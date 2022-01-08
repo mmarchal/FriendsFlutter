@@ -1,0 +1,1 @@
+const bleuCiel = 0xff6bceff;

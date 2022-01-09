@@ -1,6 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:life_friends/model/api/api_response.dart';
 import 'package:life_friends/model/api/back/api_back.dart';
+import 'package:life_friends/model/api/back/auth_token.dart';
 import 'package:life_friends/model/connect.dart';
 import 'package:life_friends/model/error/api_error.dart';
 import 'package:life_friends/model/error/type_error.dart';
@@ -10,6 +11,8 @@ class ApiRepository {
   final String domaine = "http://10.0.2.2:7070";
 
   final Dio _dio = Dio();
+
+  late final AuthToken? token;
 
   Friend _initFriend(
       {required String prenom,
@@ -44,7 +47,7 @@ class ApiRepository {
       return APIResponse(
           error: APIError(
               systemMessage: '',
-              title: 'Erreur lors de la création de compte',
+              title: 'Erreur lors de la connexion',
               content: error.toString()));
     }
   }

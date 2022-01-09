@@ -75,6 +75,7 @@ class _LoginPageState extends State<LoginPage> {
                 LoginText(
                     controller: _pass,
                     icon: Icons.vpn_key,
+                    isPassword: true,
                     hint: 'Mot de passe'),
                 const Align(
                   alignment: Alignment.centerRight,

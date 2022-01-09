@@ -15,7 +15,7 @@ dependencies:
   cupertino_icons: ^1.0.2
   json_annotation: ^4.4.0
   dio: ^4.0.4
-  commons: ^0.3.9
+  awesome_dialog: ^2.1.2
 
 dev_dependencies:
   build_runner: ^2.1.7

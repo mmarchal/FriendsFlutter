@@ -1,13 +1,22 @@
 import 'package:flutter/material.dart';
 import 'package:life_friends/model/api/back/api_back.dart';
 import 'package:life_friends/model/api/api_response.dart';
+import 'package:life_friends/service/api.repository.dart';
+import 'package:life_friends/ui/screen/home.dart';
 
-class AdvanceCustomAlert extends StatelessWidget {
+class AdvanceCustomAlert extends StatefulWidget {
   final APIResponse<ApiBack> response;
 
   const AdvanceCustomAlert({Key? key, required this.response})
       : super(key: key);
 
+  @override
+  State<StatefulWidget> createState() {
+    return _AdvanceCustomAlert();
+  }
+}
+
+class _AdvanceCustomAlert extends State<AdvanceCustomAlert> {
   @override
   Widget build(BuildContext context) {
     return Dialog(
@@ -23,7 +32,7 @@ class AdvanceCustomAlert extends StatelessWidget {
                 child: Column(
                   children: [
                     Text(
-                      (response.isSuccess)
+                      (widget.response.isSuccess)
                           ? "Connexion réussi !"
                           : "Connexion refusé",
                       style: const TextStyle(
@@ -33,9 +42,9 @@ class AdvanceCustomAlert extends StatelessWidget {
                       height: 5,
                     ),
                     Text(
-                      (response.isSuccess)
-                          ? "Bienvenue ${response.data!.result.username} !"
-                          : "Erreur : ${response.type}",
+                      (widget.response.isSuccess)
+                          ? "Bienvenue ${widget.response.data!.result.username} !"
+                          : "Erreur : ${widget.response.type}",
                       style: const TextStyle(fontSize: 20),
                     ),
                     const SizedBox(
@@ -43,14 +52,21 @@ class AdvanceCustomAlert extends StatelessWidget {
                     ),
                     ElevatedButton(
                       onPressed: () {
-                        if (response.isSuccess) {
-                          //todo
+                        if (widget.response.isSuccess) {
+                          setState(() {
+                            ApiRepository().token =
+                                widget.response.data!.result;
+                          });
+                          Navigator.push(context, MaterialPageRoute(
+                              builder: (BuildContext context) {
+                            return const HomeScreen();
+                          }));
                         } else {
                           Navigator.pop(context);
                         }
                       },
                       child: Text(
-                        (response.isSuccess)
+                        (widget.response.isSuccess)
                             ? "Entrer dans l'application"
                             : "Recommencer",
                         style: const TextStyle(color: Colors.white),
@@ -63,12 +79,14 @@ class AdvanceCustomAlert extends StatelessWidget {
             Positioned(
                 top: -60,
                 child: CircleAvatar(
-                  backgroundColor: (response.isSuccess)
+                  backgroundColor: (widget.response.isSuccess)
                       ? Colors.greenAccent
                       : Colors.redAccent,
                   radius: 60,
                   child: Icon(
-                    (response.isSuccess) ? Icons.check : Icons.assistant_photo,
+                    (widget.response.isSuccess)
+                        ? Icons.check
+                        : Icons.assistant_photo,
                     color: Colors.white,
                     size: 50,
                   ),

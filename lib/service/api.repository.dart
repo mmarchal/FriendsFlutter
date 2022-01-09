@@ -12,7 +12,7 @@ class ApiRepository {
 
   final Dio _dio = Dio();
 
-  late final AuthToken? token;
+  AuthToken? token;
 
   Friend _initFriend(
       {required String prenom,
@@ -29,7 +29,9 @@ class ApiRepository {
     var urlLogin = '$domaine/token';
     try {
       final responseLogin = await _dio.post(urlLogin, data: connect.toJson());
-      return APIResponse(data: ApiBack.fromJson(responseLogin.data));
+      ApiBack apiBack = ApiBack.fromJson(responseLogin.data);
+      token = apiBack.result;
+      return APIResponse(data: apiBack);
     } on DioError catch (error) {
       if (error.response != null) {
         switch (error.response?.statusCode) {

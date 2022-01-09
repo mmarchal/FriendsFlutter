@@ -30,7 +30,7 @@ class _SignupPageState extends State<SignupPage> {
     String login = _login.text;
     String password = _password.text;
     String email = _mail.text;
-    ApiRepository(Dio())
+    ApiRepository()
         .insertFriend(
             prenom: prenom, login: login, password: password, email: email)
         .then((value) {

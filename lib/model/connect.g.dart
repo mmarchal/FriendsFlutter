@@ -7,11 +7,11 @@ part of 'connect.dart';
 // **************************************************************************
 
 Connect _$ConnectFromJson(Map<String, dynamic> json) => Connect(
-      login: json['login'] as String,
+      username: json['username'] as String,
       password: json['password'] as String,
     );
 
 Map<String, dynamic> _$ConnectToJson(Connect instance) => <String, dynamic>{
-      'login': instance.login,
+      'username': instance.username,
       'password': instance.password,
     };

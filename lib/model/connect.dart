@@ -4,14 +4,13 @@ part 'connect.g.dart';
 
 @JsonSerializable()
 class Connect {
-  final String login;
+  final String username;
   final String password;
 
-  Connect(
-      {required this.login,
-      required this.password});
+  Connect({required this.username, required this.password});
 
-  factory Connect.fromJson(Map<String, dynamic> json) => _$ConnectFromJson(json);
+  factory Connect.fromJson(Map<String, dynamic> json) =>
+      _$ConnectFromJson(json);
 
   Map<String, dynamic> toJson() => _$ConnectToJson(this);
 }

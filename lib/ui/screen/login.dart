@@ -1,5 +1,11 @@
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:life_friends/model/api/api_response.dart';
+import 'package:life_friends/model/api/back/api_back.dart';
+import 'package:life_friends/service/api.repository.dart';
 import 'package:life_friends/ui/utils/style.dart';
+import 'package:life_friends/ui/widgets/advance_custom_alert.dart';
+import 'package:life_friends/ui/widgets/loading_widget.dart';
 import 'package:life_friends/ui/widgets/login_right_text.dart';
 import 'package:life_friends/ui/widgets/login_text.dart';
 
@@ -85,7 +91,15 @@ class _LoginPageState extends State<LoginPage> {
                 const Spacer(),
                 InkWell(
                   onTap: () {
-                    //todo login connection
+                    const LoadingWidget(label: "Connexion en cours");
+                    ApiRepository()
+                        .login(login: _user.text, password: _pass.text)
+                        .then((value) {
+                      APIResponse<ApiBack> retour = value;
+                      showDialog(
+                          context: context,
+                          builder: (_) => AdvanceCustomAlert(response: retour));
+                    });
                   },
                   child: Container(
                     height: 45,

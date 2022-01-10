@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:life_friends/provider_def.dart';
 import 'package:life_friends/ui/screen/login.dart';
 import 'package:life_friends/ui/screen/signup.dart';
 
@@ -11,17 +12,19 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Friends',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
+    return ProviderDef(
+      child: MaterialApp(
+        title: 'Friends',
+        theme: ThemeData(
+          primarySwatch: Colors.blue,
+        ),
+        initialRoute: '/',
+        debugShowCheckedModeBanner: false,
+        routes: {
+          '/': (context) => const LoginPage(),
+          '/signup': (context) => const SignupPage(),
+        },
       ),
-      initialRoute: '/',
-      debugShowCheckedModeBanner: false,
-      routes: {
-        '/': (context) => const LoginPage(),
-        '/signup': (context) => const SignupPage(),
-      },
     );
   }
 }

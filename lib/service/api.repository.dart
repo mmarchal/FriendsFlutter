@@ -6,13 +6,13 @@ import 'package:life_friends/model/connect.dart';
 import 'package:life_friends/model/error/api_error.dart';
 import 'package:life_friends/model/error/type_error.dart';
 import 'package:life_friends/model/friend.dart';
+import 'package:life_friends/notifier/token_notifier.dart';
+import 'package:provider/provider.dart';
 
 class ApiRepository {
   final String domaine = "http://10.0.2.2:7070";
 
   final Dio _dio = Dio();
-
-  AuthToken? token;
 
   Friend _initFriend(
       {required String prenom,
@@ -30,7 +30,6 @@ class ApiRepository {
     try {
       final responseLogin = await _dio.post(urlLogin, data: connect.toJson());
       ApiBack apiBack = ApiBack.fromJson(responseLogin.data);
-      token = apiBack.result;
       return APIResponse(data: apiBack);
     } on DioError catch (error) {
       if (error.response != null) {

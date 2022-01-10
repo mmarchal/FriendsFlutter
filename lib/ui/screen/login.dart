@@ -50,7 +50,7 @@ class _LoginPageState extends State<LoginPage> {
                     ),
                     child: Image.asset(
                       "asset/friends.jpeg",
-                      width: MediaQuery.of(context).size.width / 2.25,
+                      width: MediaQuery.of(context).size.width / 2.5,
                     ),
                   ),
                 ),

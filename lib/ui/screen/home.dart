@@ -12,8 +12,18 @@ class HomeScreen extends StatelessWidget {
       appBar: AppBar(
         title: Text(authToken?.username ?? ""),
       ),
-      body: const Center(
-        child: Text("Bonjour"),
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            ElevatedButton(
+                onPressed: () {}, child: const Text("Proposer une sortie")),
+            ElevatedButton(
+                onPressed: () {},
+                child: const Text("Voir les prochaines sorties"))
+          ],
+        ),
       ),
     );
   }

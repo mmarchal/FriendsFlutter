@@ -57,10 +57,7 @@ class _AdvanceCustomAlert extends State<AdvanceCustomAlert> {
                         if (widget.response.isSuccess) {
                           Provider.of<TokenNotifier>(context, listen: false)
                               .setToken(widget.response.data!.result);
-                          Navigator.push(context, MaterialPageRoute(
-                              builder: (BuildContext context) {
-                            return const HomeScreen();
-                          }));
+                          Navigator.pushNamed(context, '/home');
                         } else {
                           Navigator.pop(context);
                         }

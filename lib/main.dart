@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:life_friends/provider_def.dart';
+import 'package:life_friends/ui/screen/home.dart';
 import 'package:life_friends/ui/screen/login.dart';
 import 'package:life_friends/ui/screen/signup.dart';
 
@@ -23,6 +24,7 @@ class MyApp extends StatelessWidget {
         routes: {
           '/': (context) => const LoginPage(),
           '/signup': (context) => const SignupPage(),
+          '/home': (context) => const HomeScreen()
         },
       ),
     );

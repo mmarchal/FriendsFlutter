@@ -85,4 +85,31 @@ class ApiRepository {
               content: error.toString()));
     }
   }
+
+  Future<APIResponse<Friend>> getFriend(String id) async {
+    var url = '$domaine/friend/$id';
+    try {
+      final response = await _dio.get(url);
+      return APIResponse(data: response.data);
+    } on DioError catch (error) {
+      if (error.response != null) {
+        switch (error.response?.statusCode) {
+          case 401:
+            return APIResponse(type: TypeError.tokenExpired);
+          case 404:
+            return APIResponse(type: TypeError.notFound);
+          default:
+            return APIResponse(error: APIError.fromJson(error.response?.data));
+        }
+      } else {
+        return APIResponse(type: TypeError.noInternet);
+      }
+    } catch (error) {
+      return APIResponse(
+          error: APIError(
+              systemMessage: '',
+              title: 'Erreur lors de la création de compte',
+              content: error.toString()));
+    }
+  }
 }

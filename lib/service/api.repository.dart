@@ -1,17 +1,13 @@
 import 'package:dio/dio.dart';
+import 'package:life_friends/env/constants.dart';
 import 'package:life_friends/model/api/api_response.dart';
 import 'package:life_friends/model/api/back/api_back.dart';
-import 'package:life_friends/model/api/back/auth_token.dart';
 import 'package:life_friends/model/connect.dart';
 import 'package:life_friends/model/error/api_error.dart';
 import 'package:life_friends/model/error/type_error.dart';
 import 'package:life_friends/model/friend.dart';
-import 'package:life_friends/notifier/token_notifier.dart';
-import 'package:provider/provider.dart';
 
 class ApiRepository {
-  final String domaine = "http://10.0.2.2:7070";
-
   final Dio _dio = Dio();
 
   Friend _initFriend(
@@ -35,14 +31,14 @@ class ApiRepository {
       if (error.response != null) {
         switch (error.response?.statusCode) {
           case 401:
-            return APIResponse(type: TypeError.tokenExpired);
+            return APIResponse(type: FriendTypeError.tokenExpired);
           case 404:
-            return APIResponse(type: TypeError.notFound);
+            return APIResponse(type: FriendTypeError.notFound);
           default:
             return APIResponse(error: APIError.fromJson(error.response?.data));
         }
       } else {
-        return APIResponse(type: TypeError.noInternet);
+        return APIResponse(type: FriendTypeError.noInternet);
       }
     } catch (error) {
       return APIResponse(
@@ -68,14 +64,14 @@ class ApiRepository {
       if (error.response != null) {
         switch (error.response?.statusCode) {
           case 401:
-            return APIResponse(type: TypeError.tokenExpired);
+            return APIResponse(type: FriendTypeError.tokenExpired);
           case 404:
-            return APIResponse(type: TypeError.notFound);
+            return APIResponse(type: FriendTypeError.notFound);
           default:
             return APIResponse(error: APIError.fromJson(error.response?.data));
         }
       } else {
-        return APIResponse(type: TypeError.noInternet);
+        return APIResponse(type: FriendTypeError.noInternet);
       }
     } catch (error) {
       return APIResponse(
@@ -95,14 +91,14 @@ class ApiRepository {
       if (error.response != null) {
         switch (error.response?.statusCode) {
           case 401:
-            return APIResponse(type: TypeError.tokenExpired);
+            return APIResponse(type: FriendTypeError.tokenExpired);
           case 404:
-            return APIResponse(type: TypeError.notFound);
+            return APIResponse(type: FriendTypeError.notFound);
           default:
             return APIResponse(error: APIError.fromJson(error.response?.data));
         }
       } else {
-        return APIResponse(type: TypeError.noInternet);
+        return APIResponse(type: FriendTypeError.noInternet);
       }
     } catch (error) {
       return APIResponse(

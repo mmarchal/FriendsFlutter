@@ -1,5 +1,4 @@
 import 'package:awesome_dialog/awesome_dialog.dart';
-import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:life_friends/service/api.repository.dart';
 import 'package:life_friends/ui/utils/style.dart';

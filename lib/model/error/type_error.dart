@@ -1,1 +1,1 @@
-enum TypeError { noInternet, tokenExpired, notFound }
+enum FriendTypeError { noInternet, tokenExpired, notFound }

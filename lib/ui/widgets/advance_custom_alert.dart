@@ -2,8 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:life_friends/model/api/back/api_back.dart';
 import 'package:life_friends/model/api/api_response.dart';
 import 'package:life_friends/notifier/token_notifier.dart';
-import 'package:life_friends/service/api.repository.dart';
-import 'package:life_friends/ui/screen/home.dart';
 import 'package:provider/provider.dart';
 
 class AdvanceCustomAlert extends StatefulWidget {

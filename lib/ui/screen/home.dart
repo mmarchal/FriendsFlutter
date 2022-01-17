@@ -1,4 +1,6 @@
+import 'package:cool_alert/cool_alert.dart';
 import 'package:flutter/material.dart';
+import 'package:life_friends/model/api/api_response.dart';
 import 'package:life_friends/notifier/token_notifier.dart';
 import 'package:life_friends/ui/screen/sortie/proposition.dart';
 import 'package:provider/src/provider.dart';
@@ -19,10 +21,10 @@ class HomeScreen extends StatelessWidget {
           mainAxisSize: MainAxisSize.min,
           children: [
             ElevatedButton(
-                onPressed: () {
+                onPressed: () async {
                   Navigator.push(context,
                       MaterialPageRoute(builder: (BuildContext bC) {
-                    return PropositionSortie();
+                    return const PropositionSortie();
                   }));
                 },
                 child: const Text("Proposer une sortie")),

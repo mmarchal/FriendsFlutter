@@ -14,6 +14,9 @@ class ListeSorties extends StatefulWidget {
 class _ListeSortiesState extends State<ListeSorties> {
   List<Sortie> sorties = [];
 
+  ///To do --> Style à modifier
+  ///https://miro.medium.com/max/910/1*xvCsoq7iYcznw1Xy5A8Jng.png
+
   @override
   void initState() {
     super.initState();

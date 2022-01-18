@@ -1,7 +1,10 @@
 import 'package:cool_alert/cool_alert.dart';
 import 'package:flutter/material.dart';
 import 'package:life_friends/model/api/api_response.dart';
+import 'package:life_friends/model/sortie.dart';
 import 'package:life_friends/notifier/token_notifier.dart';
+import 'package:life_friends/service/sortie.repository.dart';
+import 'package:life_friends/ui/screen/sortie/liste_sorties.dart';
 import 'package:life_friends/ui/screen/sortie/proposition.dart';
 import 'package:provider/src/provider.dart';
 
@@ -21,7 +24,7 @@ class HomeScreen extends StatelessWidget {
           mainAxisSize: MainAxisSize.min,
           children: [
             ElevatedButton(
-                onPressed: () async {
+                onPressed: () {
                   Navigator.push(context,
                       MaterialPageRoute(builder: (BuildContext bC) {
                     return const PropositionSortie();
@@ -29,7 +32,12 @@ class HomeScreen extends StatelessWidget {
                 },
                 child: const Text("Proposer une sortie")),
             ElevatedButton(
-                onPressed: () {},
+                onPressed: () {
+                  Navigator.push(context,
+                      MaterialPageRoute(builder: (BuildContext bC) {
+                    return const ListeSorties();
+                  }));
+                },
                 child: const Text("Voir les prochaines sorties")),
             ElevatedButton(
                 onPressed: () {}, child: const Text("Voir mes sorties")),

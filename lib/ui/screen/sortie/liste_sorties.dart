@@ -31,9 +31,11 @@ class _ListeSortiesState extends State<ListeSorties> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: const Color(0xFF3B4254),
       appBar: AppBar(
         centerTitle: true,
-        title: const Text("Liste des sorties"),
+        title: const Text("Sorties"),
+        backgroundColor: const Color(0xFF3B4254),
       ),
       body: ListView.builder(
         itemCount: sorties.length,
@@ -41,10 +43,35 @@ class _ListeSortiesState extends State<ListeSorties> {
           Sortie s = sorties[index];
           return InkWell(
             child: Card(
-              elevation: 10,
-              child: ListTile(
-                title: Text(s.intitule),
-                subtitle: Text(DateFormat("dd/MM/yyyy").format(s.datePropose)),
+              margin: const EdgeInsets.all(16),
+              clipBehavior: Clip.antiAliasWithSaveLayer,
+              color: const Color(0xFF424B5E),
+              child: Row(
+                mainAxisSize: MainAxisSize.max,
+                children: [
+                  const Icon(
+                    Icons.settings_outlined,
+                    color: Colors.white,
+                    size: 24,
+                  ),
+                  const VerticalDivider(
+                    width: 5,
+                  ),
+                  Expanded(
+                      child: ListTile(
+                    title: Text(
+                      s.intitule,
+                      style: const TextStyle(color: Colors.white),
+                    ),
+                    subtitle: Text(
+                        DateFormat("dd/MM/yyyy").format(s.datePropose),
+                        style: const TextStyle(color: Colors.white)),
+                  )),
+                  const Align(
+                    alignment: Alignment.centerRight,
+                    child: Icon(Icons.navigate_next),
+                  )
+                ],
               ),
             ),
             onTap: () {

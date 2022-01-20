@@ -11,6 +11,8 @@ Sortie _$SortieFromJson(Map<String, dynamic> json) => Sortie(
       datePropose: DateTime.parse(json['datePropose'] as String),
       intitule: json['intitule'] as String,
       lieu: json['lieu'] as String,
+      typeSortie:
+          TypeSortie.fromJson(json['typeSortie'] as Map<String, dynamic>),
       friends: (json['friends'] as List<dynamic>?)
           ?.map((e) => Friend.fromJson(e as Map<String, dynamic>))
           .toList(),
@@ -22,4 +24,5 @@ Map<String, dynamic> _$SortieToJson(Sortie instance) => <String, dynamic>{
       'intitule': instance.intitule,
       'lieu': instance.lieu,
       'friends': instance.friends,
+      'typeSortie': instance.typeSortie,
     };

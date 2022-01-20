@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:life_friends/model/api/api_response.dart';
 import 'package:life_friends/model/sortie.dart';
+import 'package:life_friends/model/typesortie.dart';
 import 'package:life_friends/service/sortie.repository.dart';
 import 'package:life_friends/ui/widgets/login_text.dart';
 import 'package:life_friends/ui/widgets/selected_widget.dart';
@@ -102,7 +103,8 @@ class PropositionSortieState extends State<PropositionSortie> {
                     Sortie sortie = Sortie(
                         datePropose: selectedDateTime!,
                         intitule: _controllerTitle.text,
-                        lieu: _controllerLocation.text);
+                        lieu: _controllerLocation.text,
+                        typeSortie: TypeSortie(id: 1, type: ''));
                     APIResponse<bool> response =
                         await SortieRepository().addOuting(sortie);
                     if (response.isSuccess && response.data!) {

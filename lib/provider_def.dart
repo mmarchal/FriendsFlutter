@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:life_friends/notifier/sortie/sortie_notifier.dart';
 import 'package:life_friends/notifier/token_notifier.dart';
 import 'package:provider/provider.dart';
 

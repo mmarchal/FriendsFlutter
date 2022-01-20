@@ -20,6 +20,7 @@ dependencies:
   syncfusion_flutter_datepicker: ^19.4.42
   intl: ^0.17.0
   cool_alert: ^1.1.0
+  gradient_ui_widgets: ^1.0.2-nullsafety
 
 dev_dependencies:
   build_runner: ^2.1.7

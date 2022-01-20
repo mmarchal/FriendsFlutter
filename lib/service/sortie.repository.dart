@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:dio/dio.dart';
 import 'package:life_friends/env/constants.dart';
 import 'package:life_friends/model/api/api_response.dart';

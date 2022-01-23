@@ -7,7 +7,7 @@ part 'sortie.g.dart';
 @JsonSerializable()
 class Sortie {
   final int? id;
-  final DateTime datePropose;
+  final DateTime? datePropose;
   final String intitule;
   final String lieu;
   final List<Friend>? friends;
@@ -15,7 +15,7 @@ class Sortie {
 
   Sortie(
       {this.id,
-      required this.datePropose,
+      this.datePropose,
       required this.intitule,
       required this.lieu,
       required this.typeSortie,

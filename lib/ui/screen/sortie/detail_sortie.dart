@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:life_friends/model/sortie.dart';
+import 'package:life_friends/ui/widgets/detail_type_sortie.dart';
 
 class DetailSortie extends StatefulWidget {
   final Sortie sortie;
@@ -22,10 +23,15 @@ class _DetailSortieState extends State<DetailSortie> {
       body: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
+          DetailTypeSortie(
+            typeSortie: widget.sortie.typeSortie,
+          ),
           Card(
             elevation: 5,
-            child: Text(
-                "Date : ${DateFormat('dd/MM/yyyy').format(widget.sortie.datePropose)}"),
+            child: (widget.sortie.datePropose != null)
+                ? Text(
+                    "Date : ${DateFormat('dd/MM/yyyy').format(widget.sortie.datePropose!)}")
+                : const SizedBox(),
           ),
           Card(
             elevation: 5,

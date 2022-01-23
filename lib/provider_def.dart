@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:life_friends/notifier/token_notifier.dart';
+import 'package:life_friends/notifier/typesortie/typesortie_list_notifier.dart';
+import 'package:life_friends/notifier/typesortie/typesortie_notifier.dart';
+import 'package:life_friends/service/typesortie.repository.dart';
 import 'package:provider/provider.dart';
 
 class ProviderDef extends StatelessWidget {
@@ -14,9 +17,25 @@ class ProviderDef extends StatelessWidget {
         Provider<TokenNotifier>(
           create: (_) => TokenNotifier(),
         ),
+        Provider<TypeSortieRepository>(
+          create: (_) => TypeSortieRepository(),
+        ),
+        Provider<TypeSortieNotifier>(
+          create: (_) => TypeSortieNotifier(),
+        ),
         ChangeNotifierProvider<TokenNotifier>(
           create: (context) => TokenNotifier(),
         ),
+        ChangeNotifierProvider<TypeSortieNotifier>(
+          create: (_) => TypeSortieNotifier(),
+        ),
+        ChangeNotifierProxyProvider<TypeSortieNotifier, TypeSortieListNotifier>(
+          create: (context) => TypeSortieListNotifier(context.read())
+            ..loadTypesSorties(clearList: true),
+          update: (context, filter, typeSortiesList) {
+            return typeSortiesList!;
+          },
+        )
       ],
       child: child,
     );

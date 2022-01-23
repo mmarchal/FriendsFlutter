@@ -66,7 +66,10 @@ class _ListeSortiesState extends State<ListeSorties> {
                           style: const TextStyle(color: Colors.white),
                         ),
                         subtitle: Text(
-                            DateFormat("dd/MM/yyyy").format(s.datePropose),
+                            (s.datePropose != null)
+                                ? DateFormat("dd/MM/yyyy")
+                                    .format(s.datePropose!)
+                                : "-",
                             style: const TextStyle(color: Colors.white)),
                       )),
                       const Align(

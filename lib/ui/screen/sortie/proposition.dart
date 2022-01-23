@@ -4,9 +4,11 @@ import 'package:intl/intl.dart';
 import 'package:life_friends/model/api/api_response.dart';
 import 'package:life_friends/model/sortie.dart';
 import 'package:life_friends/model/typesortie.dart';
+import 'package:life_friends/notifier/typesortie/typesortie_list_notifier.dart';
 import 'package:life_friends/service/sortie.repository.dart';
 import 'package:life_friends/ui/widgets/login_text.dart';
 import 'package:life_friends/ui/widgets/selected_widget.dart';
+import 'package:provider/src/provider.dart';
 
 class PropositionSortie extends StatefulWidget {
   const PropositionSortie({Key? key}) : super(key: key);
@@ -24,11 +26,14 @@ class PropositionSortieState extends State<PropositionSortie> {
   String? title;
   DateTime? selectedDateTime;
   String? selectedLocation;
+  int? selectedValue = 0;
 
   bool emptyDateTime = false;
 
   @override
   Widget build(BuildContext context) {
+    final List<TypeSortie>? liste =
+        context.watch<TypeSortieListNotifier>().listeTypes;
     _selectDate(BuildContext context) async {
       final DateTime? selected = await showDatePicker(
         context: context,
@@ -90,6 +95,23 @@ class PropositionSortieState extends State<PropositionSortie> {
               icon: Icons.location_city,
               controller: _controllerLocation,
             ),
+            (liste != null)
+                ? Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: liste
+                        .map((element) => RadioListTile<int>(
+                              title: Text(element.type),
+                              onChanged: (int? b) {
+                                setState(() {
+                                  selectedValue = b;
+                                });
+                              },
+                              value: element.id!,
+                              groupValue: selectedValue,
+                            ))
+                        .toList(),
+                  )
+                : const CircularProgressIndicator(),
             Align(
               alignment: Alignment.bottomCenter,
               child: ElevatedButton(
@@ -104,7 +126,7 @@ class PropositionSortieState extends State<PropositionSortie> {
                         datePropose: selectedDateTime!,
                         intitule: _controllerTitle.text,
                         lieu: _controllerLocation.text,
-                        typeSortie: TypeSortie(id: 1, type: ''));
+                        typeSortie: TypeSortie(id: selectedValue, type: ''));
                     APIResponse<bool> response =
                         await SortieRepository().addOuting(sortie);
                     if (response.isSuccess && response.data!) {

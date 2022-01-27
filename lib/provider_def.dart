@@ -1,7 +1,11 @@
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:life_friends/notifier/friend/friend_list_notifier.dart';
+import 'package:life_friends/notifier/friend/friend_notifier.dart';
 import 'package:life_friends/notifier/token_notifier.dart';
 import 'package:life_friends/notifier/typesortie/typesortie_list_notifier.dart';
 import 'package:life_friends/notifier/typesortie/typesortie_notifier.dart';
+import 'package:life_friends/service/friend.repository.dart';
 import 'package:life_friends/service/typesortie.repository.dart';
 import 'package:provider/provider.dart';
 
@@ -17,11 +21,17 @@ class ProviderDef extends StatelessWidget {
         Provider<TokenNotifier>(
           create: (_) => TokenNotifier(),
         ),
+        Provider<FriendRepository>(
+          create: (_) => FriendRepository(),
+        ),
         Provider<TypeSortieRepository>(
           create: (_) => TypeSortieRepository(),
         ),
         Provider<TypeSortieNotifier>(
           create: (_) => TypeSortieNotifier(),
+        ),
+        ChangeNotifierProvider<FriendNotifier>(
+          create: (_) => FriendNotifier(),
         ),
         ChangeNotifierProvider<TokenNotifier>(
           create: (context) => TokenNotifier(),
@@ -29,6 +39,12 @@ class ProviderDef extends StatelessWidget {
         ChangeNotifierProvider<TypeSortieNotifier>(
           create: (_) => TypeSortieNotifier(),
         ),
+        ChangeNotifierProxyProvider<FriendNotifier, FriendListNotifier>(
+            create: (context) => FriendListNotifier(context.read())
+              ..loadFriends(clearList: true),
+            update: (context, filter, friendListNotifier) {
+              return friendListNotifier!;
+            }),
         ChangeNotifierProxyProvider<TypeSortieNotifier, TypeSortieListNotifier>(
           create: (context) => TypeSortieListNotifier(context.read())
             ..loadTypesSorties(clearList: true),

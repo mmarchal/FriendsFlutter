@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:life_friends/model/friend.dart';
 import 'package:life_friends/model/sortie.dart';
 import 'package:life_friends/ui/screen/sortie/scaffold_sortie.dart';
 import 'package:life_friends/ui/widgets/detail_type_sortie.dart';
@@ -23,8 +24,11 @@ class _DetailSortieState extends State<DetailSortie> {
       body: SingleChildScrollView(
         child: Column(
           children: [
-            DetailTypeSortie(
-              typeSortie: widget.sortie.typeSortie,
+            SizedBox(
+              width: MediaQuery.of(context).size.width / 1.25,
+              child: DetailTypeSortie(
+                typeSortie: widget.sortie.typeSortie,
+              ),
             ),
             Container(
               margin: const EdgeInsets.all(16),
@@ -63,7 +67,10 @@ class _DetailSortieState extends State<DetailSortie> {
                       ),
                     ),
                   ),
-                  ParticipantSortie()
+                  ParticipantSortie(
+                    listeIdParticipants:
+                        getAllIdParticipants(widget.sortie.friends),
+                  )
                 ],
               ),
             ),
@@ -71,5 +78,13 @@ class _DetailSortieState extends State<DetailSortie> {
         ),
       ),
     );
+  }
+
+  List<int> getAllIdParticipants(List<Friend>? friends) {
+    List<int> liste = [];
+    friends?.forEach((element) {
+      liste.add(element.id!);
+    });
+    return liste;
   }
 }

@@ -4,6 +4,7 @@ import 'package:life_friends/model/api/api_response.dart';
 import 'package:life_friends/model/sortie.dart';
 import 'package:life_friends/service/sortie.repository.dart';
 import 'package:life_friends/ui/screen/sortie/detail_sortie.dart';
+import 'package:life_friends/ui/screen/sortie/scaffold_sortie.dart';
 
 class ListeSorties extends StatefulWidget {
   const ListeSorties({Key? key}) : super(key: key);
@@ -106,14 +107,6 @@ class _ListeSortiesState extends State<ListeSorties> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: const Color(0xFF3B4254),
-      appBar: AppBar(
-        centerTitle: true,
-        title: const Text("Sorties"),
-        backgroundColor: const Color(0xFF3B4254),
-      ),
-      body: _initBody(),
-    );
+    return ScaffoldSortie(title: "Liste des sorties", body: _initBody());
   }
 }

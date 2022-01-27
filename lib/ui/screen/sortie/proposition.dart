@@ -28,8 +28,6 @@ class PropositionSortieState extends State<PropositionSortie> {
   String? selectedLocation;
   int? selectedValue = 0;
 
-  bool emptyDateTime = false;
-
   @override
   Widget build(BuildContext context) {
     final List<TypeSortie>? liste =
@@ -54,100 +52,87 @@ class PropositionSortieState extends State<PropositionSortie> {
         centerTitle: true,
         title: const Text("Proposition de sortie"),
       ),
-      body: Container(
-        margin: const EdgeInsets.all(16),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            LoginText(
-              hint: "Titre de la proposition",
-              icon: Icons.title,
-              controller: _controllerTitle,
-            ),
-            SelectedWidget(
-              isSelected: (selectedDateTime != null),
-              selectedChild: Text((selectedDateTime != null)
-                  ? DateFormat("dd/MM/yyyy").format(selectedDateTime!)
-                  : ""),
-              notSelectedChild: ElevatedButton.icon(
+      body: SingleChildScrollView(
+        child: Container(
+          margin: const EdgeInsets.all(16),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              LoginText(
+                hint: "Titre de la proposition",
+                icon: Icons.title,
+                controller: _controllerTitle,
+              ),
+              SelectedWidget(
+                isSelected: (selectedDateTime != null),
+                selectedChild: Text((selectedDateTime != null)
+                    ? DateFormat("dd/MM/yyyy").format(selectedDateTime!)
+                    : ""),
+                notSelectedChild: ElevatedButton.icon(
+                  onPressed: () {
+                    _selectDate(context);
+                  },
+                  icon: const Icon(Icons.calendar_today),
+                  label: const Text("Choisir une date"),
+                ),
                 onPressed: () {
                   _selectDate(context);
                 },
-                icon: const Icon(Icons.calendar_today),
-                label: const Text("Choisir une date"),
               ),
-              onPressed: () {
-                _selectDate(context);
-              },
-            ),
-            Container(
-              margin: const EdgeInsets.all(10),
-              child: Visibility(
-                  visible: emptyDateTime,
-                  child: const Text(
-                    "Il faut choisir une date !",
-                    style: TextStyle(
-                        color: Colors.red, fontWeight: FontWeight.bold),
-                  )),
-            ),
-            LoginText(
-              hint: "Lieu de la proposition",
-              icon: Icons.location_city,
-              controller: _controllerLocation,
-            ),
-            (liste != null)
-                ? Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: liste
-                        .map((element) => RadioListTile<int>(
-                              title: Text(element.type),
-                              onChanged: (int? b) {
-                                setState(() {
-                                  selectedValue = b;
-                                });
-                              },
-                              value: element.id!,
-                              groupValue: selectedValue,
-                            ))
-                        .toList(),
-                  )
-                : const CircularProgressIndicator(),
-            Align(
-              alignment: Alignment.bottomCenter,
-              child: ElevatedButton(
-                child: const Text("Valider"),
-                onPressed: () async {
-                  if (selectedDateTime == null) {
-                    setState(() {
-                      emptyDateTime = true;
-                    });
-                  } else {
+              LoginText(
+                hint: "Lieu de la proposition",
+                icon: Icons.location_city,
+                controller: _controllerLocation,
+              ),
+              (liste != null)
+                  ? Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: liste
+                          .map((element) => RadioListTile<int>(
+                                title: Text(element.type),
+                                onChanged: (int? b) {
+                                  setState(() {
+                                    selectedValue = b;
+                                  });
+                                },
+                                value: element.id!,
+                                groupValue: selectedValue,
+                              ))
+                          .toList(),
+                    )
+                  : const CircularProgressIndicator(),
+              Align(
+                alignment: Alignment.bottomCenter,
+                child: ElevatedButton(
+                  child: const Text("Valider"),
+                  onPressed: () async {
                     Sortie sortie = Sortie(
-                        datePropose: selectedDateTime!,
+                        datePropose: selectedDateTime,
                         intitule: _controllerTitle.text,
                         lieu: _controllerLocation.text,
                         typeSortie: TypeSortie(id: selectedValue, type: ''));
                     APIResponse<bool> response =
                         await SortieRepository().addOuting(sortie);
                     if (response.isSuccess && response.data!) {
-                      CoolAlert.show(
+                      await CoolAlert.show(
                         context: context,
                         type: CoolAlertType.success,
                         text: 'Sortie enregistré !',
                         autoCloseDuration: const Duration(seconds: 2),
                       );
+                      Navigator.pushNamed(context, "/home");
                     } else {
-                      CoolAlert.show(
+                      await CoolAlert.show(
                           context: context,
                           type: CoolAlertType.error,
                           title: response.error!.title,
                           text: response.error!.content);
                     }
-                  }
-                },
-              ),
-            )
-          ],
+                  },
+                ),
+              )
+            ],
+          ),
         ),
       ),
     );

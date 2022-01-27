@@ -9,21 +9,18 @@ class DetailTypeSortie extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Widget w = const SizedBox();
     switch (typeSortie.id) {
       case 1:
-        w = Image.asset("asset/cinema.jpeg");
-        break;
+        precacheImage(const AssetImage("asset/cinema.jpeg"), context);
+        return Image.asset("asset/cinema.jpeg");
       case 2:
-        w = Image.asset("asset/sport.jpeg");
-        break;
+        precacheImage(const AssetImage("asset/sport.jpeg"), context);
+        return Image.asset("asset/sport.jpeg");
       case 3:
-        w = Image.asset("asset/activite.jpeg");
-        break;
+        precacheImage(const AssetImage("asset/activite.jpeg"), context);
+        return Image.asset("asset/activite.jpeg");
       default:
-        w = const SizedBox();
-        break;
+        return const SizedBox();
     }
-    return w;
   }
 }

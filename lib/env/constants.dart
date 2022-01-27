@@ -1,1 +1,1 @@
-const String domaine = "http://10.0.2.2:7070";
+const String domaine = "http://192.168.1.11:19998";

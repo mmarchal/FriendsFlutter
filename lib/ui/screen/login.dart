@@ -1,12 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:life_friends/model/api/api_response.dart';
 import 'package:life_friends/model/api/back/api_back.dart';
+import 'package:life_friends/model/friend.dart';
+import 'package:life_friends/notifier/friend/friend_notifier.dart';
+import 'package:life_friends/notifier/token_notifier.dart';
 import 'package:life_friends/service/api.repository.dart';
+import 'package:life_friends/service/friend.repository.dart';
 import 'package:life_friends/ui/utils/style.dart';
 import 'package:life_friends/ui/widgets/advance_custom_alert.dart';
 import 'package:life_friends/ui/widgets/loading_widget.dart';
 import 'package:life_friends/ui/widgets/login_right_text.dart';
 import 'package:life_friends/ui/widgets/login_text.dart';
+import 'package:provider/provider.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({Key? key}) : super(key: key);
@@ -28,6 +33,10 @@ class _LoginPageState extends State<LoginPage> {
 
   @override
   Widget build(BuildContext context) {
+    final FriendNotifier friendNotifier =
+        Provider.of<FriendNotifier>(context, listen: false);
+    final TokenNotifier tokenNotifier =
+        Provider.of<TokenNotifier>(context, listen: false);
     return Scaffold(
       body: ListView(
         children: <Widget>[
@@ -94,11 +103,18 @@ class _LoginPageState extends State<LoginPage> {
                     const LoadingWidget(label: "Connexion en cours");
                     ApiRepository()
                         .login(login: _user.text, password: _pass.text)
-                        .then((value) {
+                        .then((value) async {
                       APIResponse<ApiBack> retour = value;
-                      showDialog(
-                          context: context,
-                          builder: (_) => AdvanceCustomAlert(response: retour));
+                      if (retour.isSuccess) {
+                        APIResponse<Friend> friend = await FriendRepository()
+                            .loadConnectedFriend(retour.data?.result);
+                        friendNotifier.setFriend(friend.data);
+                        tokenNotifier.setToken(retour.data?.result);
+                        showDialog(
+                            context: context,
+                            builder: (_) =>
+                                AdvanceCustomAlert(response: retour));
+                      }
                     });
                   },
                   child: Container(

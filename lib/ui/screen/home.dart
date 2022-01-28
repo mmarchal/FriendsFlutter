@@ -39,7 +39,7 @@ class HomeScreen extends StatelessWidget {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: FriendAppBar(
-        username: authToken?.username,
+        username: "Hello ${authToken?.username}",
       ),
       body: Center(
         child: Column(

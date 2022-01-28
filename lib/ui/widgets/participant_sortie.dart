@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:life_friends/model/api/api_response.dart';
 import 'package:life_friends/model/friend.dart';
 import 'package:life_friends/notifier/friend/friend_list_notifier.dart';
+// ignore: implementation_imports
 import 'package:provider/src/provider.dart';
 
 class ParticipantSortie extends StatelessWidget {

@@ -8,6 +8,7 @@ import 'package:life_friends/notifier/typesortie/typesortie_list_notifier.dart';
 import 'package:life_friends/service/sortie.repository.dart';
 import 'package:life_friends/ui/widgets/login_text.dart';
 import 'package:life_friends/ui/widgets/selected_widget.dart';
+// ignore: implementation_imports
 import 'package:provider/src/provider.dart';
 
 class PropositionSortie extends StatefulWidget {

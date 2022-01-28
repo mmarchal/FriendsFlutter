@@ -1,4 +1,3 @@
-import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:life_friends/notifier/friend/friend_list_notifier.dart';
 import 'package:life_friends/notifier/friend/friend_notifier.dart';

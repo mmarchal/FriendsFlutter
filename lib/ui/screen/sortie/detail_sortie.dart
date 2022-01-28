@@ -21,6 +21,8 @@ class _DetailSortieState extends State<DetailSortie> {
   Widget build(BuildContext context) {
     return ScaffoldSortie(
       title: widget.sortie.intitule,
+      inscription: true,
+      sortie: widget.sortie,
       body: SingleChildScrollView(
         child: Column(
           children: [

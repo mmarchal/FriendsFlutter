@@ -108,4 +108,86 @@ class ApiRepository {
               content: error.toString()));
     }
   }
+
+  Future<APIResponse<bool>> getForgotPassword(String user) async {
+    var url = '$domaine/friend/getTempPassword';
+    try {
+      final response = await _dio.post(url, data: user);
+      return APIResponse(data: response.data);
+    } on DioError catch (error) {
+      if (error.response != null) {
+        switch (error.response?.statusCode) {
+          case 401:
+            return APIResponse(type: FriendTypeError.tokenExpired);
+          case 404:
+            return APIResponse(type: FriendTypeError.notFound);
+          default:
+            return APIResponse(error: APIError.fromJson(error.response?.data));
+        }
+      } else {
+        return APIResponse(type: FriendTypeError.noInternet);
+      }
+    } catch (error) {
+      return APIResponse(
+          error: APIError(
+              systemMessage: '',
+              title: 'Erreur lors de l\'oublie de mot de passe',
+              content: error.toString()));
+    }
+  }
+
+  Future<APIResponse<bool>> checkingTempPassword(
+      String user, String temp) async {
+    var url = '$domaine/friend/checkingTempPassword/$user';
+    try {
+      final response = await _dio.post(url, data: temp);
+      return APIResponse(data: response.data);
+    } on DioError catch (error) {
+      if (error.response != null) {
+        switch (error.response?.statusCode) {
+          case 401:
+            return APIResponse(type: FriendTypeError.tokenExpired);
+          case 404:
+            return APIResponse(type: FriendTypeError.notFound);
+          default:
+            return APIResponse(error: APIError.fromJson(error.response?.data));
+        }
+      } else {
+        return APIResponse(type: FriendTypeError.noInternet);
+      }
+    } catch (error) {
+      return APIResponse(
+          error: APIError(
+              systemMessage: '',
+              title: 'Erreur lors de l\'oublie de mot de passe',
+              content: error.toString()));
+    }
+  }
+
+  Future<APIResponse<bool>> resetPassword(Friend friend) async {
+    var url = '$domaine/friend/resetPassword';
+    try {
+      final response = await _dio.put(url, data: friend.toJson());
+      return APIResponse(data: response.data);
+    } on DioError catch (error) {
+      if (error.response != null) {
+        switch (error.response?.statusCode) {
+          case 401:
+            return APIResponse(type: FriendTypeError.tokenExpired);
+          case 404:
+            return APIResponse(type: FriendTypeError.notFound);
+          default:
+            return APIResponse(error: APIError.fromJson(error.response?.data));
+        }
+      } else {
+        return APIResponse(type: FriendTypeError.noInternet);
+      }
+    } catch (error) {
+      return APIResponse(
+          error: APIError(
+              systemMessage: '',
+              title: 'Erreur lors de l\'oublie de mot de passe',
+              content: error.toString()));
+    }
+  }
 }

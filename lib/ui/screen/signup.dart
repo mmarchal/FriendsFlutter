@@ -1,7 +1,9 @@
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:life_friends/service/api.repository.dart';
+import 'package:life_friends/ui/screen/login_head_screen.dart';
 import 'package:life_friends/ui/utils/style.dart';
+import 'package:life_friends/ui/widgets/button_login.dart';
 import 'package:life_friends/ui/widgets/loading_widget.dart';
 import 'package:life_friends/ui/widgets/login_right_text.dart';
 import 'package:life_friends/ui/widgets/sign_textfield.dart';
@@ -64,88 +66,37 @@ class _SignupPageState extends State<SignupPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: ListView(
-        children: <Widget>[
-          Container(
-            width: MediaQuery.of(context).size.width,
-            height: MediaQuery.of(context).size.height / 3.5,
-            decoration: Style().boxDeco,
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: const <Widget>[
-                Spacer(),
-                Align(
-                  alignment: Alignment.center,
-                  child: Icon(
-                    Icons.person,
-                    size: 90,
-                    color: Colors.white,
-                  ),
-                ),
-                Spacer(),
-                LoginRightText(
-                  title: "Compte",
-                ),
-              ],
+    return LoginHeadScreen(
+        value: "Compte",
+        child: Column(
+          children: <Widget>[
+            SignTextField(
+              title: "Prénom",
+              controller: _prenom,
             ),
-          ),
-          Container(
-            height: MediaQuery.of(context).size.height / 2,
-            width: MediaQuery.of(context).size.width,
-            padding: const EdgeInsets.only(top: 62),
-            child: Column(
-              children: <Widget>[
-                SignTextField(
-                  title: "Prénom",
-                  controller: _prenom,
-                ),
-                Style().espace,
-                SignTextField(
-                  title: "Login",
-                  controller: _login,
-                ),
-                Style().espace,
-                SignTextField(
-                  title: "Mot de passe",
-                  controller: _password,
-                ),
-                Style().espace,
-                SignTextField(title: "Email", controller: _mail),
-                Style().espace,
-                InkWell(
-                  onTap: () {
-                    showDialog(
-                        context: context,
-                        builder: (_) => const LoadingWidget(
-                            label: 'Création de compte en cours'));
-                    _creationCompte();
-                  },
-                  child: Container(
-                    height: 45,
-                    width: MediaQuery.of(context).size.width / 1.2,
-                    decoration: const BoxDecoration(
-                        gradient: LinearGradient(
-                          colors: [
-                            Color(0xff6bceff),
-                            Color(0xFF00abff),
-                          ],
-                        ),
-                        borderRadius: BorderRadius.all(Radius.circular(50))),
-                    child: Center(
-                      child: Text(
-                        'Créer un compte'.toUpperCase(),
-                        style: const TextStyle(
-                            color: Colors.white, fontWeight: FontWeight.bold),
-                      ),
-                    ),
-                  ),
-                ),
-              ],
+            Style().espace,
+            SignTextField(
+              title: "Login",
+              controller: _login,
             ),
-          ),
-        ],
-      ),
-    );
+            Style().espace,
+            SignTextField(
+              title: "Mot de passe",
+              controller: _password,
+            ),
+            Style().espace,
+            SignTextField(title: "Email", controller: _mail),
+            Style().espace,
+            ButtonLogin(
+                onTap: () {
+                  showDialog(
+                      context: context,
+                      builder: (_) => const LoadingWidget(
+                          label: 'Création de compte en cours'));
+                  _creationCompte();
+                },
+                title: 'Créer un compte'),
+          ],
+        ));
   }
 }

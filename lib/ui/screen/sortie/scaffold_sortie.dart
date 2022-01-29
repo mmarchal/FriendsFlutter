@@ -1,3 +1,4 @@
+import 'package:cool_alert/cool_alert.dart';
 import 'package:flutter/material.dart';
 import 'package:life_friends/model/friend.dart';
 import 'package:life_friends/model/sortie.dart';
@@ -19,15 +20,32 @@ class ScaffoldSortie extends StatelessWidget {
       this.sortie})
       : super(key: key);
 
-  _addFriend(Friend? friend) {
+  _showDialogError(String error, BuildContext context) {
+    return CoolAlert.show(
+        context: context,
+        type: CoolAlertType.error,
+        title: "Erreur lors de l'inscription",
+        text: "Une erreur est survenu --> $error");
+  }
+
+  _addFriend(Friend? friend, BuildContext context) {
     if (friend != null && sortie != null) {
       SortieRepository().addFriendToOuting(friend, sortie!).then((value) {
-        print(value.data);
+        if (value.data!) {
+          CoolAlert.show(
+              context: context,
+              type: CoolAlertType.success,
+              title: "Inscription",
+              text: "Vous êtes bien inscrit !");
+        } else {
+          _showDialogError("Contactez l'administrateur !", context);
+        }
+      }).onError((error, stackTrace) {
+        _showDialogError(error.toString(), context);
       });
     } else {
-      print("friend null");
+      _showDialogError("Contactez l'administrateur !", context);
     }
-    ;
   }
 
   @override
@@ -58,7 +76,7 @@ class ScaffoldSortie extends StatelessWidget {
                           actions: [
                             TextButton(
                                 onPressed: () {
-                                  _addFriend(friend);
+                                  _addFriend(friend, context);
                                   Navigator.pop(context);
                                 },
                                 child: const Text("Oui")),

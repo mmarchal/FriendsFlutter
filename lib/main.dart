@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:life_friends/provider_def.dart';
+import 'package:life_friends/ui/screen/forgot_pass.dart';
 import 'package:life_friends/ui/screen/home.dart';
 import 'package:life_friends/ui/screen/login.dart';
 import 'package:life_friends/ui/screen/signup.dart';
@@ -25,6 +26,7 @@ class MyApp extends StatelessWidget {
         debugShowCheckedModeBanner: false,
         routes: {
           '/': (context) => const LoginPage(),
+          '/forgot': (context) => ForgotPassScreen(),
           '/signup': (context) => const SignupPage(),
           '/home': (context) => const HomeScreen(),
           '/nouvel_sortie': (context) => const PropositionSortie(),

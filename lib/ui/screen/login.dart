@@ -85,16 +85,19 @@ class _LoginPageState extends State<LoginPage> {
                     icon: Icons.vpn_key,
                     isPassword: true,
                     hint: 'Mot de passe'),
-                const Align(
+                Align(
                   alignment: Alignment.centerRight,
                   child: InkWell(
-                    child: Padding(
+                    child: const Padding(
                       padding: EdgeInsets.only(top: 16, right: 32),
                       child: Text(
                         'Mot de passe oublié ?',
                         style: TextStyle(color: Colors.grey),
                       ),
                     ),
+                    onTap: () {
+                      Navigator.pushNamed(context, '/forgot');
+                    },
                   ),
                 ),
                 const Spacer(),

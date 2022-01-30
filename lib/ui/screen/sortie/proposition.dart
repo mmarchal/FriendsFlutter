@@ -1,11 +1,13 @@
 import 'package:cool_alert/cool_alert.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:life_friends/env/constants.dart';
 import 'package:life_friends/model/api/api_response.dart';
 import 'package:life_friends/model/sortie.dart';
 import 'package:life_friends/model/typesortie.dart';
 import 'package:life_friends/notifier/typesortie/typesortie_list_notifier.dart';
 import 'package:life_friends/service/sortie.repository.dart';
+import 'package:life_friends/ui/screen/sortie/scaffold_sortie.dart';
 import 'package:life_friends/ui/widgets/login_text.dart';
 import 'package:life_friends/ui/widgets/selected_widget.dart';
 // ignore: implementation_imports
@@ -48,11 +50,9 @@ class PropositionSortieState extends State<PropositionSortie> {
       }
     }
 
-    return Scaffold(
-      appBar: AppBar(
-        centerTitle: true,
-        title: const Text("Proposition de sortie"),
-      ),
+    return ScaffoldSortie(
+      title: "Proposition de sortie",
+      gradient: gNewSortie,
       body: Center(
         child: ListView(
           shrinkWrap: true,

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:life_friends/env/constants.dart';
 import 'package:life_friends/model/api/api_response.dart';
 import 'package:life_friends/model/sortie.dart';
 import 'package:life_friends/service/sortie.repository.dart';
@@ -120,6 +121,10 @@ class _ListeSortiesState extends State<ListeSorties> {
 
   @override
   Widget build(BuildContext context) {
-    return ScaffoldSortie(title: "Liste des sorties", body: _initBody());
+    return ScaffoldSortie(
+      title: "Liste des sorties",
+      body: _initBody(),
+      gradient: gNextSorties,
+    );
   }
 }

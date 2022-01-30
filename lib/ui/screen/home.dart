@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:life_friends/env/constants.dart';
 import 'package:life_friends/notifier/token_notifier.dart';
 import 'package:life_friends/ui/widgets/friend_app_bar.dart';
 import 'package:life_friends/ui/widgets/gradient_icon_button.dart';
@@ -7,31 +8,6 @@ import 'package:provider/src/provider.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({Key? key}) : super(key: key);
-
-  final Gradient gNewSortie = const LinearGradient(colors: [
-    Color(0xFF5c8dff),
-    Color(0xFF44d1ee),
-  ]);
-
-  final Gradient gNextSorties = const LinearGradient(colors: [
-    Color(0xFF3b4254),
-    Color(0xFFc2c2c1),
-  ]);
-
-  final Gradient gMesSorties = const LinearGradient(colors: [
-    Color(0xFF307e51),
-    Color(0xFF71f4c2),
-  ]);
-
-  final Gradient gMessagerie = const LinearGradient(colors: [
-    Color(0xFFff0000),
-    Color(0xFFffd747),
-  ]);
-
-  final Gradient gPropositions = const LinearGradient(colors: [
-    Color(0xFF7e3030),
-    Color(0xFF8e71f4),
-  ]);
 
   @override
   Widget build(BuildContext context) {
@@ -69,7 +45,8 @@ class HomeScreen extends StatelessWidget {
                 gradient: gMessagerie,
                 label: "Messagerie"),
             GradientIconButton(
-                onPressed: () => Navigator.pushNamed(context, "/propositions"),
+                onPressed: () =>
+                    Navigator.pushNamed(context, "/nouvelle_proposition"),
                 icon: Icons.vertical_distribute_rounded,
                 gradient: gPropositions,
                 label: "Propositions"),

@@ -8,16 +8,19 @@ import 'package:life_friends/service/sortie.repository.dart';
 import 'package:provider/src/provider.dart';
 
 class ScaffoldSortie extends StatelessWidget {
+  final Gradient gradient;
   final String title;
   final Widget body;
   final bool? inscription;
   final Sortie? sortie;
+
   const ScaffoldSortie(
       {Key? key,
       required this.title,
       required this.body,
       this.inscription = false,
-      this.sortie})
+      this.sortie,
+      required this.gradient})
       : super(key: key);
 
   _showDialogError(String error, BuildContext context) {
@@ -52,11 +55,11 @@ class ScaffoldSortie extends StatelessWidget {
   Widget build(BuildContext context) {
     Friend? friend = context.watch<FriendNotifier>().friend;
     return Scaffold(
-      backgroundColor: const Color(0xFF3B4254),
+      backgroundColor: gradient.colors[0],
       appBar: AppBar(
         centerTitle: true,
         title: Text(title),
-        backgroundColor: const Color(0xFF3B4254),
+        backgroundColor: gradient.colors[1],
         actions: [
           if (inscription!)
             IconButton(

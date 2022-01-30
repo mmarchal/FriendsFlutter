@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:life_friends/env/constants.dart';
 import 'package:life_friends/model/friend.dart';
 import 'package:life_friends/model/sortie.dart';
 import 'package:life_friends/ui/screen/sortie/scaffold_sortie.dart';
@@ -79,6 +80,7 @@ class _DetailSortieState extends State<DetailSortie> {
           ],
         ),
       ),
+      gradient: gNextSorties,
     );
   }
 

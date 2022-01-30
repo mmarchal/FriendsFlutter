@@ -30,6 +30,19 @@ class _ListeSortiesState extends State<ListeSorties> {
     });
   }
 
+  IconData _getIconFromType(Sortie s) {
+    switch (s.typeSortie.id) {
+      case 1:
+        return Icons.movie;
+      case 2:
+        return Icons.sports;
+      case 3:
+        return Icons.local_activity;
+      default:
+        return Icons.question_answer;
+    }
+  }
+
   _initBody() {
     Widget? body;
     setState(() {
@@ -52,8 +65,8 @@ class _ListeSortiesState extends State<ListeSorties> {
                   child: Row(
                     mainAxisSize: MainAxisSize.max,
                     children: [
-                      const Icon(
-                        Icons.settings_outlined,
+                      Icon(
+                        _getIconFromType(s),
                         color: Colors.white,
                         size: 24,
                       ),

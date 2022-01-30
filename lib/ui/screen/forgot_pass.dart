@@ -1,6 +1,7 @@
 import 'package:cool_alert/cool_alert.dart';
 import 'package:flutter/material.dart';
 import 'package:life_friends/model/api/api_response.dart';
+import 'package:life_friends/model/password.dart';
 import 'package:life_friends/service/api.repository.dart';
 import 'package:life_friends/ui/screen/login_head_screen.dart';
 import 'package:life_friends/ui/widgets/button_login.dart';
@@ -103,7 +104,37 @@ class ForgotPassScreenState extends State<ForgotPassScreen> {
   }
 
   _reinitPass(BuildContext context) async {
-    //TODO Voir comment réinitialiser le mot de passe sans envoyer l'objet Friend car inconnu à ce moment
+    Password password = Password(
+        userLogin: usernameController.text,
+        token: reinitController.text,
+        newPassword: newPassController.text);
+    APIResponse<bool> response = await ApiRepository().resetPassword(password);
+    if (response.isSuccess) {
+      Navigator.pop(context);
+      if (response.data!) {
+        CoolAlert.show(
+            context: context,
+            type: CoolAlertType.success,
+            title: "Mot de passe modifié avec succés !",
+            onConfirmBtnTap: () {
+              Navigator.pushNamed(context, '/');
+            },
+            text: "Vous allez être redirigé vers la page de login !");
+      } else {
+        CoolAlert.show(
+            context: context,
+            type: CoolAlertType.error,
+            title: "Erreur",
+            text: "Contactez votre admin !");
+      }
+    } else {
+      Navigator.pop(context);
+      CoolAlert.show(
+          context: context,
+          type: CoolAlertType.error,
+          title: "Erreur",
+          text: "Contactez votre admin !");
+    }
   }
 
   @override

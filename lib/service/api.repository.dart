@@ -6,6 +6,7 @@ import 'package:life_friends/model/connect.dart';
 import 'package:life_friends/model/error/api_error.dart';
 import 'package:life_friends/model/error/type_error.dart';
 import 'package:life_friends/model/friend.dart';
+import 'package:life_friends/model/password.dart';
 
 class ApiRepository {
   final Dio _dio = Dio();
@@ -164,10 +165,10 @@ class ApiRepository {
     }
   }
 
-  Future<APIResponse<bool>> resetPassword(Friend friend) async {
+  Future<APIResponse<bool>> resetPassword(Password password) async {
     var url = '$domaine/friend/resetPassword';
     try {
-      final response = await _dio.put(url, data: friend.toJson());
+      final response = await _dio.put(url, data: password.toJson());
       return APIResponse(data: response.data);
     } on DioError catch (error) {
       if (error.response != null) {

@@ -53,87 +53,84 @@ class PropositionSortieState extends State<PropositionSortie> {
         centerTitle: true,
         title: const Text("Proposition de sortie"),
       ),
-      body: SingleChildScrollView(
-        child: Container(
-          margin: const EdgeInsets.all(16),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              LoginText(
-                hint: "Titre de la proposition",
-                icon: Icons.title,
-                controller: _controllerTitle,
-              ),
-              SelectedWidget(
-                isSelected: (selectedDateTime != null),
-                selectedChild: Text((selectedDateTime != null)
-                    ? DateFormat("dd/MM/yyyy").format(selectedDateTime!)
-                    : ""),
-                notSelectedChild: ElevatedButton.icon(
-                  onPressed: () {
-                    _selectDate(context);
-                  },
-                  icon: const Icon(Icons.calendar_today),
-                  label: const Text("Choisir une date"),
-                ),
+      body: Center(
+        child: ListView(
+          shrinkWrap: true,
+          padding: const EdgeInsets.all(30),
+          children: [
+            LoginText(
+              hint: "Titre de la proposition",
+              icon: Icons.title,
+              controller: _controllerTitle,
+            ),
+            SelectedWidget(
+              isSelected: (selectedDateTime != null),
+              selectedChild: Text((selectedDateTime != null)
+                  ? DateFormat("dd/MM/yyyy").format(selectedDateTime!)
+                  : ""),
+              notSelectedChild: ElevatedButton.icon(
                 onPressed: () {
                   _selectDate(context);
                 },
+                icon: const Icon(Icons.calendar_today),
+                label: const Text("Choisir une date"),
               ),
-              LoginText(
-                hint: "Lieu de la proposition",
-                icon: Icons.location_city,
-                controller: _controllerLocation,
-              ),
-              (liste != null)
-                  ? Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: liste
-                          .map((element) => RadioListTile<int>(
-                                title: Text(element.type),
-                                onChanged: (int? b) {
-                                  setState(() {
-                                    selectedValue = b;
-                                  });
-                                },
-                                value: element.id!,
-                                groupValue: selectedValue,
-                              ))
-                          .toList(),
-                    )
-                  : const CircularProgressIndicator(),
-              Align(
-                alignment: Alignment.bottomCenter,
-                child: ElevatedButton(
-                  child: const Text("Valider"),
-                  onPressed: () async {
-                    Sortie sortie = Sortie(
-                        datePropose: selectedDateTime,
-                        intitule: _controllerTitle.text,
-                        lieu: _controllerLocation.text,
-                        typeSortie: TypeSortie(id: selectedValue, type: ''));
-                    APIResponse<bool> response =
-                        await SortieRepository().addOuting(sortie);
-                    if (response.isSuccess && response.data!) {
-                      await CoolAlert.show(
+              onPressed: () {
+                _selectDate(context);
+              },
+            ),
+            LoginText(
+              hint: "Lieu de la proposition",
+              icon: Icons.location_city,
+              controller: _controllerLocation,
+            ),
+            (liste != null)
+                ? Column(
+                    children: liste
+                        .map((element) => RadioListTile<int>(
+                              title: Text(element.type),
+                              onChanged: (int? b) {
+                                setState(() {
+                                  selectedValue = b;
+                                });
+                              },
+                              value: element.id!,
+                              groupValue: selectedValue,
+                            ))
+                        .toList(),
+                  )
+                : const CircularProgressIndicator(),
+            Align(
+              alignment: Alignment.bottomCenter,
+              child: ElevatedButton(
+                child: const Text("Valider"),
+                onPressed: () async {
+                  Sortie sortie = Sortie(
+                      datePropose: selectedDateTime,
+                      intitule: _controllerTitle.text,
+                      lieu: _controllerLocation.text,
+                      typeSortie: TypeSortie(id: selectedValue, type: ''));
+                  APIResponse<bool> response =
+                      await SortieRepository().addOuting(sortie);
+                  if (response.isSuccess && response.data!) {
+                    await CoolAlert.show(
+                      context: context,
+                      type: CoolAlertType.success,
+                      text: 'Sortie enregistré !',
+                      autoCloseDuration: const Duration(seconds: 2),
+                    );
+                    Navigator.pushNamed(context, "/home");
+                  } else {
+                    await CoolAlert.show(
                         context: context,
-                        type: CoolAlertType.success,
-                        text: 'Sortie enregistré !',
-                        autoCloseDuration: const Duration(seconds: 2),
-                      );
-                      Navigator.pushNamed(context, "/home");
-                    } else {
-                      await CoolAlert.show(
-                          context: context,
-                          type: CoolAlertType.error,
-                          title: response.error!.title,
-                          text: response.error!.content);
-                    }
-                  },
-                ),
-              )
-            ],
-          ),
+                        type: CoolAlertType.error,
+                        title: response.error!.title,
+                        text: response.error!.content);
+                  }
+                },
+              ),
+            )
+          ],
         ),
       ),
     );

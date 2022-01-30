@@ -103,10 +103,16 @@ class _LoginPageState extends State<LoginPage> {
                 const Spacer(),
                 InkWell(
                   onTap: () {
-                    const LoadingWidget(label: "Connexion en cours");
+                    showDialog(
+                        context: context,
+                        builder: (context) {
+                          return const LoadingWidget(
+                              label: "Connexion en cours");
+                        });
                     ApiRepository()
                         .login(login: _user.text, password: _pass.text)
                         .then((value) async {
+                      Navigator.pop(context);
                       APIResponse<ApiBack> retour = value;
                       if (retour.isSuccess) {
                         APIResponse<Friend> friend = await FriendRepository()

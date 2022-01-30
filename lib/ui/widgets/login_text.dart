@@ -21,6 +21,7 @@ class LoginText extends StatelessWidget {
       width: MediaQuery.of(context).size.width / 1.2,
       height: 45,
       padding: const EdgeInsets.only(top: 4, left: 16, right: 16, bottom: 4),
+      margin: const EdgeInsets.only(top: 20, bottom: 20),
       decoration: const BoxDecoration(
           borderRadius: BorderRadius.all(Radius.circular(50)),
           color: Colors.white,

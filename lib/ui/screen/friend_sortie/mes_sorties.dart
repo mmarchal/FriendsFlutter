@@ -1,14 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_calendar_carousel/classes/event.dart';
+import 'package:flutter_calendar_carousel/flutter_calendar_carousel.dart';
+import 'package:intl/intl.dart';
 import 'package:life_friends/env/constants.dart';
 import 'package:life_friends/model/api/api_response.dart';
 import 'package:life_friends/model/sortie.dart';
-import 'package:life_friends/notifier/friend/friend_list_notifier.dart';
-import 'package:life_friends/notifier/friend/friend_notifier.dart';
-import 'package:life_friends/notifier/sortie/sortie_notifier.dart';
 import 'package:life_friends/service/friend.repository.dart';
 import 'package:life_friends/ui/screen/sortie/scaffold_sortie.dart';
 import 'package:provider/src/provider.dart';
-import 'package:sticky_grouped_list/sticky_grouped_list.dart';
 
 // ignore: must_be_immutable
 class MesSorties extends StatefulWidget {
@@ -27,8 +26,21 @@ class MesSorties extends StatefulWidget {
 class _MesSorties extends State<MesSorties> {
   APIResponse<List<Sortie>>? apiSorties;
 
-  ///To do --> Style à modifier
-  ///https://miro.medium.com/max/910/1*xvCsoq7iYcznw1Xy5A8Jng.png
+  static Widget _presentIcon(String day) => CircleAvatar(
+        backgroundColor: Colors.green,
+        child: Text(
+          day,
+          style: const TextStyle(
+            color: Colors.black,
+          ),
+        ),
+      );
+
+  final EventList<Event> _markedDateMap = EventList<Event>(
+    events: {},
+  );
+
+  late CalendarCarousel _calendarCarouselNoHeader;
 
   @override
   void initState() {
@@ -43,36 +55,79 @@ class _MesSorties extends State<MesSorties> {
     }
   }
 
+  late double cHeight;
+
+  List<DateTime> presentDates = [
+    DateTime(2022, 01, 1),
+    DateTime(2022, 01, 3),
+    DateTime(2022, 01, 4),
+    DateTime(2022, 01, 5),
+    DateTime(2022, 01, 6),
+    DateTime(2022, 01, 9),
+    DateTime(2022, 01, 10),
+    DateTime(2022, 01, 11),
+    DateTime(2022, 01, 15),
+    DateTime(2022, 01, 22),
+    DateTime(2022, 01, 23),
+  ];
+
   @override
   Widget build(BuildContext context) {
-    //TO DO voir afficher les sorties comme un "calendrier"
+    cHeight = MediaQuery.of(context).size.height;
+    for (int i = 0; i < presentDates.length; i++) {
+      _markedDateMap.add(
+        presentDates[i],
+        Event(
+          date: presentDates[i],
+          title: 'Event 5',
+          icon: _presentIcon(
+            presentDates[i].day.toString(),
+          ),
+        ),
+      );
+    }
+
+    _calendarCarouselNoHeader = CalendarCarousel<Event>(
+      height: cHeight * 0.54,
+      weekendTextStyle: const TextStyle(
+        color: Colors.red,
+      ),
+      todayButtonColor: Colors.blue,
+      markedDatesMap: _markedDateMap,
+      markedDateShowIcon: true,
+      markedDateIconMaxShown: 1,
+      markedDateMoreShowTotal:
+          null, // null for not showing hidden events indicator
+      markedDateIconBuilder: (event) {
+        return event.icon;
+      },
+    );
     return ScaffoldSortie(
       title: 'Mes sorties',
+      gradient: widget.gradient,
       body: (apiSorties != null)
-          ? GridView.builder(
-              primary: false,
-              padding: const EdgeInsets.all(20),
-              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisSpacing: 10, mainAxisSpacing: 10, crossAxisCount: 2),
-              itemCount: apiSorties?.data!.length,
-              itemBuilder: (context, index) {
-                Sortie sortie = apiSorties!.data![index];
-                return Card(
-                  elevation: 10,
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Text(sortie.intitule),
-                      Text(sortie.datePropose?.toIso8601String() ??
-                          "Pas de date prévu !"),
-                      Text(sortie.typeSortie.type)
-                    ],
-                  ),
-                );
-              },
+          ? SingleChildScrollView(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: <Widget>[
+                  _calendarCarouselNoHeader,
+                  markerRepresent(Colors.green, "Present"),
+                ],
+              ),
             )
           : const Center(child: CircularProgressIndicator()),
-      gradient: gMesSorties,
+    );
+  }
+
+  Widget markerRepresent(Color color, String data) {
+    return ListTile(
+      leading: CircleAvatar(
+        backgroundColor: color,
+        radius: cHeight * 0.022,
+      ),
+      title: Text(
+        data,
+      ),
     );
   }
 }

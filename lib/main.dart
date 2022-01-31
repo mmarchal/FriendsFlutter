@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:life_friends/env/constants.dart';
 import 'package:life_friends/provider_def.dart';
 import 'package:life_friends/ui/screen/forgot_pass.dart';
@@ -12,7 +13,10 @@ import 'package:life_friends/ui/screen/sortie/proposition.dart';
 import 'package:provider/provider.dart';
 
 void main() {
-  runApp(const MyApp());
+  WidgetsFlutterBinding.ensureInitialized();
+  SystemChrome.setPreferredOrientations([
+    DeviceOrientation.portraitUp,
+  ]).then((value) => runApp(const MyApp()));
 }
 
 class MyApp extends StatelessWidget {

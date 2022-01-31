@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:life_friends/env/constants.dart';
 import 'package:life_friends/notifier/token_notifier.dart';
+import 'package:life_friends/ui/screen/friend_sortie/mes_sorties.dart';
 import 'package:life_friends/ui/widgets/friend_app_bar.dart';
 import 'package:life_friends/ui/widgets/gradient_icon_button.dart';
 // ignore: implementation_imports
@@ -34,7 +35,12 @@ class HomeScreen extends StatelessWidget {
                 gradient: gNextSorties,
                 label: "Voir les prochaines sorties"),
             GradientIconButton(
-                onPressed: () => Navigator.pushNamed(context, "/mes_sorties"),
+                onPressed: () => Navigator.push(context,
+                        MaterialPageRoute(builder: (BuildContext bC) {
+                      return MesSorties(
+                          gradient: gMesSorties,
+                          userId: (authToken?.userId.toString())!);
+                    })),
                 icon: Icons.my_library_add,
                 gradient: gMesSorties,
                 label: "Mes sorties"),

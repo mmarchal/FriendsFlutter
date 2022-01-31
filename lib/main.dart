@@ -9,6 +9,7 @@ import 'package:life_friends/ui/screen/proposition/nouvelle_proposition.dart';
 import 'package:life_friends/ui/screen/signup.dart';
 import 'package:life_friends/ui/screen/sortie/liste_sorties.dart';
 import 'package:life_friends/ui/screen/sortie/proposition.dart';
+import 'package:provider/provider.dart';
 
 void main() {
   runApp(const MyApp());
@@ -36,6 +37,7 @@ class MyApp extends StatelessWidget {
           '/prochaines_sorties': (context) => const ListeSorties(),
           '/mes_sorties': (context) => const MesSorties(
                 gradient: gPropositions,
+                userId: '',
               ),
           '/nouvelle_proposition': (context) => const NouvelleProposition(
                 gradient: gPropositions,

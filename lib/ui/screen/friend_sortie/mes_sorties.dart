@@ -41,6 +41,7 @@ class _MesSorties extends State<MesSorties> {
   );
 
   late CalendarCarousel _calendarCarouselNoHeader;
+  List<DateTime> presentDates = [];
 
   @override
   void initState() {
@@ -50,26 +51,20 @@ class _MesSorties extends State<MesSorties> {
       FriendRepository().getMySorties(widget.userId).then((value) {
         setState(() {
           apiSorties = value;
+          if (apiSorties?.data != null) {
+            for (var element in apiSorties!.data!) {
+              print(element.datePropose);
+              if (element.datePropose != null) {
+                presentDates.add(element.datePropose!);
+              }
+            }
+          }
         });
       });
     }
   }
 
   late double cHeight;
-
-  List<DateTime> presentDates = [
-    DateTime(2022, 01, 1),
-    DateTime(2022, 01, 3),
-    DateTime(2022, 01, 4),
-    DateTime(2022, 01, 5),
-    DateTime(2022, 01, 6),
-    DateTime(2022, 01, 9),
-    DateTime(2022, 01, 10),
-    DateTime(2022, 01, 11),
-    DateTime(2022, 01, 15),
-    DateTime(2022, 01, 22),
-    DateTime(2022, 01, 23),
-  ];
 
   @override
   Widget build(BuildContext context) {

@@ -6,6 +6,7 @@ import 'package:life_friends/model/sortie.dart';
 import 'package:life_friends/notifier/sortie/sortie_notifier.dart';
 import 'package:life_friends/ui/screen/sortie/detail_sortie.dart';
 import 'package:life_friends/ui/screen/sortie/scaffold_sortie.dart';
+import 'package:life_friends/ui/widgets/icon_type.dart';
 import 'package:provider/src/provider.dart';
 
 class ListeSorties extends StatelessWidget {
@@ -13,19 +14,6 @@ class ListeSorties extends StatelessWidget {
 
   ///To do --> Style à modifier
   ///https://miro.medium.com/max/910/1*xvCsoq7iYcznw1Xy5A8Jng.png
-
-  IconData _getIconFromType(Sortie s) {
-    switch (s.typeSortie.id) {
-      case 1:
-        return Icons.movie;
-      case 2:
-        return Icons.sports;
-      case 3:
-        return Icons.local_activity;
-      default:
-        return Icons.question_answer;
-    }
-  }
 
   _initBody(List<Sortie>? data) {
     if (data!.isNotEmpty) {
@@ -42,7 +30,7 @@ class ListeSorties extends StatelessWidget {
                 mainAxisSize: MainAxisSize.max,
                 children: [
                   Icon(
-                    _getIconFromType(s),
+                    IconType().getIconFromType(s),
                     color: Colors.white,
                     size: 24,
                   ),

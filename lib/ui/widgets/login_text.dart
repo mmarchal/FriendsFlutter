@@ -39,7 +39,7 @@ class LoginTextState extends State<LoginText> {
           Expanded(
             child: TextField(
               controller: widget.controller,
-              obscureText: !showPassword,
+              obscureText: showPassword,
               decoration: InputDecoration(
                 border: InputBorder.none,
                 icon: Icon(
@@ -57,7 +57,7 @@ class LoginTextState extends State<LoginText> {
                     showPassword = !showPassword;
                   });
                 },
-                icon: Icon((showPassword)
+                icon: Icon((!showPassword)
                     ? Icons.visibility_off
                     : Icons.remove_red_eye))
         ],

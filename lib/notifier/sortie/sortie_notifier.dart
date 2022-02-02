@@ -9,6 +9,9 @@ class SortieNotifier extends ChangeNotifier {
   final String _userId;
 
   APIResponse<List<Sortie>>? sorties;
+  APIResponse<List<int>>? participants;
+
+  APIResponse<Sortie>? uniqueSortie;
 
   SortieNotifier(this._userId);
 
@@ -23,6 +26,24 @@ class SortieNotifier extends ChangeNotifier {
       if (apiResponse.isSuccess) {
         _mesSorties.addAll(apiResponse.data!);
         sorties = APIResponse(data: _mesSorties, type: apiResponse.type);
+      } else {}
+    } catch (error) {
+      print(error);
+    }
+    notifyListeners();
+  }
+
+  Future loadOneSortie(
+      {bool clearSortie = false, required String sortieId}) async {
+    if (clearSortie) {
+      uniqueSortie = null;
+    }
+
+    try {
+      var apiResponse = await SortieRepository().getOneSortie(sortieId);
+      if (apiResponse.isSuccess) {
+        uniqueSortie =
+            APIResponse(data: apiResponse.data, type: apiResponse.type);
       } else {}
     } catch (error) {
       print(error);

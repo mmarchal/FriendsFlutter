@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:life_friends/notifier/friend/friend_list_notifier.dart';
 import 'package:life_friends/notifier/friend/friend_notifier.dart';
+import 'package:life_friends/notifier/sortie/sortie_notifier.dart';
 import 'package:life_friends/notifier/token_notifier.dart';
 import 'package:life_friends/notifier/typesortie/typesortie_list_notifier.dart';
 import 'package:life_friends/notifier/typesortie/typesortie_notifier.dart';
@@ -23,6 +24,7 @@ class ProviderDef extends StatelessWidget {
         Provider<FriendRepository>(
           create: (_) => FriendRepository(),
         ),
+        Provider<SortieNotifier>(create: (_) => SortieNotifier("")),
         Provider<TypeSortieRepository>(
           create: (_) => TypeSortieRepository(),
         ),

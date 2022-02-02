@@ -96,4 +96,30 @@ class SortieRepository {
               content: error.toString()));
     }
   }
+
+  Future<APIResponse<Sortie>> getOneSortie(String sortieId) async {
+    try {
+      final responseDio = await _dio.get("$url/$sortieId");
+      return APIResponse(data: Sortie.fromJson(responseDio.data));
+    } on DioError catch (error) {
+      if (error.response != null) {
+        switch (error.response?.statusCode) {
+          case 401:
+            return APIResponse(type: FriendTypeError.tokenExpired);
+          case 404:
+            return APIResponse(type: FriendTypeError.notFound);
+          default:
+            return APIResponse(error: APIError.fromJson(error.response?.data));
+        }
+      } else {
+        return APIResponse(type: FriendTypeError.noInternet);
+      }
+    } catch (error) {
+      return APIResponse(
+          error: APIError(
+              systemMessage: '',
+              title: 'Erreur lors de la connexion',
+              content: error.toString()));
+    }
+  }
 }

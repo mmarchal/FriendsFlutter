@@ -16,14 +16,12 @@ class SortieNotifier extends ChangeNotifier {
 
   Future loadAllSorties({bool clearList = false}) async {
     if (clearList) {
-      allSorties.clear();
       listeSorties = null;
     }
 
     try {
       var api = await SortieRepository().getSorties();
       if (api.isSuccess) {
-        allSorties.addAll(api.data!);
         listeSorties = api;
       }
     } catch (error) {

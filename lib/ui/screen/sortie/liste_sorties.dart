@@ -69,12 +69,9 @@ class ListeSorties extends StatelessWidget {
               ),
             ),
             onTap: () {
-              Navigator.push(context,
-                  MaterialPageRoute(builder: (BuildContext bC) {
-                return DetailSortie(
-                  sortie: s,
-                );
-              }));
+              Provider.of<SortieNotifier>(context, listen: false)
+                  .loadOneSortie(sortieId: s.id.toString());
+              Navigator.pushNamed(context, '/detail_sortie');
             },
           );
         },

@@ -8,6 +8,7 @@ import 'package:life_friends/ui/screen/home.dart';
 import 'package:life_friends/ui/screen/login.dart';
 import 'package:life_friends/ui/screen/proposition/nouvelle_proposition.dart';
 import 'package:life_friends/ui/screen/signup.dart';
+import 'package:life_friends/ui/screen/sortie/detail_sortie.dart';
 import 'package:life_friends/ui/screen/sortie/liste_sorties.dart';
 import 'package:life_friends/ui/screen/sortie/proposition.dart';
 import 'package:provider/provider.dart';
@@ -46,7 +47,8 @@ class MyApp extends StatelessWidget {
               ),
           '/nouvelle_proposition': (context) => const NouvelleProposition(
                 gradient: gPropositions,
-              )
+              ),
+          '/detail_sortie': (context) => const DetailSortie()
         },
       ),
     );

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:life_friends/model/friend.dart';
 import 'package:life_friends/model/sortie.dart';
 import 'package:life_friends/notifier/friend/friend_notifier.dart';
+import 'package:life_friends/notifier/sortie/sortie_notifier.dart';
 import 'package:life_friends/service/sortie.repository.dart';
 // ignore: implementation_imports
 import 'package:provider/src/provider.dart';
@@ -12,6 +13,7 @@ class ScaffoldSortie extends StatelessWidget {
   final String title;
   final Widget body;
   final bool? inscription;
+  final VoidCallback? onConfirm;
   final Sortie? sortie;
 
   const ScaffoldSortie(
@@ -20,7 +22,8 @@ class ScaffoldSortie extends StatelessWidget {
       required this.body,
       this.inscription = false,
       this.sortie,
-      required this.gradient})
+      required this.gradient,
+      this.onConfirm})
       : super(key: key);
 
   _showDialogError(String error, BuildContext context) {
@@ -38,6 +41,8 @@ class ScaffoldSortie extends StatelessWidget {
           CoolAlert.show(
               context: context,
               type: CoolAlertType.success,
+              barrierDismissible: true,
+              onConfirmBtnTap: onConfirm,
               title: "Inscription",
               text: "Vous êtes bien inscrit !");
         } else {

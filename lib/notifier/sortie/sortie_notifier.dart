@@ -5,24 +5,42 @@ import 'package:life_friends/service/friend.repository.dart';
 import 'package:life_friends/service/sortie.repository.dart';
 
 class SortieNotifier extends ChangeNotifier {
+  final List<Sortie> allSorties = [];
   final List<Sortie> _mesSorties = [];
-  final String _userId;
 
   APIResponse<List<Sortie>>? sorties;
+  APIResponse<List<Sortie>>? listeSorties;
   APIResponse<List<int>>? participants;
 
   APIResponse<Sortie>? uniqueSortie;
 
-  SortieNotifier(this._userId);
+  Future loadAllSorties({bool clearList = false}) async {
+    if (clearList) {
+      allSorties.clear();
+      listeSorties = null;
+    }
 
-  Future loadMesSorties({bool clearList = false}) async {
+    try {
+      var api = await SortieRepository().getSorties();
+      if (api.isSuccess) {
+        allSorties.addAll(api.data!);
+        listeSorties = api;
+      }
+    } catch (error) {
+      print(error);
+    }
+    notifyListeners();
+  }
+
+  Future loadMesSorties(
+      {bool clearList = false, required String userId}) async {
     if (clearList) {
       _mesSorties.clear();
       sorties = null;
     }
 
     try {
-      var apiResponse = await FriendRepository().getMySorties(_userId);
+      var apiResponse = await FriendRepository().getMySorties(userId);
       if (apiResponse.isSuccess) {
         _mesSorties.addAll(apiResponse.data!);
         sorties = APIResponse(data: _mesSorties, type: apiResponse.type);

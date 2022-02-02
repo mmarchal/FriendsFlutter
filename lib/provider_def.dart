@@ -24,7 +24,7 @@ class ProviderDef extends StatelessWidget {
         Provider<FriendRepository>(
           create: (_) => FriendRepository(),
         ),
-        Provider<SortieNotifier>(create: (_) => SortieNotifier("")),
+        Provider<SortieNotifier>(create: (_) => SortieNotifier()),
         Provider<TypeSortieRepository>(
           create: (_) => TypeSortieRepository(),
         ),
@@ -40,6 +40,8 @@ class ProviderDef extends StatelessWidget {
         ChangeNotifierProvider<TypeSortieNotifier>(
           create: (_) => TypeSortieNotifier(),
         ),
+        ChangeNotifierProvider<SortieNotifier>(
+            create: (_) => SortieNotifier()..loadAllSorties(clearList: true)),
         ChangeNotifierProxyProvider<FriendNotifier, FriendListNotifier>(
             create: (context) => FriendListNotifier(context.read())
               ..loadFriends(clearList: true),

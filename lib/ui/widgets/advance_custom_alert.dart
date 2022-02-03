@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:life_friends/model/api/back/api_back.dart';
 import 'package:life_friends/model/api/api_response.dart';
+import 'package:life_friends/model/error/type_error.dart';
 import 'package:life_friends/notifier/token_notifier.dart';
 import 'package:provider/provider.dart';
 
@@ -25,50 +26,52 @@ class _AdvanceCustomAlert extends State<AdvanceCustomAlert> {
           clipBehavior: Clip.none,
           alignment: Alignment.topCenter,
           children: [
-            SizedBox(
-              height: 200,
-              child: Padding(
-                padding: const EdgeInsets.fromLTRB(10, 70, 10, 10),
-                child: Column(
-                  children: [
-                    Text(
+            Padding(
+              padding: const EdgeInsets.fromLTRB(10, 70, 10, 10),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Text(
+                    (widget.response.isSuccess)
+                        ? "Connexion réussi !"
+                        : "Connexion refusé",
+                    textAlign: TextAlign.center,
+                    style: const TextStyle(
+                        fontWeight: FontWeight.bold, fontSize: 20),
+                  ),
+                  const SizedBox(
+                    height: 5,
+                  ),
+                  Text(
+                    (widget.response.isSuccess)
+                        ? "Bienvenue ${widget.response.data!.result.username} !"
+                        : "Erreur : ${_errorMesssage(widget.response.type)}",
+                    textAlign: TextAlign.center,
+                    style: const TextStyle(
+                      fontSize: 20,
+                    ),
+                  ),
+                  const SizedBox(
+                    height: 20,
+                  ),
+                  ElevatedButton(
+                    onPressed: () {
+                      if (widget.response.isSuccess) {
+                        Provider.of<TokenNotifier>(context, listen: false)
+                            .setToken(widget.response.data!.result);
+                        Navigator.pushNamed(context, '/home');
+                      } else {
+                        Navigator.pop(context);
+                      }
+                    },
+                    child: Text(
                       (widget.response.isSuccess)
-                          ? "Connexion réussi !"
-                          : "Connexion refusé",
-                      style: const TextStyle(
-                          fontWeight: FontWeight.bold, fontSize: 20),
+                          ? "Entrer dans l'application"
+                          : "Recommencer",
+                      style: const TextStyle(color: Colors.white),
                     ),
-                    const SizedBox(
-                      height: 5,
-                    ),
-                    Text(
-                      (widget.response.isSuccess)
-                          ? "Bienvenue ${widget.response.data!.result.username} !"
-                          : "Erreur : ${widget.response.type}",
-                      style: const TextStyle(fontSize: 20),
-                    ),
-                    const SizedBox(
-                      height: 20,
-                    ),
-                    ElevatedButton(
-                      onPressed: () {
-                        if (widget.response.isSuccess) {
-                          Provider.of<TokenNotifier>(context, listen: false)
-                              .setToken(widget.response.data!.result);
-                          Navigator.pushNamed(context, '/home');
-                        } else {
-                          Navigator.pop(context);
-                        }
-                      },
-                      child: Text(
-                        (widget.response.isSuccess)
-                            ? "Entrer dans l'application"
-                            : "Recommencer",
-                        style: const TextStyle(color: Colors.white),
-                      ),
-                    )
-                  ],
-                ),
+                  )
+                ],
               ),
             ),
             Positioned(
@@ -88,5 +91,18 @@ class _AdvanceCustomAlert extends State<AdvanceCustomAlert> {
                 )),
           ],
         ));
+  }
+
+  String _errorMesssage(FriendTypeError? type) {
+    switch (type) {
+      case FriendTypeError.unauthorized:
+        return "Connexion non autorisé ! Vérifiez votre identifiant / mot de passe !";
+      case FriendTypeError.noInternet:
+        return "Vous n'êtes pas connecté à Internet ! Vérifiez votre connexion !";
+      case FriendTypeError.notFound:
+        return "Non trouvé ! Contactez l'administrateur !";
+      default:
+        return "Erreur inconnu ! Contactez l'administrateur !";
+    }
   }
 }

@@ -21,7 +21,7 @@ class TypePropositionRepository {
       if (error.response != null) {
         switch (error.response?.statusCode) {
           case 401:
-            return APIResponse(type: FriendTypeError.tokenExpired);
+            return APIResponse(type: FriendTypeError.unauthorized);
           case 404:
             return APIResponse(type: FriendTypeError.notFound);
           default:

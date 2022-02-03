@@ -10,7 +10,10 @@ class LoadingWidget extends StatelessWidget {
     return AlertDialog(
       shape: const RoundedRectangleBorder(
           borderRadius: BorderRadius.all(Radius.circular(32.0))),
-      title: Text(label),
+      title: Text(
+        label,
+        textAlign: TextAlign.center,
+      ),
       content: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         mainAxisSize: MainAxisSize.min,

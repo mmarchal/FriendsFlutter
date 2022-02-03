@@ -114,16 +114,13 @@ class _LoginPageState extends State<LoginPage> {
                         .then((value) async {
                       Navigator.pop(context);
                       APIResponse<ApiBack> retour = value;
-                      if (retour.isSuccess) {
-                        APIResponse<Friend> friend = await FriendRepository()
-                            .loadConnectedFriend(retour.data?.result);
-                        friendNotifier.setFriend(friend.data);
-                        tokenNotifier.setToken(retour.data?.result);
-                        showDialog(
-                            context: context,
-                            builder: (_) =>
-                                AdvanceCustomAlert(response: retour));
-                      }
+                      APIResponse<Friend> friend = await FriendRepository()
+                          .loadConnectedFriend(retour.data?.result);
+                      friendNotifier.setFriend(friend.data);
+                      tokenNotifier.setToken(retour.data?.result);
+                      showDialog(
+                          context: context,
+                          builder: (_) => AdvanceCustomAlert(response: retour));
                     });
                   },
                   child: Container(

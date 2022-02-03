@@ -89,6 +89,7 @@ class PropositionSortieState extends State<PropositionSortie> {
                     children: liste
                         .map((element) => RadioListTile<int>(
                               title: Text(element.type),
+                              activeColor: Colors.white,
                               onChanged: (int? b) {
                                 setState(() {
                                   selectedValue = b;
@@ -117,9 +118,9 @@ class PropositionSortieState extends State<PropositionSortie> {
                       context: context,
                       type: CoolAlertType.success,
                       text: 'Sortie enregistré !',
-                      autoCloseDuration: const Duration(seconds: 2),
+                      onConfirmBtnTap: () => Navigator.pushNamedAndRemoveUntil(
+                          context, '/home', (route) => false),
                     );
-                    Navigator.pushNamed(context, "/home");
                   } else {
                     await CoolAlert.show(
                         context: context,

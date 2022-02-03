@@ -1,20 +1,24 @@
 import 'package:json_annotation/json_annotation.dart';
 import 'package:life_friends/model/friend.dart';
+import 'package:life_friends/model/type_proposition.dart';
 
-part 'amelioration.g.dart';
+part 'proposition.g.dart';
 
 @JsonSerializable()
-class Amelioration {
+class Proposition {
   final Friend utilisateur;
   final TypeProposition typeProposition;
   final String titre;
   final String detail;
 
-  Amelioration(
+  Proposition(
       {required this.utilisateur,
       required this.typeProposition,
       required this.titre,
       required this.detail});
-}
 
-enum TypeProposition { bug, fonctionnalite }
+  factory Proposition.fromJson(Map<String, dynamic> json) =>
+      _$PropositionFromJson(json);
+
+  Map<String, dynamic> toJson() => _$PropositionToJson(this);
+}

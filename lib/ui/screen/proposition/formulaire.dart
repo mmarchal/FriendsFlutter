@@ -1,0 +1,248 @@
+import 'package:flutter/material.dart';
+import 'package:flutter_form_bloc/flutter_form_bloc.dart';
+import 'package:life_friends/model/friend.dart';
+import 'package:life_friends/model/type_proposition.dart';
+import 'package:life_friends/notifier/friend/friend_notifier.dart';
+import 'package:life_friends/notifier/typeproposition/typeproposition_list_notifier.dart';
+import 'package:life_friends/ui/widgets/button_login.dart';
+import 'package:rating_dialog/rating_dialog.dart';
+
+class AllFieldsFormBloc extends FormBloc<String, String> {
+  TextFieldBloc nomFriend = TextFieldBloc();
+
+  final titreDemande = TextFieldBloc();
+
+  final typeDemande = SelectFieldBloc<String, dynamic>(
+    items: [],
+  );
+
+  final dateDemande = InputFieldBloc<DateTime, dynamic>(initialValue: null);
+
+  final contenuDemande = TextFieldBloc();
+
+  AllFieldsFormBloc() {
+    addFieldBlocs(fieldBlocs: [
+      nomFriend,
+      titreDemande,
+      typeDemande,
+      dateDemande,
+      contenuDemande
+    ]);
+  }
+
+  @override
+  void onSubmitting() async {
+    try {
+      await Future<void>.delayed(const Duration(milliseconds: 500));
+
+      emitSuccess(canSubmitAgain: true);
+    } catch (e) {
+      emitFailure();
+    }
+  }
+}
+
+class AllFieldsForm extends StatefulWidget {
+  const AllFieldsForm({Key? key}) : super(key: key);
+
+  @override
+  State<StatefulWidget> createState() {
+    return _AllFieldsForm();
+  }
+}
+
+class _AllFieldsForm extends State<AllFieldsForm> {
+  void _showRatingAppDialog() {
+    final _ratingDialog = RatingDialog(
+      title: const Text(
+        'Ajoute une note',
+        textAlign: TextAlign.center,
+      ),
+      message: const Text(
+          'Pour avoir ton avis sur le style général de l\'app :) ',
+          textAlign: TextAlign.center),
+      commentHint: 'Tu peux ajouter un commentaire si tu le souhaites :',
+      image: Image.asset(
+        "asset/evaluation.jpg",
+        height: 200,
+      ),
+      onCancelled: () => print('cancelled'),
+      onSubmitted: (response) {
+        print('rating: ${response.rating}, '
+            'comment: ${response.comment}');
+
+        if (response.rating < 3.0) {
+          print('response.rating: ${response.rating}');
+        } else {
+          Container();
+        }
+      },
+      submitButtonText: 'Valider',
+    );
+
+    showDialog(
+      context: context,
+      barrierDismissible: true,
+      builder: (context) => _ratingDialog,
+    );
+  }
+
+  double value = 0.0;
+  @override
+  Widget build(BuildContext context) {
+    Friend? friend = context.watch<FriendNotifier>().friend;
+    List<TypeProposition>? typePropositions =
+        context.watch<TypePropositionListNotifier>().listeTypes;
+    return BlocProvider(
+      create: (context) => AllFieldsFormBloc(),
+      child: Builder(
+        builder: (context) {
+          final formBloc = BlocProvider.of<AllFieldsFormBloc>(context);
+          formBloc.nomFriend.updateInitialValue(friend?.prenom);
+          formBloc.typeDemande
+              .updateItems(typePropositions?.map((e) => e.type).toList());
+          return Theme(
+            data: Theme.of(context).copyWith(
+              inputDecorationTheme: InputDecorationTheme(
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(20),
+                ),
+              ),
+            ),
+            child: FormBlocListener<AllFieldsFormBloc, String, String>(
+              onSubmitting: (context, state) {
+                LoadingDialog.show(context);
+              },
+              onSuccess: (context, state) {
+                LoadingDialog.hide(context);
+
+                Navigator.of(context).pushReplacement(
+                    MaterialPageRoute(builder: (_) => const SuccessScreen()));
+              },
+              onFailure: (context, state) {
+                LoadingDialog.hide(context);
+
+                ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(content: Text(state.failureResponse!)));
+              },
+              child: SingleChildScrollView(
+                physics: const ClampingScrollPhysics(),
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Column(
+                    children: <Widget>[
+                      TextFieldBlocBuilder(
+                        readOnly: true,
+                        textFieldBloc: formBloc.nomFriend,
+                        decoration: const InputDecoration(
+                          labelText: 'Votre nom',
+                          prefixIcon: Icon(Icons.text_fields),
+                        ),
+                      ),
+                      RadioButtonGroupFieldBlocBuilder<String>(
+                        selectFieldBloc: formBloc.typeDemande,
+                        decoration: const InputDecoration(
+                          labelText: 'Type de demande',
+                          prefixIcon: SizedBox(),
+                        ),
+                        itemBuilder: (context, item) => item,
+                      ),
+                      DateTimeFieldBlocBuilder(
+                        dateTimeFieldBloc: formBloc.dateDemande,
+                        format: DateFormat('dd-MM-yyyy'),
+                        initialDate: DateTime.now(),
+                        firstDate: DateTime(1900),
+                        lastDate: DateTime(2100),
+                        decoration: const InputDecoration(
+                          prefixIcon: Icon(Icons.calendar_today),
+                          labelText: 'Date',
+                        ),
+                      ),
+                      TextFieldBlocBuilder(
+                        textFieldBloc: formBloc.contenuDemande,
+                        minLines: 2,
+                        maxLines: 10,
+                        decoration: const InputDecoration(
+                          labelText: 'Votre demande',
+                          prefixIcon: Icon(Icons.text_fields),
+                        ),
+                      ),
+                      Align(
+                        alignment: Alignment.bottomCenter,
+                        child: ButtonLogin(
+                          title: "Envoyer ma proposition",
+                          onTap: _showRatingAppDialog,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+          );
+        },
+      ),
+    );
+  }
+}
+
+class LoadingDialog extends StatelessWidget {
+  static void show(BuildContext context, {Key? key}) => showDialog<void>(
+        context: context,
+        useRootNavigator: false,
+        barrierDismissible: false,
+        builder: (_) => LoadingDialog(key: key),
+      ).then((_) => FocusScope.of(context).requestFocus(FocusNode()));
+
+  static void hide(BuildContext context) => Navigator.pop(context);
+
+  const LoadingDialog({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return WillPopScope(
+      onWillPop: () async => false,
+      child: Center(
+        child: Card(
+          child: Container(
+            width: 80,
+            height: 80,
+            padding: const EdgeInsets.all(12.0),
+            child: const CircularProgressIndicator(),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class SuccessScreen extends StatelessWidget {
+  const SuccessScreen({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            const Icon(Icons.tag_faces, size: 100),
+            const SizedBox(height: 10),
+            const Text(
+              'Success',
+              style: TextStyle(fontSize: 54, color: Colors.black),
+              textAlign: TextAlign.center,
+            ),
+            const SizedBox(height: 10),
+            ElevatedButton.icon(
+              onPressed: () => Navigator.of(context).pushReplacement(
+                  MaterialPageRoute(builder: (_) => const AllFieldsForm())),
+              icon: const Icon(Icons.replay),
+              label: const Text('AGAIN'),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}

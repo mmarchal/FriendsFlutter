@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:life_friends/env/constants.dart';
+import 'package:life_friends/ui/screen/proposition/formulaire.dart';
 import 'package:life_friends/ui/screen/sortie/scaffold_sortie.dart';
 
 class NouvelleProposition extends StatelessWidget {
@@ -14,7 +15,7 @@ class NouvelleProposition extends StatelessWidget {
     //et textfield multilignes centré
     return const ScaffoldSortie(
       title: 'Nouvelle proposition',
-      body: Center(),
+      body: AllFieldsForm(),
       gradient: gPropositions,
     );
   }

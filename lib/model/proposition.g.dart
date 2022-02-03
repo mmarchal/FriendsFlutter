@@ -1,28 +1,23 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'amelioration.dart';
+part of 'proposition.dart';
 
 // **************************************************************************
 // JsonSerializableGenerator
 // **************************************************************************
 
-Amelioration _$AmeliorationFromJson(Map<String, dynamic> json) => Amelioration(
+Proposition _$PropositionFromJson(Map<String, dynamic> json) => Proposition(
       utilisateur: Friend.fromJson(json['utilisateur'] as Map<String, dynamic>),
-      typeProposition:
-          $enumDecode(_$TypePropositionEnumMap, json['typeProposition']),
+      typeProposition: TypeProposition.fromJson(
+          json['typeProposition'] as Map<String, dynamic>),
       titre: json['titre'] as String,
       detail: json['detail'] as String,
     );
 
-Map<String, dynamic> _$AmeliorationToJson(Amelioration instance) =>
+Map<String, dynamic> _$PropositionToJson(Proposition instance) =>
     <String, dynamic>{
       'utilisateur': instance.utilisateur,
-      'typeProposition': _$TypePropositionEnumMap[instance.typeProposition],
+      'typeProposition': instance.typeProposition,
       'titre': instance.titre,
       'detail': instance.detail,
     };
-
-const _$TypePropositionEnumMap = {
-  TypeProposition.bug: 'bug',
-  TypeProposition.fonctionnalite: 'fonctionnalite',
-};

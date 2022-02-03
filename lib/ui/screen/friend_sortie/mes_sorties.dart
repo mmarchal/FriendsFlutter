@@ -7,6 +7,7 @@ import 'package:life_friends/model/api/api_response.dart';
 import 'package:life_friends/model/sortie.dart';
 import 'package:life_friends/service/friend.repository.dart';
 import 'package:life_friends/ui/screen/sortie/scaffold_sortie.dart';
+import 'package:life_friends/ui/widgets/button_login.dart';
 import 'package:life_friends/ui/widgets/icon_type.dart';
 import 'package:provider/src/provider.dart';
 
@@ -95,11 +96,30 @@ class _MesSorties extends State<MesSorties> {
         Event e = p1.firstWhere((element) => element.date == p0);
         showDialog(
             context: context,
+            barrierDismissible: false,
             builder: (BuildContext bC) {
               return AlertDialog(
+                shape: const RoundedRectangleBorder(
+                    borderRadius: BorderRadius.all(Radius.circular(32.0))),
+                contentPadding: const EdgeInsets.only(top: 10.0),
                 elevation: 10,
-                title: Text(e.getTitle() ?? ""),
-                content: Text(e.location ?? ""),
+                title: Image.asset(
+                  "asset/agenda.jpg",
+                  height: 200,
+                ),
+                content: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                        "Date de la sortie : ${DateFormat("dd/MM/yyyy").format(e.date)}"),
+                    Text("Nom de la sortie : ${e.title ?? ""}"),
+                    Text("Lieu prévu : ${e.location ?? ""}")
+                  ],
+                ),
+                actions: [
+                  ButtonLogin(onTap: () => Navigator.pop(context), title: "OK")
+                ],
               );
             });
       },

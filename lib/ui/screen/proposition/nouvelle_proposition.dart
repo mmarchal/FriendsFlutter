@@ -11,8 +11,6 @@ class NouvelleProposition extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    //TO DO choix du type via enum + affichage sur même ligne du login et prénom
-    //et textfield multilignes centré
     return const ScaffoldSortie(
       title: 'Nouvelle proposition',
       body: AllFieldsForm(),

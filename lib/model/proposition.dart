@@ -6,16 +6,16 @@ part 'proposition.g.dart';
 
 @JsonSerializable()
 class Proposition {
-  final Friend utilisateur;
+  final String nom;
   final TypeProposition typeProposition;
-  final String titre;
-  final String detail;
+  final DateTime dateProposition;
+  final String demande;
 
   Proposition(
-      {required this.utilisateur,
+      {required this.nom,
       required this.typeProposition,
-      required this.titre,
-      required this.detail});
+      required this.dateProposition,
+      required this.demande});
 
   factory Proposition.fromJson(Map<String, dynamic> json) =>
       _$PropositionFromJson(json);

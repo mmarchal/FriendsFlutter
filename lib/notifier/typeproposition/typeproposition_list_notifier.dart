@@ -1,7 +1,7 @@
 import 'package:flutter/widgets.dart';
 import 'package:life_friends/model/api/api_response.dart';
 import 'package:life_friends/model/type_proposition.dart';
-import 'package:life_friends/service/typeproposition.dart';
+import 'package:life_friends/service/typeproposition.repository.dart';
 
 class TypePropositionListNotifier extends ChangeNotifier {
   final List<TypeProposition> _list = [];
@@ -11,7 +11,7 @@ class TypePropositionListNotifier extends ChangeNotifier {
 
   TypePropositionListNotifier(this.typePropositionRepository);
 
-  Future loadTypesSorties({bool clearList = false}) async {
+  Future loadTypesPropositions({bool clearList = false}) async {
     if (clearList) _list.clear();
     APIResponse<List<TypeProposition>> response =
         await typePropositionRepository.getTypePropositions();

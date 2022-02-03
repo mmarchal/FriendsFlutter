@@ -7,12 +7,12 @@ import 'package:life_friends/model/type_proposition.dart';
 
 class TypePropositionRepository {
   final Dio _dio = Dio();
-  final String url = "$domaine/typeProposition";
+  final String url = "$domaine/proposition";
 
   Future<APIResponse<List<TypeProposition>>> getTypePropositions() async {
     List<TypeProposition> list = [];
     try {
-      final response = await _dio.get(url);
+      final response = await _dio.get("$url/types");
       for (var element in response.data) {
         list.add(TypeProposition.fromJson(element));
       }

@@ -7,17 +7,17 @@ part of 'proposition.dart';
 // **************************************************************************
 
 Proposition _$PropositionFromJson(Map<String, dynamic> json) => Proposition(
-      utilisateur: Friend.fromJson(json['utilisateur'] as Map<String, dynamic>),
+      nom: json['nom'] as String,
       typeProposition: TypeProposition.fromJson(
           json['typeProposition'] as Map<String, dynamic>),
-      titre: json['titre'] as String,
-      detail: json['detail'] as String,
+      dateProposition: DateTime.parse(json['dateProposition'] as String),
+      demande: json['demande'] as String,
     );
 
 Map<String, dynamic> _$PropositionToJson(Proposition instance) =>
     <String, dynamic>{
-      'utilisateur': instance.utilisateur,
+      'nom': instance.nom,
       'typeProposition': instance.typeProposition,
-      'titre': instance.titre,
-      'detail': instance.detail,
+      'dateProposition': instance.dateProposition.toIso8601String(),
+      'demande': instance.demande,
     };

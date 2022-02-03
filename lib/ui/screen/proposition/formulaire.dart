@@ -1,10 +1,15 @@
+import 'package:cool_alert/cool_alert.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_bloc/flutter_form_bloc.dart';
+import 'package:life_friends/model/api/api_response.dart';
 import 'package:life_friends/model/friend.dart';
+import 'package:life_friends/model/proposition.dart';
 import 'package:life_friends/model/type_proposition.dart';
 import 'package:life_friends/notifier/friend/friend_notifier.dart';
 import 'package:life_friends/notifier/typeproposition/typeproposition_list_notifier.dart';
+import 'package:life_friends/service/proposition.repository.dart';
 import 'package:life_friends/ui/widgets/button_login.dart';
+import 'package:life_friends/ui/widgets/loading_widget.dart';
 import 'package:rating_dialog/rating_dialog.dart';
 
 class AllFieldsFormBloc extends FormBloc<String, String> {
@@ -12,11 +17,12 @@ class AllFieldsFormBloc extends FormBloc<String, String> {
 
   final titreDemande = TextFieldBloc();
 
-  final typeDemande = SelectFieldBloc<String, dynamic>(
+  final typeDemande = SelectFieldBloc<TypeProposition, dynamic>(
     items: [],
   );
 
-  final dateDemande = InputFieldBloc<DateTime, dynamic>(initialValue: null);
+  final dateDemande =
+      InputFieldBloc<DateTime, dynamic>(initialValue: DateTime.now());
 
   final contenuDemande = TextFieldBloc();
 
@@ -31,14 +37,8 @@ class AllFieldsFormBloc extends FormBloc<String, String> {
   }
 
   @override
-  void onSubmitting() async {
-    try {
-      await Future<void>.delayed(const Duration(milliseconds: 500));
-
-      emitSuccess(canSubmitAgain: true);
-    } catch (e) {
-      emitFailure();
-    }
+  void onSubmitting() {
+    // TODO: implement onSubmitting
   }
 }
 
@@ -52,41 +52,6 @@ class AllFieldsForm extends StatefulWidget {
 }
 
 class _AllFieldsForm extends State<AllFieldsForm> {
-  void _showRatingAppDialog() {
-    final _ratingDialog = RatingDialog(
-      title: const Text(
-        'Ajoute une note',
-        textAlign: TextAlign.center,
-      ),
-      message: const Text(
-          'Pour avoir ton avis sur le style général de l\'app :) ',
-          textAlign: TextAlign.center),
-      commentHint: 'Tu peux ajouter un commentaire si tu le souhaites :',
-      image: Image.asset(
-        "asset/evaluation.jpg",
-        height: 200,
-      ),
-      onCancelled: () => print('cancelled'),
-      onSubmitted: (response) {
-        print('rating: ${response.rating}, '
-            'comment: ${response.comment}');
-
-        if (response.rating < 3.0) {
-          print('response.rating: ${response.rating}');
-        } else {
-          Container();
-        }
-      },
-      submitButtonText: 'Valider',
-    );
-
-    showDialog(
-      context: context,
-      barrierDismissible: true,
-      builder: (context) => _ratingDialog,
-    );
-  }
-
   double value = 0.0;
   @override
   Widget build(BuildContext context) {
@@ -99,8 +64,9 @@ class _AllFieldsForm extends State<AllFieldsForm> {
         builder: (context) {
           final formBloc = BlocProvider.of<AllFieldsFormBloc>(context);
           formBloc.nomFriend.updateInitialValue(friend?.prenom);
-          formBloc.typeDemande
-              .updateItems(typePropositions?.map((e) => e.type).toList());
+          if (typePropositions != null) {
+            formBloc.typeDemande.updateItems(typePropositions);
+          }
           return Theme(
             data: Theme.of(context).copyWith(
               inputDecorationTheme: InputDecorationTheme(
@@ -110,21 +76,6 @@ class _AllFieldsForm extends State<AllFieldsForm> {
               ),
             ),
             child: FormBlocListener<AllFieldsFormBloc, String, String>(
-              onSubmitting: (context, state) {
-                LoadingDialog.show(context);
-              },
-              onSuccess: (context, state) {
-                LoadingDialog.hide(context);
-
-                Navigator.of(context).pushReplacement(
-                    MaterialPageRoute(builder: (_) => const SuccessScreen()));
-              },
-              onFailure: (context, state) {
-                LoadingDialog.hide(context);
-
-                ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(content: Text(state.failureResponse!)));
-              },
               child: SingleChildScrollView(
                 physics: const ClampingScrollPhysics(),
                 child: Padding(
@@ -139,17 +90,17 @@ class _AllFieldsForm extends State<AllFieldsForm> {
                           prefixIcon: Icon(Icons.text_fields),
                         ),
                       ),
-                      RadioButtonGroupFieldBlocBuilder<String>(
+                      RadioButtonGroupFieldBlocBuilder<TypeProposition>(
                         selectFieldBloc: formBloc.typeDemande,
                         decoration: const InputDecoration(
                           labelText: 'Type de demande',
                           prefixIcon: SizedBox(),
                         ),
-                        itemBuilder: (context, item) => item,
+                        itemBuilder: (context, item) => item.type,
                       ),
                       DateTimeFieldBlocBuilder(
                         dateTimeFieldBloc: formBloc.dateDemande,
-                        format: DateFormat('dd-MM-yyyy'),
+                        format: DateFormat('dd/MM/yyyy'),
                         initialDate: DateTime.now(),
                         firstDate: DateTime(1900),
                         lastDate: DateTime(2100),
@@ -171,7 +122,40 @@ class _AllFieldsForm extends State<AllFieldsForm> {
                         alignment: Alignment.bottomCenter,
                         child: ButtonLogin(
                           title: "Envoyer ma proposition",
-                          onTap: _showRatingAppDialog,
+                          onTap: () async {
+                            showDialog(
+                                context: context,
+                                builder: (context) {
+                                  return const LoadingWidget(
+                                      label: "Connexion en cours");
+                                });
+                            Proposition p = Proposition(
+                                nom: formBloc.nomFriend.value!,
+                                typeProposition: formBloc.typeDemande.value!,
+                                dateProposition: formBloc.dateDemande.value!,
+                                demande: formBloc.contenuDemande.value!);
+                            APIResponse<bool> api =
+                                await PropositionRepository().addProposition(p);
+                            if (api.isSuccess && api.data!) {
+                              Navigator.pop(context);
+                              await CoolAlert.show(
+                                context: context,
+                                type: CoolAlertType.success,
+                                text: 'Proposition envoyé !',
+                              );
+                              Navigator.pushNamedAndRemoveUntil(
+                                  context, '/home', (route) => false);
+                            } else {
+                              Navigator.pop(context);
+                              await CoolAlert.show(
+                                context: context,
+                                type: CoolAlertType.error,
+                                onConfirmBtnTap: () => Navigator.pop(context),
+                                text:
+                                    'Erreur rencontré : ${api.error?.content} !',
+                              );
+                            }
+                          },
                         ),
                       ),
                     ],

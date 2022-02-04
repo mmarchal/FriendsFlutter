@@ -7,6 +7,7 @@ import 'package:life_friends/ui/screen/forgot_pass.dart';
 import 'package:life_friends/ui/screen/friend_sortie/mes_sorties.dart';
 import 'package:life_friends/ui/screen/home.dart';
 import 'package:life_friends/ui/screen/login.dart';
+import 'package:life_friends/ui/screen/profil/my_profil.dart';
 import 'package:life_friends/ui/screen/proposition/nouvelle_proposition.dart';
 import 'package:life_friends/ui/screen/signup.dart';
 import 'package:life_friends/ui/screen/sortie/detail_sortie.dart';
@@ -57,7 +58,8 @@ class MyApp extends StatelessWidget {
           '/nouvelle_proposition': (context) => const NouvelleProposition(
                 gradient: gPropositions,
               ),
-          '/detail_sortie': (context) => const DetailSortie()
+          '/detail_sortie': (context) => const DetailSortie(),
+          '/profil': (context) => MyProfil()
         },
       ),
     );

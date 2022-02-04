@@ -22,6 +22,14 @@ class FriendAppBar extends StatelessWidget with PreferredSizeWidget {
         username ?? "Bonjour",
         style: const TextStyle(color: Colors.black),
       ),
+      actions: [
+        IconButton(
+            onPressed: () => Navigator.pushNamed(context, '/profil'),
+            icon: const Icon(
+              Icons.person,
+              color: Colors.black,
+            ))
+      ],
     );
   }
 

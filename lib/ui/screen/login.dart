@@ -33,6 +33,9 @@ class _LoginPageState extends State<LoginPage> {
 
   @override
   Widget build(BuildContext context) {
+    ApiRepository apiRepository = ApiRepository(context.read(), context.read());
+    FriendRepository friendRepository =
+        FriendRepository(context.read(), context.read());
     final FriendNotifier friendNotifier =
         Provider.of<FriendNotifier>(context, listen: false);
     final TokenNotifier tokenNotifier =
@@ -109,12 +112,12 @@ class _LoginPageState extends State<LoginPage> {
                           return const LoadingWidget(
                               label: "Connexion en cours");
                         });
-                    ApiRepository()
+                    apiRepository
                         .login(login: _user.text, password: _pass.text)
                         .then((value) async {
                       Navigator.pop(context);
                       APIResponse<ApiBack> retour = value;
-                      APIResponse<Friend> friend = await FriendRepository()
+                      APIResponse<Friend> friend = await friendRepository
                           .loadConnectedFriend(retour.data?.result);
                       friendNotifier.setFriend(friend.data);
                       tokenNotifier.setToken(retour.data?.result);

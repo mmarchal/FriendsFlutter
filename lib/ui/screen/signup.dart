@@ -7,6 +7,7 @@ import 'package:life_friends/ui/widgets/button_login.dart';
 import 'package:life_friends/ui/widgets/loading_widget.dart';
 import 'package:life_friends/ui/widgets/login_right_text.dart';
 import 'package:life_friends/ui/widgets/sign_textfield.dart';
+import 'package:provider/src/provider.dart';
 
 class SignupPage extends StatefulWidget {
   const SignupPage({Key? key}) : super(key: key);
@@ -26,12 +27,12 @@ class _SignupPageState extends State<SignupPage> {
     super.initState();
   }
 
-  void _creationCompte() {
+  void _creationCompte(BuildContext buildContext) {
     String prenom = _prenom.text;
     String login = _login.text;
     String password = _password.text;
     String email = _mail.text;
-    ApiRepository()
+    ApiRepository(context.read(), context.read())
         .insertFriend(
             prenom: prenom, login: login, password: password, email: email)
         .then((value) {
@@ -93,7 +94,7 @@ class _SignupPageState extends State<SignupPage> {
                       context: context,
                       builder: (_) => const LoadingWidget(
                           label: 'Création de compte en cours'));
-                  _creationCompte();
+                  _creationCompte(context);
                 },
                 title: 'Créer un compte'),
           ],

@@ -4,7 +4,7 @@ import 'package:life_friends/env/constants.dart';
 import 'package:life_friends/model/api/api_response.dart';
 import 'package:life_friends/model/friend.dart';
 import 'package:life_friends/model/sortie.dart';
-import 'package:life_friends/notifier/sortie/sortie_notifier.dart';
+import 'package:life_friends/notifier/sortie/sortie_list_notifier.dart';
 import 'package:life_friends/notifier/token_notifier.dart';
 import 'package:life_friends/ui/screen/sortie/scaffold_sortie.dart';
 import 'package:life_friends/ui/widgets/detail_type_sortie.dart';
@@ -25,7 +25,7 @@ class _DetailSortieState extends State<DetailSortie> {
   @override
   Widget build(BuildContext context) {
     APIResponse<Sortie>? apiSortie =
-        context.watch<SortieNotifier>().uniqueSortie;
+        context.watch<SortieListNotifier>().uniqueSortie;
     Sortie? sortie = apiSortie?.data;
     return ScaffoldSortie(
       title: sortie?.intitule ?? "",

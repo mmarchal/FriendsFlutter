@@ -50,7 +50,7 @@ class MyApp extends StatelessWidget {
           '/home': (context) => const HomeScreen(),
           '/nouvel_sortie': (context) => const PropositionSortie(),
           '/prochaines_sorties': (context) => const ListeSorties(),
-          '/mes_sorties': (context) => const MesSorties(
+          '/mes_sorties': (context) => MesSorties(
                 gradient: gPropositions,
                 userId: '',
               ),

@@ -1,5 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:life_friends/env/constants.dart';
+import 'package:life_friends/login_service.dart';
 import 'package:life_friends/model/api/api_response.dart';
 import 'package:life_friends/model/api/back/api_back.dart';
 import 'package:life_friends/model/connect.dart';
@@ -7,9 +8,12 @@ import 'package:life_friends/model/error/api_error.dart';
 import 'package:life_friends/model/error/type_error.dart';
 import 'package:life_friends/model/friend.dart';
 import 'package:life_friends/model/password.dart';
+import 'package:life_friends/service/api.service.dart';
 
-class ApiRepository {
+class ApiRepository extends ApiService {
   final Dio _dio = Dio();
+
+  ApiRepository(Dio dio, LoginService loginService) : super(dio, loginService);
 
   Friend _initFriend(
       {required String prenom,
@@ -85,29 +89,7 @@ class ApiRepository {
 
   Future<APIResponse<Friend>> getFriend(String id) async {
     var url = '$domaine/friend/$id';
-    try {
-      final response = await _dio.get(url);
-      return APIResponse(data: response.data);
-    } on DioError catch (error) {
-      if (error.response != null) {
-        switch (error.response?.statusCode) {
-          case 401:
-            return APIResponse(type: FriendTypeError.unauthorized);
-          case 404:
-            return APIResponse(type: FriendTypeError.notFound);
-          default:
-            return APIResponse(error: APIError.fromJson(error.response?.data));
-        }
-      } else {
-        return APIResponse(type: FriendTypeError.noInternet);
-      }
-    } catch (error) {
-      return APIResponse(
-          error: APIError(
-              systemMessage: '',
-              title: 'Erreur lors de la création de compte',
-              content: error.toString()));
-    }
+    return APIResponse(data: await getData(url));
   }
 
   Future<APIResponse<bool>> getForgotPassword(String user) async {

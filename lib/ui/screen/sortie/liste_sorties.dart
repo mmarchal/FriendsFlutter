@@ -3,8 +3,7 @@ import 'package:intl/intl.dart';
 import 'package:life_friends/env/constants.dart';
 import 'package:life_friends/model/api/api_response.dart';
 import 'package:life_friends/model/sortie.dart';
-import 'package:life_friends/notifier/sortie/sortie_notifier.dart';
-import 'package:life_friends/ui/screen/sortie/detail_sortie.dart';
+import 'package:life_friends/notifier/sortie/sortie_list_notifier.dart';
 import 'package:life_friends/ui/screen/sortie/scaffold_sortie.dart';
 import 'package:life_friends/ui/widgets/icon_type.dart';
 import 'package:provider/src/provider.dart';
@@ -57,7 +56,7 @@ class ListeSorties extends StatelessWidget {
               ),
             ),
             onTap: () {
-              Provider.of<SortieNotifier>(context, listen: false)
+              Provider.of<SortieListNotifier>(context, listen: false)
                   .loadOneSortie(sortieId: s.id.toString());
               Navigator.pushNamed(context, '/detail_sortie');
             },
@@ -76,15 +75,15 @@ class ListeSorties extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    APIResponse<List<Sortie>>? api =
-        context.watch<SortieNotifier>().listeSorties;
+    APIResponse<List<Sortie>>? response =
+        context.watch<SortieListNotifier>().listeSorties;
     return ScaffoldSortie(
       title: "Liste des sorties",
-      body: (api == null)
+      body: (response == null)
           ? const Center(
               child: CircularProgressIndicator(),
             )
-          : _initBody(api.data),
+          : _initBody(response.data),
       gradient: gNextSorties,
     );
   }

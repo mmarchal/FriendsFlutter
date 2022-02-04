@@ -2,31 +2,21 @@ import 'package:flutter/material.dart';
 import 'package:flutter_calendar_carousel/classes/event.dart';
 import 'package:flutter_calendar_carousel/flutter_calendar_carousel.dart';
 import 'package:intl/intl.dart';
-import 'package:life_friends/env/constants.dart';
 import 'package:life_friends/model/api/api_response.dart';
 import 'package:life_friends/model/sortie.dart';
-import 'package:life_friends/service/friend.repository.dart';
+import 'package:life_friends/notifier/sortie/sortie_list_notifier.dart';
+import 'package:life_friends/notifier/sortie/sortie_notifier.dart';
 import 'package:life_friends/ui/screen/sortie/scaffold_sortie.dart';
 import 'package:life_friends/ui/widgets/button_login.dart';
-import 'package:life_friends/ui/widgets/icon_type.dart';
 import 'package:provider/src/provider.dart';
 
 // ignore: must_be_immutable
-class MesSorties extends StatefulWidget {
+class MesSorties extends StatelessWidget {
   final Gradient gradient;
   final String userId;
 
-  const MesSorties({Key? key, required this.gradient, required this.userId})
+  MesSorties({Key? key, required this.gradient, required this.userId})
       : super(key: key);
-
-  @override
-  State<StatefulWidget> createState() {
-    return _MesSorties();
-  }
-}
-
-class _MesSorties extends State<MesSorties> {
-  APIResponse<List<Sortie>>? apiSorties;
 
   static Widget _presentIcon(String day) => CircleAvatar(
         backgroundColor: Colors.green,
@@ -45,27 +35,18 @@ class _MesSorties extends State<MesSorties> {
   late CalendarCarousel _calendarCarouselNoHeader;
   List<DateTime> presentDates = [];
 
-  @override
-  void initState() {
-    super.initState();
-
-    if (widget.userId != '') {
-      FriendRepository().getMySorties(widget.userId).then((value) {
-        setState(() {
-          apiSorties = value;
-        });
-      });
-    }
-  }
-
   late double cHeight;
 
   @override
   Widget build(BuildContext context) {
+    Provider.of<SortieListNotifier>(context, listen: false)
+        .loadMesSorties(userId: userId);
+    APIResponse<List<Sortie>>? apiSorties =
+        context.watch<SortieListNotifier>().sorties;
     cHeight = MediaQuery.of(context).size.height;
-    if (apiSorties != null && apiSorties!.data != null) {
-      for (int i = 0; i < apiSorties!.data!.length; i++) {
-        Sortie s = apiSorties!.data![i];
+    if (apiSorties != null && apiSorties.data != null) {
+      for (int i = 0; i < apiSorties.data!.length; i++) {
+        Sortie s = apiSorties.data![i];
         if (s.datePropose != null) {
           _markedDateMap.add(
             s.datePropose!,
@@ -131,7 +112,7 @@ class _MesSorties extends State<MesSorties> {
     );
     return ScaffoldSortie(
       title: 'Mes sorties',
-      gradient: widget.gradient,
+      gradient: gradient,
       body: (apiSorties != null)
           ? SingleChildScrollView(
               child: Column(
@@ -139,7 +120,7 @@ class _MesSorties extends State<MesSorties> {
                 children: <Widget>[
                   _calendarCarouselNoHeader,
                   markerRepresent(Colors.green, "Present"),
-                  widgetSortieSansDate(apiSorties!.data)
+                  widgetSortieSansDate(apiSorties.data)
                 ],
               ),
             )

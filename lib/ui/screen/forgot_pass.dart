@@ -28,8 +28,9 @@ class ForgotPassScreenState extends State<ForgotPassScreen> {
   String codeString = "Code de réinitialisation reçu";
 
   _forgotPassword(BuildContext context) async {
+    ApiRepository apiRepository = ApiRepository(context.read(), context.read());
     APIResponse<bool> response =
-        await ApiRepository().getForgotPassword(usernameController.text);
+        await apiRepository.getForgotPassword(usernameController.text);
     if (response.isSuccess) {
       Navigator.pop(context);
       if (response.data!) {
@@ -57,8 +58,9 @@ class ForgotPassScreenState extends State<ForgotPassScreen> {
   }
 
   _reinitPassWithCode(BuildContext context) async {
-    APIResponse<bool> response = await ApiRepository()
-        .checkingTempPassword(usernameController.text, reinitController.text);
+    ApiRepository apiRepository = ApiRepository(context.read(), context.read());
+    APIResponse<bool> response = await apiRepository.checkingTempPassword(
+        usernameController.text, reinitController.text);
     if (response.isSuccess) {
       Navigator.pop(context);
       if (response.data!) {
@@ -104,11 +106,12 @@ class ForgotPassScreenState extends State<ForgotPassScreen> {
   }
 
   _reinitPass(BuildContext context) async {
+    ApiRepository apiRepository = ApiRepository(context.read(), context.read());
     Password password = Password(
         userLogin: usernameController.text,
         token: reinitController.text,
         newPassword: newPassController.text);
-    APIResponse<bool> response = await ApiRepository().resetPassword(password);
+    APIResponse<bool> response = await apiRepository.resetPassword(password);
     if (response.isSuccess) {
       Navigator.pop(context);
       if (response.data!) {

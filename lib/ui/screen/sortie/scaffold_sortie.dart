@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:life_friends/model/friend.dart';
 import 'package:life_friends/model/sortie.dart';
 import 'package:life_friends/notifier/friend/friend_notifier.dart';
-import 'package:life_friends/notifier/sortie/sortie_notifier.dart';
+import 'package:life_friends/notifier/sortie/sortie_list_notifier.dart';
 import 'package:life_friends/service/sortie.repository.dart';
 // ignore: implementation_imports
 import 'package:provider/src/provider.dart';

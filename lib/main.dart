@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:life_friends/env/constants.dart';
 import 'package:life_friends/provider_def.dart';
 import 'package:life_friends/ui/screen/forgot_pass.dart';
@@ -32,6 +33,14 @@ class MyApp extends StatelessWidget {
         theme: ThemeData(
           primarySwatch: Colors.blue,
         ),
+        localizationsDelegates: const [
+          GlobalMaterialLocalizations.delegate,
+          GlobalWidgetsLocalizations.delegate,
+          GlobalCupertinoLocalizations.delegate,
+        ],
+        supportedLocales: const [
+          Locale('fr', ''),
+        ],
         initialRoute: '/',
         debugShowCheckedModeBanner: false,
         routes: {

@@ -90,14 +90,16 @@ class _AllFieldsForm extends State<AllFieldsForm> {
                           prefixIcon: Icon(Icons.text_fields),
                         ),
                       ),
-                      RadioButtonGroupFieldBlocBuilder<TypeProposition>(
-                        selectFieldBloc: formBloc.typeDemande,
-                        decoration: const InputDecoration(
-                          labelText: 'Type de demande',
-                          prefixIcon: SizedBox(),
-                        ),
-                        itemBuilder: (context, item) => item.type,
-                      ),
+                      (typePropositions != null)
+                          ? RadioButtonGroupFieldBlocBuilder<TypeProposition>(
+                              selectFieldBloc: formBloc.typeDemande,
+                              decoration: const InputDecoration(
+                                labelText: 'Type de demande',
+                                prefixIcon: SizedBox(),
+                              ),
+                              itemBuilder: (context, item) => item.type,
+                            )
+                          : const CircularProgressIndicator(),
                       DateTimeFieldBlocBuilder(
                         dateTimeFieldBloc: formBloc.dateDemande,
                         format: DateFormat('dd/MM/yyyy'),

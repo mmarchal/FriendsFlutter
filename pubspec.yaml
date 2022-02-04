@@ -11,7 +11,9 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-
+  flutter_localizations: # Add this line
+    sdk: flutter         # Add this line
+    
   cupertino_icons: ^1.0.2
   json_annotation: ^4.4.0
   dio: ^4.0.4

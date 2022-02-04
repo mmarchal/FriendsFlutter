@@ -18,45 +18,49 @@ class HomeScreen extends StatelessWidget {
       appBar: FriendAppBar(
         username: "Hello ${authToken?.username}",
       ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            GradientIconButton(
-                onPressed: () => Navigator.pushNamed(context, "/nouvel_sortie"),
-                icon: Icons.add,
-                gradient: gNewSortie,
-                label: "Proposer une sortie"),
-            GradientIconButton(
-                onPressed: () =>
-                    Navigator.pushNamed(context, "/prochaines_sorties"),
-                icon: Icons.calendar_today,
-                gradient: gNextSorties,
-                label: "Voir les prochaines sorties"),
-            GradientIconButton(
-                onPressed: () => Navigator.push(context,
-                        MaterialPageRoute(builder: (BuildContext bC) {
-                      return MesSorties(
-                          gradient: gMesSorties,
-                          userId: (authToken?.userId.toString())!);
-                    })),
-                icon: Icons.my_library_add,
-                gradient: gMesSorties,
-                label: "Mes sorties"),
-            GradientIconButton(
-                onPressed: () =>
-                    Navigator.pushNamed(context, "/prochaines_sorties"),
-                icon: Icons.message,
-                gradient: gMessagerie,
-                label: "Messagerie"),
-            GradientIconButton(
-                onPressed: () =>
-                    Navigator.pushNamed(context, "/nouvelle_proposition"),
-                icon: Icons.vertical_distribute_rounded,
-                gradient: gPropositions,
-                label: "Propositions"),
-          ],
+      body: WillPopScope(
+        onWillPop: () async => false,
+        child: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              GradientIconButton(
+                  onPressed: () =>
+                      Navigator.pushNamed(context, "/nouvel_sortie"),
+                  icon: Icons.add,
+                  gradient: gNewSortie,
+                  label: "Proposer une sortie"),
+              GradientIconButton(
+                  onPressed: () =>
+                      Navigator.pushNamed(context, "/prochaines_sorties"),
+                  icon: Icons.calendar_today,
+                  gradient: gNextSorties,
+                  label: "Voir les prochaines sorties"),
+              GradientIconButton(
+                  onPressed: () => Navigator.push(context,
+                          MaterialPageRoute(builder: (BuildContext bC) {
+                        return MesSorties(
+                            gradient: gMesSorties,
+                            userId: (authToken?.userId.toString())!);
+                      })),
+                  icon: Icons.my_library_add,
+                  gradient: gMesSorties,
+                  label: "Mes sorties"),
+              GradientIconButton(
+                  onPressed: () =>
+                      Navigator.pushNamed(context, "/prochaines_sorties"),
+                  icon: Icons.message,
+                  gradient: gMessagerie,
+                  label: "Messagerie"),
+              GradientIconButton(
+                  onPressed: () =>
+                      Navigator.pushNamed(context, "/nouvelle_proposition"),
+                  icon: Icons.vertical_distribute_rounded,
+                  gradient: gPropositions,
+                  label: "Propositions"),
+            ],
+          ),
         ),
       ),
     );

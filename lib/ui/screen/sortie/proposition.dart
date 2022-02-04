@@ -37,6 +37,7 @@ class PropositionSortieState extends State<PropositionSortie> {
         context.watch<TypeSortieListNotifier>().listeTypes;
     _selectDate(BuildContext context) async {
       final DateTime? selected = await showDatePicker(
+        locale: const Locale("fr"),
         context: context,
         initialDate:
             (selectedDateTime != null) ? selectedDateTime! : DateTime.now(),

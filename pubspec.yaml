@@ -26,6 +26,8 @@ dependencies:
   flutter_calendar_carousel: ^2.1.0
   flutter_form_bloc: ^0.20.0
   rating_dialog: ^2.0.0
+  socket_io_client: ^1.0.2
+  flutter_chat_bubble: ^1.0.2
 
 dev_dependencies:
   build_runner: ^2.1.7

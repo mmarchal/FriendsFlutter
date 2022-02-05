@@ -2,11 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:life_friends/env/constants.dart';
+import 'package:life_friends/notifier/token_notifier.dart';
 import 'package:life_friends/provider_def.dart';
 import 'package:life_friends/ui/screen/forgot_pass.dart';
 import 'package:life_friends/ui/screen/friend_sortie/mes_sorties.dart';
 import 'package:life_friends/ui/screen/home.dart';
 import 'package:life_friends/ui/screen/login.dart';
+import 'package:life_friends/ui/screen/messagerie/connexion_messagerie.dart';
 import 'package:life_friends/ui/screen/profil/my_profil.dart';
 import 'package:life_friends/ui/screen/proposition/nouvelle_proposition.dart';
 import 'package:life_friends/ui/screen/signup.dart';
@@ -59,7 +61,10 @@ class MyApp extends StatelessWidget {
                 gradient: gPropositions,
               ),
           '/detail_sortie': (context) => const DetailSortie(),
-          '/profil': (context) => MyProfil()
+          '/profil': (context) => MyProfil(),
+          '/messagerie': (context) => Chat(
+                user: context.watch<TokenNotifier>().token?.username ?? "",
+              )
         },
       ),
     );

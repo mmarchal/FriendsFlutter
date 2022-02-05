@@ -48,8 +48,7 @@ class HomeScreen extends StatelessWidget {
                   gradient: gMesSorties,
                   label: "Mes sorties"),
               GradientIconButton(
-                  onPressed: () =>
-                      Navigator.pushNamed(context, "/prochaines_sorties"),
+                  onPressed: () => Navigator.pushNamed(context, "/messagerie"),
                   icon: Icons.message,
                   gradient: gMessagerie,
                   label: "Messagerie"),

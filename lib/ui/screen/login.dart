@@ -144,11 +144,11 @@ class _LoginPageState extends State<LoginPage> {
                             .then((value) async {
                           Navigator.pop(context);
                           APIResponse<ApiBack> retour = value;
-                          APIResponse<Friend> friend = await friendRepository
-                              .loadConnectedFriend(retour.data?.result);
-                          friendNotifier.setFriend(friend.data);
-                          tokenNotifier.setToken(retour.data?.result);
                           if (retour.isSuccess && retour.data != null) {
+                            APIResponse<Friend> friend = await friendRepository
+                                .loadConnectedFriend(retour.data?.result);
+                            friendNotifier.setFriend(friend.data);
+                            tokenNotifier.setToken(retour.data?.result);
                             Provider.of<TokenNotifier>(context, listen: false)
                                 .setToken(retour.data!.result);
                             Navigator.pushNamed(context, '/home');

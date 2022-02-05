@@ -73,7 +73,7 @@ class _LoginPageState extends State<LoginPage> {
             ),
           ),
           Container(
-            height: MediaQuery.of(context).size.height / 2,
+            height: MediaQuery.of(context).size.height / 1.75,
             width: MediaQuery.of(context).size.width,
             padding: const EdgeInsets.only(top: 62),
             child: Column(
@@ -88,84 +88,91 @@ class _LoginPageState extends State<LoginPage> {
                     icon: Icons.vpn_key,
                     isPassword: true,
                     hint: 'Mot de passe'),
-                Align(
-                  alignment: Alignment.centerRight,
-                  child: InkWell(
-                    child: const Padding(
-                      padding: EdgeInsets.only(top: 16, right: 32),
-                      child: Text(
-                        'Mot de passe oublié ?',
-                        style: TextStyle(color: Colors.grey),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Container(
+                      margin: const EdgeInsets.only(left: 20),
+                      child: Align(
+                        alignment: Alignment.centerLeft,
+                        child: InkWell(
+                          child: Row(
+                            children: const <Widget>[
+                              Text("Pas de compte ?"),
+                              Text(
+                                " Crée en 1",
+                                style: TextStyle(color: Color(0xff6bceff)),
+                              ),
+                            ],
+                          ),
+                          onTap: () {
+                            Navigator.pushNamed(context, '/signup');
+                          },
+                        ),
                       ),
                     ),
-                    onTap: () {
-                      Navigator.pushNamed(context, '/forgot');
-                    },
-                  ),
+                    Container(
+                      margin: const EdgeInsets.only(right: 20),
+                      child: Align(
+                        alignment: Alignment.centerRight,
+                        child: InkWell(
+                          child: const Text(
+                            'Mot de passe oublié ?',
+                            style: TextStyle(color: Colors.grey),
+                          ),
+                          onTap: () {
+                            Navigator.pushNamed(context, '/forgot');
+                          },
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
                 const Spacer(),
-                InkWell(
-                  onTap: () {
-                    showDialog(
-                        context: context,
-                        builder: (context) {
-                          return const LoadingWidget(
-                              label: "Connexion en cours");
+                SizedBox(
+                  width: MediaQuery.of(context).size.width / 1.5,
+                  child: ElevatedButton(
+                      onPressed: () {
+                        showDialog(
+                            context: context,
+                            builder: (context) {
+                              return const LoadingWidget(
+                                  label: "Connexion en cours");
+                            });
+                        apiRepository
+                            .login(login: _user.text, password: _pass.text)
+                            .then((value) async {
+                          Navigator.pop(context);
+                          APIResponse<ApiBack> retour = value;
+                          APIResponse<Friend> friend = await friendRepository
+                              .loadConnectedFriend(retour.data?.result);
+                          friendNotifier.setFriend(friend.data);
+                          tokenNotifier.setToken(retour.data?.result);
+                          if (retour.isSuccess && retour.data != null) {
+                            Provider.of<TokenNotifier>(context, listen: false)
+                                .setToken(retour.data!.result);
+                            Navigator.pushNamed(context, '/home');
+                          } else {
+                            showDialog(
+                                context: context,
+                                builder: (_) =>
+                                    AdvanceCustomAlert(response: retour));
+                          }
                         });
-                    apiRepository
-                        .login(login: _user.text, password: _pass.text)
-                        .then((value) async {
-                      Navigator.pop(context);
-                      APIResponse<ApiBack> retour = value;
-                      APIResponse<Friend> friend = await friendRepository
-                          .loadConnectedFriend(retour.data?.result);
-                      friendNotifier.setFriend(friend.data);
-                      tokenNotifier.setToken(retour.data?.result);
-                      showDialog(
-                          context: context,
-                          builder: (_) => AdvanceCustomAlert(response: retour));
-                    });
-                  },
-                  child: Container(
-                    height: 45,
-                    width: MediaQuery.of(context).size.width / 1.2,
-                    decoration: const BoxDecoration(
-                        gradient: LinearGradient(
-                          colors: [
-                            Color(0xff6bceff),
-                            Color(0xFF00abff),
-                          ],
+                      },
+                      child: Center(
+                        child: Text(
+                          'Login'.toUpperCase(),
+                          style: const TextStyle(
+                              color: Colors.white, fontWeight: FontWeight.bold),
                         ),
-                        borderRadius: BorderRadius.all(Radius.circular(50))),
-                    child: Center(
-                      child: Text(
-                        'Login'.toUpperCase(),
-                        style: const TextStyle(
-                            color: Colors.white, fontWeight: FontWeight.bold),
-                      ),
-                    ),
-                  ),
+                      )),
                 ),
               ],
             ),
           ),
           const SizedBox(
             height: 50,
-          ),
-          InkWell(
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: const <Widget>[
-                Text("Pas de compte ?"),
-                Text(
-                  " Crée en 1",
-                  style: TextStyle(color: Color(0xff6bceff)),
-                ),
-              ],
-            ),
-            onTap: () {
-              Navigator.pushNamed(context, '/signup');
-            },
           ),
         ],
       ),

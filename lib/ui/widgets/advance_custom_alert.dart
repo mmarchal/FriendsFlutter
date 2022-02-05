@@ -31,21 +31,16 @@ class _AdvanceCustomAlert extends State<AdvanceCustomAlert> {
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  Text(
-                    (widget.response.isSuccess)
-                        ? "Connexion réussi !"
-                        : "Connexion refusé",
+                  const Text(
+                    "Connexion refusé",
                     textAlign: TextAlign.center,
-                    style: const TextStyle(
-                        fontWeight: FontWeight.bold, fontSize: 20),
+                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
                   ),
                   const SizedBox(
                     height: 5,
                   ),
                   Text(
-                    (widget.response.isSuccess)
-                        ? "Bienvenue ${widget.response.data!.result.username} !"
-                        : "Erreur : ${_errorMesssage(widget.response.type)}",
+                    "Erreur : ${_errorMesssage(widget.response.type)}",
                     textAlign: TextAlign.center,
                     style: const TextStyle(
                       fontSize: 20,
@@ -55,36 +50,22 @@ class _AdvanceCustomAlert extends State<AdvanceCustomAlert> {
                     height: 20,
                   ),
                   ElevatedButton(
-                    onPressed: () {
-                      if (widget.response.isSuccess) {
-                        Provider.of<TokenNotifier>(context, listen: false)
-                            .setToken(widget.response.data!.result);
-                        Navigator.pushNamed(context, '/home');
-                      } else {
-                        Navigator.pop(context);
-                      }
-                    },
-                    child: Text(
-                      (widget.response.isSuccess)
-                          ? "Entrer dans l'application"
-                          : "Recommencer",
-                      style: const TextStyle(color: Colors.white),
+                    onPressed: () => Navigator.pop(context),
+                    child: const Text(
+                      "Recommencer",
+                      style: TextStyle(color: Colors.white),
                     ),
                   )
                 ],
               ),
             ),
-            Positioned(
+            const Positioned(
                 top: -60,
                 child: CircleAvatar(
-                  backgroundColor: (widget.response.isSuccess)
-                      ? Colors.greenAccent
-                      : Colors.redAccent,
+                  backgroundColor: Colors.redAccent,
                   radius: 60,
                   child: Icon(
-                    (widget.response.isSuccess)
-                        ? Icons.check
-                        : Icons.assistant_photo,
+                    Icons.assistant_photo,
                     color: Colors.white,
                     size: 50,
                   ),

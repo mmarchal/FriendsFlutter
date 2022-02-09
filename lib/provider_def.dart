@@ -1,6 +1,8 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:life_friends/login_service.dart';
+import 'package:life_friends/notifier/chat/chat_list_notifier.dart';
+import 'package:life_friends/notifier/chat/chat_notifier.dart';
 import 'package:life_friends/notifier/friend/friend_list_notifier.dart';
 import 'package:life_friends/notifier/friend/friend_notifier.dart';
 import 'package:life_friends/notifier/sortie/sortie_list_notifier.dart';
@@ -10,6 +12,7 @@ import 'package:life_friends/notifier/typeproposition/typeproposition_list_notif
 import 'package:life_friends/notifier/typeproposition/typeproposition_notifier.dart';
 import 'package:life_friends/notifier/typesortie/typesortie_list_notifier.dart';
 import 'package:life_friends/notifier/typesortie/typesortie_notifier.dart';
+import 'package:life_friends/service/chat.repository.dart';
 import 'package:life_friends/service/friend.repository.dart';
 import 'package:life_friends/service/sortie.repository.dart';
 import 'package:life_friends/service/typeproposition.repository.dart';
@@ -107,6 +110,24 @@ class ProviderDef extends StatelessWidget {
             return typePropositionsList!;
           },
         ),
+
+        // Chat
+        Provider<ChatRepository>(
+            create: (context) =>
+                ChatRepository(context.read(), context.read())),
+        Provider<ChatNotifier>(
+          create: (_) => ChatNotifier(),
+        ),
+        ChangeNotifierProxyProvider<ChatNotifier, ChatListNotifier>(
+            create: (context) => ChatListNotifier(context.read())
+              ..loadChannels(
+                  clearList: true,
+                  friendId:
+                      context.read<FriendNotifier>().friend?.id.toString() ??
+                          ""),
+            update: (context, filter, typePropositionsList) {
+              return typePropositionsList!;
+            })
       ],
       child: child,
     );

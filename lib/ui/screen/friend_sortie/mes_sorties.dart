@@ -39,6 +39,7 @@ class MesSorties extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    //TODO Modifier pour que l'appel ne se fasse qu'une fois
     Provider.of<SortieListNotifier>(context, listen: false)
         .loadMesSorties(userId: userId);
     APIResponse<List<Sortie>>? apiSorties =

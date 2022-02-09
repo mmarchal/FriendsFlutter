@@ -12,7 +12,9 @@ Chat _$ChatFromJson(Map<String, dynamic> json) => Chat(
       friends: (json['friends'] as List<dynamic>?)
           ?.map((e) => Friend.fromJson(e as Map<String, dynamic>))
           .toList(),
-      messagesList: json['messagesList'] as List<Message>,
+      messagesList: (json['messagesList'] as List<dynamic>?)
+          ?.map((e) => Message.fromJson(e as Map<String, dynamic>))
+          .toList(),
     );
 
 Map<String, dynamic> _$ChatToJson(Chat instance) => <String, dynamic>{

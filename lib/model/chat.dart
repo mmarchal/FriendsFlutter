@@ -9,7 +9,7 @@ class Chat {
   final int id;
   final String name;
   final List<Friend>? friends;
-  final List<Message> messagesList;
+  final List<Message>? messagesList;
 
   Chat(
       {required this.id,

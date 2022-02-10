@@ -11,13 +11,20 @@ import 'package:life_friends/ui/widgets/button_login.dart';
 import 'package:provider/src/provider.dart';
 
 // ignore: must_be_immutable
-class MesSorties extends StatelessWidget {
+class MesSorties extends StatefulWidget {
   final Gradient gradient;
   final String userId;
 
-  MesSorties({Key? key, required this.gradient, required this.userId})
+  const MesSorties({Key? key, required this.gradient, required this.userId})
       : super(key: key);
 
+  @override
+  State<StatefulWidget> createState() {
+    return MesSortiesState();
+  }
+}
+
+class MesSortiesState extends State<MesSorties> {
   static Widget _presentIcon(String day) => CircleAvatar(
         backgroundColor: Colors.green,
         child: Text(
@@ -38,10 +45,14 @@ class MesSorties extends StatelessWidget {
   late double cHeight;
 
   @override
-  Widget build(BuildContext context) {
-    //TODO Modifier pour que l'appel ne se fasse qu'une fois
+  void initState() {
     Provider.of<SortieListNotifier>(context, listen: false)
-        .loadMesSorties(userId: userId);
+        .loadMesSorties(userId: widget.userId);
+    super.initState();
+  }
+
+  @override
+  Widget build(BuildContext context) {
     APIResponse<List<Sortie>>? apiSorties =
         context.watch<SortieListNotifier>().sorties;
     cHeight = MediaQuery.of(context).size.height;
@@ -113,7 +124,7 @@ class MesSorties extends StatelessWidget {
     );
     return ScaffoldSortie(
       title: 'Mes sorties',
-      gradient: gradient,
+      gradient: widget.gradient,
       body: (apiSorties != null)
           ? SingleChildScrollView(
               child: Column(

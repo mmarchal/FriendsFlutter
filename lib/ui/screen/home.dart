@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:life_friends/env/constants.dart';
+import 'package:life_friends/notifier/friend/friend_notifier.dart';
 import 'package:life_friends/notifier/token_notifier.dart';
 import 'package:life_friends/ui/screen/friend_sortie/mes_sorties.dart';
 import 'package:life_friends/ui/widgets/friend_app_bar.dart';
@@ -12,11 +13,11 @@ class HomeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var authToken = context.watch<TokenNotifier>().token;
+    var friend = context.watch<FriendNotifier>().friend;
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: FriendAppBar(
-        username: "Hello ${authToken?.username}",
+        username: "Hello ${friend?.prenom}",
       ),
       body: WillPopScope(
         onWillPop: () async => false,
@@ -42,7 +43,7 @@ class HomeScreen extends StatelessWidget {
                           MaterialPageRoute(builder: (BuildContext bC) {
                         return MesSorties(
                             gradient: gMesSorties,
-                            userId: (authToken?.userId.toString())!);
+                            userId: (friend?.id.toString() ?? ""));
                       })),
                   icon: Icons.my_library_add,
                   gradient: gMesSorties,

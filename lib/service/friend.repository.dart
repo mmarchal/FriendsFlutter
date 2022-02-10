@@ -81,4 +81,30 @@ class FriendRepository extends ApiService {
               content: error.toString()));
     }
   }
+
+  Future<APIResponse<Friend>> updateUser(Friend friend) async {
+    try {
+      final response = await _dio.put(url, data: friend.toJson());
+      return APIResponse<Friend>(data: Friend.fromJson(response.data));
+    } on DioError catch (error) {
+      if (error.response != null) {
+        switch (error.response?.statusCode) {
+          case 401:
+            return APIResponse(type: FriendTypeError.noInternet);
+          case 404:
+            return APIResponse(type: FriendTypeError.notFound);
+          default:
+            return APIResponse(error: APIError.fromJson(error.response?.data));
+        }
+      } else {
+        return APIResponse(type: FriendTypeError.noInternet);
+      }
+    } catch (error) {
+      return APIResponse(
+          error: APIError(
+              systemMessage: '',
+              title: 'Erreur lors de la connexion',
+              content: error.toString()));
+    }
+  }
 }

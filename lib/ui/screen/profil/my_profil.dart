@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:life_friends/model/friend.dart';
 import 'package:life_friends/notifier/friend/friend_notifier.dart';
+import 'package:life_friends/service/friend.repository.dart';
 import 'package:life_friends/ui/widgets/editable_widget.dart';
 import 'package:provider/src/provider.dart';
 
@@ -57,7 +58,7 @@ class MyProfil extends StatelessWidget {
                   ),
                   EditableWidget(
                     label: "Prénom",
-                    controller: mailController,
+                    controller: nameController,
                     value: friend.prenom,
                   ),
                   Align(
@@ -65,11 +66,22 @@ class MyProfil extends StatelessWidget {
                     child: ElevatedButton(
                       onPressed: () {
                         Friend updateFriend = Friend(
+                            id: friend.id,
                             prenom: nameController.text,
                             login: loginController.text,
                             email: mailController.text,
                             password: friend.password);
-                        //TODO Update friend in bdd
+                        Provider.of<FriendRepository>(context, listen: false)
+                            .updateUser(updateFriend)
+                            .then((value) {
+                          if (value.isSuccess) {
+                            //TODO Dialog de confirmation + pop + si changement afficher la valeur changé et pas l'ancienne
+                            Provider.of<FriendNotifier>(context, listen: false)
+                                .setFriend(value.data);
+                          } else {
+                            //TODO Gérer le cas d'erreur via un dialog
+                          }
+                        });
                       },
                       child: const Text('Valider les modifications'),
                     ),

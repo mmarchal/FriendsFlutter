@@ -28,6 +28,7 @@ dependencies:
   rating_dialog: ^2.0.0
   socket_io_client: ^1.0.2
   flutter_chat_bubble: ^1.0.2
+  random_string: ^2.3.1
 
 dev_dependencies:
   build_runner: ^2.1.7
@@ -50,9 +51,9 @@ flutter:
   assets:
     - asset/
 
-  # fonts:
-  #   - family: Schyler
-  #     fonts:
-  #       - asset: fonts/Schyler-Regular.ttf
+  fonts:
+    - family: Copperplate
+      fonts:
+        - asset: asset/fonts/OPTICopperplate.otf
   #       - asset: fonts/Schyler-Italic.ttf
   #         style: italic

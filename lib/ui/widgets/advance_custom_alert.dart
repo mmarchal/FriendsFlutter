@@ -2,11 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:life_friends/model/api/back/api_back.dart';
 import 'package:life_friends/model/api/api_response.dart';
 import 'package:life_friends/model/error/type_error.dart';
-import 'package:life_friends/notifier/token_notifier.dart';
 import 'package:provider/provider.dart';
 
-class AdvanceCustomAlert extends StatefulWidget {
-  final APIResponse<ApiBack> response;
+class AdvanceCustomAlert<T> extends StatefulWidget {
+  final APIResponse<T> response;
 
   const AdvanceCustomAlert({Key? key, required this.response})
       : super(key: key);
@@ -32,7 +31,7 @@ class _AdvanceCustomAlert extends State<AdvanceCustomAlert> {
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   const Text(
-                    "Connexion refusé",
+                    "Erreur",
                     textAlign: TextAlign.center,
                     style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
                   ),

@@ -11,6 +11,7 @@ import 'package:life_friends/ui/screen/home.dart';
 import 'package:life_friends/ui/screen/login.dart';
 import 'package:life_friends/ui/screen/messagerie/home_chat.dart';
 import 'package:life_friends/ui/screen/profil/my_profil.dart';
+import 'package:life_friends/ui/screen/profil/my_profil_2.dart';
 import 'package:life_friends/ui/screen/proposition/nouvelle_proposition.dart';
 import 'package:life_friends/ui/screen/signup.dart';
 import 'package:life_friends/ui/screen/sortie/detail_sortie.dart';
@@ -54,7 +55,7 @@ class MyApp extends StatelessWidget {
           '/home': (context) => const HomeScreen(),
           '/nouvel_sortie': (context) => const PropositionSortie(),
           '/prochaines_sorties': (context) => const ListeSorties(),
-          '/mes_sorties': (context) => MesSorties(
+          '/mes_sorties': (context) => const MesSorties(
                 gradient: gPropositions,
                 userId: '',
               ),
@@ -62,7 +63,7 @@ class MyApp extends StatelessWidget {
                 gradient: gPropositions,
               ),
           '/detail_sortie': (context) => const DetailSortie(),
-          '/profil': (context) => MyProfil(),
+          '/profil': (context) => MyProfilV2(),
           '/messagerie': (context) => HomeChat(
                 user: context.watch<FriendNotifier>().friend,
               )

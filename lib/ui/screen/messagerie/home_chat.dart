@@ -77,7 +77,10 @@ class _HomeChatState extends State<HomeChat> {
 
   Widget generateAlertDialog(APIResponse<List<Friend>?>? apiFriends) {
     return SimpleDialog(
-        title: const Text("Choisissez un ami avec qui discuter: "),
+        title: const Text(
+          "Choisissez un ami avec qui discuter: ",
+          textAlign: TextAlign.center,
+        ),
         children: apiFriends!.data!
             .map((e) => GradientButton(
                   label: e.prenom,

@@ -5,6 +5,7 @@ class ProfilInformationRow extends StatelessWidget {
   final String label;
   final String value;
   final VoidCallback onPressed;
+  final VoidCallback onReinitValue;
   final bool updated;
 
   const ProfilInformationRow(
@@ -12,7 +13,8 @@ class ProfilInformationRow extends StatelessWidget {
       required this.label,
       required this.value,
       required this.onPressed,
-      this.updated = false})
+      this.updated = false,
+      required this.onReinitValue})
       : super(key: key);
 
   @override
@@ -30,7 +32,10 @@ class ProfilInformationRow extends StatelessWidget {
             color: (updated) ? Colors.green : Colors.black,
             fontStyle: FontStyle.italic,
           ),
-          IconButton(onPressed: onPressed, icon: const Icon(Icons.edit))
+          IconButton(onPressed: onPressed, icon: const Icon(Icons.edit)),
+          if (updated)
+            IconButton(
+                onPressed: onReinitValue, icon: const Icon(Icons.restart_alt))
         ],
       ),
     );

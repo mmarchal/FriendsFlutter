@@ -61,7 +61,7 @@ class MyApp extends StatelessWidget {
                 gradient: gPropositions,
               ),
           '/detail_sortie': (context) => const DetailSortie(),
-          '/profil': (context) => MyProfilV2(),
+          '/profil': (context) => const MyProfil(),
           '/messagerie': (context) => HomeChat(
                 user: context.watch<FriendNotifier>().friend,
               )

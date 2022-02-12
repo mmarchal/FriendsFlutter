@@ -14,9 +14,16 @@ import 'package:random_string/random_string.dart';
 enum Updated { prenom, mail, identifiant }
 
 // ignore: must_be_immutable
-class MyProfilV2 extends StatelessWidget {
-  MyProfilV2({Key? key}) : super(key: key);
+class MyProfil extends StatefulWidget {
+  const MyProfil({Key? key}) : super(key: key);
 
+  @override
+  State<StatefulWidget> createState() {
+    return MyProfilState();
+  }
+}
+
+class MyProfilState extends State<MyProfil> {
   TextEditingController mailController = TextEditingController();
   TextEditingController loginController = TextEditingController();
   TextEditingController nameController = TextEditingController();
@@ -49,6 +56,17 @@ class MyProfilV2 extends StatelessWidget {
     }
   }
 
+  _controllerUpdated(Updated updated) {
+    switch (updated) {
+      case Updated.identifiant:
+        return loginController;
+      case Updated.mail:
+        return mailController;
+      case Updated.prenom:
+        return nameController;
+    }
+  }
+
   Future<void> _displayTextInputDialog(
       BuildContext context, Updated updated, Friend friend) async {
     return showDialog(
@@ -67,7 +85,7 @@ class MyProfilV2 extends StatelessWidget {
                     label: "Actuel : ${_valueDialogUpdate(updated, friend)}",
                     color: Colors.black),
                 TextField(
-                  controller: mailController,
+                  controller: _controllerUpdated(updated),
                 )
               ],
             ),
@@ -76,6 +94,19 @@ class MyProfilV2 extends StatelessWidget {
                 style: ElevatedButton.styleFrom(primary: Colors.green),
                 child: const Text('Valider'),
                 onPressed: () {
+                  setState(() {
+                    switch (updated) {
+                      case Updated.identifiant:
+                        loginUpdated = true;
+                        break;
+                      case Updated.mail:
+                        mailUpdated = true;
+                        break;
+                      case Updated.prenom:
+                        nameUpdated = true;
+                        break;
+                    }
+                  });
                   Navigator.pop(context);
                 },
               ),
@@ -91,6 +122,41 @@ class MyProfilV2 extends StatelessWidget {
         });
   }
 
+  String _checkChangedValue(Friend? friend) {
+    String allChangements = "";
+    if (loginUpdated) {
+      allChangements +=
+          "Identifiant modifié : ${loginController.text} (${friend?.login})\n";
+    }
+    if (nameUpdated) {
+      allChangements +=
+          "Prénom modifié : ${nameController.text} (${friend?.prenom})\n";
+    }
+    if (mailUpdated) {
+      allChangements +=
+          "Email modifié : ${mailController.text} (${friend?.email})\n";
+    }
+    return allChangements;
+  }
+
+  _alertPopupChangements(BuildContext context, Friend? friend) async {
+    String changed = _checkChangedValue(friend);
+    await CoolAlert.show(
+        context: context,
+        type: CoolAlertType.warning,
+        title: 'Confirmation de modification',
+        onConfirmBtnTap: () {
+          if (changed == "") {
+            Navigator.pushNamedAndRemoveUntil(
+                context, '/home', (route) => false);
+          } else {
+            Navigator.pop(context);
+            _validateChangements(context, friend);
+          }
+        },
+        text: changed);
+  }
+
   _validateChangements(BuildContext context, Friend? friend) {
     showDialog(
         context: context,
@@ -99,23 +165,23 @@ class MyProfilV2 extends StatelessWidget {
         });
     Friend updateFriend = Friend(
         id: friend!.id,
-        prenom: nameController.text,
-        login: loginController.text,
-        email: mailController.text,
+        prenom: (nameUpdated) ? nameController.text : friend.prenom,
+        login: (loginUpdated) ? loginController.text : friend.login,
+        email: (mailUpdated) ? mailController.text : friend.email,
         password: friend.password);
     Provider.of<FriendRepository>(context, listen: false)
         .updateUser(updateFriend)
         .then((value) async {
       Navigator.pop(context);
       if (value.isSuccess) {
-        //TODO si changement afficher la valeur changé et pas l'ancienne
         Provider.of<FriendNotifier>(context, listen: false)
             .setFriend(value.data);
         await CoolAlert.show(
-          context: context,
-          type: CoolAlertType.success,
-          text: 'Modification effectué ! !',
-        );
+            context: context,
+            type: CoolAlertType.success,
+            text: 'Modification effectué ! !',
+            onConfirmBtnTap: () => Navigator.pushNamedAndRemoveUntil(
+                context, '/home', (route) => false));
       } else {
         showDialog(
             context: context,
@@ -140,12 +206,12 @@ class MyProfilV2 extends StatelessWidget {
       ),
       floatingActionButton: FloatingActionButton(
           onPressed: () {
-            _validateChangements(context, friend);
+            _alertPopupChangements(context, friend);
           },
           child: const Icon(Icons.check)),
       body: Center(
         child: SizedBox(
-          height: MediaQuery.of(context).size.height / 2.5,
+          height: MediaQuery.of(context).size.height / 2,
           child: Card(
             color: HexColor("#dff5e9"),
             elevation: 10,
@@ -164,63 +230,79 @@ class MyProfilV2 extends StatelessWidget {
                       textAlign: TextAlign.center,
                       color: Colors.white,
                     )),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    CopperPlateText(
-                        label: "Ami : Important", color: Colors.black),
-                    CopperPlateText(
-                        label: "Code : ${randomAlphaNumeric(10)}",
-                        color: Colors.black)
-                  ],
+                Padding(
+                  padding: const EdgeInsetsDirectional.fromSTEB(0, 10, 0, 0),
+                  child: Container(
+                    width: 120,
+                    height: 120,
+                    clipBehavior: Clip.antiAlias,
+                    decoration: const BoxDecoration(
+                      shape: BoxShape.circle,
+                    ),
+                    //TODO image à stocker et modifiable
+                    child: Image.network(
+                      'https://picsum.photos/seed/220/600',
+                    ),
+                  ),
                 ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
-                    Padding(
-                      padding:
-                          const EdgeInsetsDirectional.fromSTEB(0, 10, 0, 0),
-                      child: Container(
-                        width: 120,
-                        height: 120,
-                        clipBehavior: Clip.antiAlias,
-                        decoration: const BoxDecoration(
-                          shape: BoxShape.circle,
-                        ),
-                        //TODO image à stocker et modifiable
-                        child: Image.network(
-                          'https://picsum.photos/seed/220/600',
-                        ),
-                      ),
-                    ),
                     Column(
                       mainAxisAlignment: MainAxisAlignment.start,
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         ProfilInformationRow(
-                            label: "Prénom :",
-                            value: friend?.prenom ?? "",
-                            updated: nameUpdated,
-                            onPressed: () {
-                              _displayTextInputDialog(
-                                  context, Updated.prenom, friend!);
-                            }),
+                          label: "Prénom :",
+                          value: (nameUpdated)
+                              ? nameController.text
+                              : friend?.prenom ?? "",
+                          updated: nameUpdated,
+                          onPressed: () {
+                            _displayTextInputDialog(
+                                context, Updated.prenom, friend!);
+                          },
+                          onReinitValue: () {
+                            setState(() {
+                              nameUpdated = false;
+                              nameController.clear();
+                            });
+                          },
+                        ),
                         ProfilInformationRow(
-                            label: "Adresse mail :",
-                            value: friend?.email ?? "",
-                            updated: mailUpdated,
-                            onPressed: () {
-                              _displayTextInputDialog(
-                                  context, Updated.mail, friend!);
-                            }),
+                          label: "Adresse mail :",
+                          value: (mailUpdated)
+                              ? mailController.text
+                              : friend?.email ?? "",
+                          updated: mailUpdated,
+                          onPressed: () {
+                            _displayTextInputDialog(
+                                context, Updated.mail, friend!);
+                          },
+                          onReinitValue: () {
+                            setState(() {
+                              mailUpdated = false;
+                              mailController.clear();
+                            });
+                          },
+                        ),
                         ProfilInformationRow(
-                            label: "Identifiant :",
-                            value: friend?.login ?? "",
-                            updated: loginUpdated,
-                            onPressed: () {
-                              _displayTextInputDialog(
-                                  context, Updated.identifiant, friend!);
-                            }),
+                          label: "Identifiant :",
+                          value: (loginUpdated)
+                              ? loginController.text
+                              : friend?.login ?? "",
+                          updated: loginUpdated,
+                          onPressed: () {
+                            _displayTextInputDialog(
+                                context, Updated.identifiant, friend!);
+                          },
+                          onReinitValue: () {
+                            setState(() {
+                              loginUpdated = false;
+                              loginController.clear();
+                            });
+                          },
+                        ),
                       ],
                     )
                   ],

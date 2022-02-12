@@ -21,6 +21,10 @@ class MyProfilV2 extends StatelessWidget {
   TextEditingController loginController = TextEditingController();
   TextEditingController nameController = TextEditingController();
 
+  bool mailUpdated = false;
+  bool loginUpdated = false;
+  bool nameUpdated = false;
+
   _titleDialogUpdate(Updated updated) {
     switch (updated) {
       case Updated.prenom:
@@ -196,32 +200,23 @@ class MyProfilV2 extends StatelessWidget {
                         ProfilInformationRow(
                             label: "Prénom :",
                             value: friend?.prenom ?? "",
+                            updated: nameUpdated,
                             onPressed: () {
                               _displayTextInputDialog(
                                   context, Updated.prenom, friend!);
                             }),
-                        CopperPlateText(
-                          label: "Adresse mail :",
-                          color: Colors.black,
-                        ),
-                        Row(
-                          children: [
-                            CopperPlateText(
-                              label: friend?.email ?? "",
-                              color: Colors.black,
-                              fontStyle: FontStyle.italic,
-                            ),
-                            IconButton(
-                                onPressed: () {
-                                  _displayTextInputDialog(
-                                      context, Updated.mail, friend!);
-                                },
-                                icon: const Icon(Icons.edit))
-                          ],
-                        ),
+                        ProfilInformationRow(
+                            label: "Adresse mail :",
+                            value: friend?.email ?? "",
+                            updated: mailUpdated,
+                            onPressed: () {
+                              _displayTextInputDialog(
+                                  context, Updated.mail, friend!);
+                            }),
                         ProfilInformationRow(
                             label: "Identifiant :",
                             value: friend?.login ?? "",
+                            updated: loginUpdated,
                             onPressed: () {
                               _displayTextInputDialog(
                                   context, Updated.identifiant, friend!);

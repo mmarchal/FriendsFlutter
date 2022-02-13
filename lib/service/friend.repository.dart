@@ -1,4 +1,5 @@
 import 'package:dio/dio.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:life_friends/env/constants.dart';
 import 'package:life_friends/login_service.dart';
 import 'package:life_friends/model/api/api_response.dart';
@@ -19,6 +20,37 @@ class FriendRepository extends ApiService {
   Future<APIResponse<Friend>> loadConnectedFriend(AuthToken? authToken) async {
     var urlFriend = "$url/${authToken!.userId}";
     return APIResponse<Friend>(data: Friend.fromJson(await getData(urlFriend)));
+  }
+
+  Future<APIResponse<bool>> updateLoginPicture(
+    int friendId,
+    XFile imageImporte,
+  ) async {
+    MultipartFile file = await MultipartFile.fromFile(imageImporte.path);
+    var urlFriend = "$url/$friendId/upload/profile-image";
+    try {
+      final response = await _dio.post(urlFriend, data: file);
+      return APIResponse(data: response.data);
+    } on DioError catch (error) {
+      if (error.response != null) {
+        switch (error.response?.statusCode) {
+          case 401:
+            return APIResponse(type: FriendTypeError.noInternet);
+          case 404:
+            return APIResponse(type: FriendTypeError.notFound);
+          default:
+            return APIResponse(error: APIError.fromJson(error.response?.data));
+        }
+      } else {
+        return APIResponse(type: FriendTypeError.noInternet);
+      }
+    } catch (error) {
+      return APIResponse(
+          error: APIError(
+              systemMessage: '',
+              title: 'Erreur lors de la connexion',
+              content: error.toString()));
+    }
   }
 
   Future<APIResponse<List<Friend>>> getFriends() async {

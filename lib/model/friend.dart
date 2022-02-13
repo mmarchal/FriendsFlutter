@@ -1,7 +1,6 @@
 import 'dart:typed_data';
 
 import 'package:json_annotation/json_annotation.dart';
-import 'package:life_friends/ui/utils/uint8_list_converter.dart';
 
 part 'friend.g.dart';
 

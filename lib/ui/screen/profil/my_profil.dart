@@ -1,9 +1,10 @@
 import 'dart:convert';
-import 'dart:typed_data';
+import 'dart:io';
 import 'dart:ui';
 
 import 'package:cool_alert/cool_alert.dart';
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:life_friends/model/friend.dart';
 import 'package:life_friends/notifier/friend/friend_notifier.dart';
 import 'package:life_friends/service/friend.repository.dart';
@@ -13,7 +14,6 @@ import 'package:life_friends/ui/widgets/advance_custom_alert.dart';
 import 'package:life_friends/ui/widgets/copper_text.dart';
 import 'package:life_friends/ui/widgets/loading_widget.dart';
 import 'package:provider/src/provider.dart';
-import 'package:random_string/random_string.dart';
 
 enum Updated { prenom, mail, identifiant }
 
@@ -35,6 +35,9 @@ class MyProfilState extends State<MyProfil> {
   bool mailUpdated = false;
   bool loginUpdated = false;
   bool nameUpdated = false;
+
+  final ImagePicker _picker = ImagePicker();
+  XFile? imageImporte;
 
   _titleDialogUpdate(Updated updated) {
     switch (updated) {
@@ -140,6 +143,12 @@ class MyProfilState extends State<MyProfil> {
       allChangements +=
           "Email modifié : ${mailController.text} (${friend?.email})\n";
     }
+    if (imageImporte != null) {
+      allChangements += "Photo de profil modifié !";
+    }
+    if (allChangements == "") {
+      allChangements = "Aucune modification !";
+    }
     return allChangements;
   }
 
@@ -150,7 +159,7 @@ class MyProfilState extends State<MyProfil> {
         type: CoolAlertType.warning,
         title: 'Confirmation de modification',
         onConfirmBtnTap: () {
-          if (changed == "") {
+          if (changed == "Aucune modification !") {
             Navigator.pushNamedAndRemoveUntil(
                 context, '/home', (route) => false);
           } else {
@@ -173,6 +182,10 @@ class MyProfilState extends State<MyProfil> {
         login: (loginUpdated) ? loginController.text : friend.login,
         email: (mailUpdated) ? mailController.text : friend.email,
         password: friend.password);
+    if (imageImporte != null) {
+      Provider.of<FriendRepository>(context, listen: false)
+          .updateLoginPicture(friend.id!, imageImporte!);
+    }
     Provider.of<FriendRepository>(context, listen: false)
         .updateUser(updateFriend)
         .then((value) async {
@@ -196,6 +209,53 @@ class MyProfilState extends State<MyProfil> {
     });
   }
 
+  void _showPicker(context) {
+    showModalBottomSheet(
+        context: context,
+        builder: (BuildContext bc) {
+          return SafeArea(
+            child: Wrap(
+              children: <Widget>[
+                ListTile(
+                    leading: const Icon(Icons.photo_library),
+                    title: const Text('Galerie photos'),
+                    onTap: () async {
+                      XFile? image = await _picker.pickImage(
+                          source: ImageSource.gallery, imageQuality: 50);
+
+                      setState(() {
+                        imageImporte = image;
+                      });
+                      Navigator.of(context).pop();
+                    }),
+                ListTile(
+                  leading: const Icon(Icons.photo_camera),
+                  title: const Text('Appareil photo'),
+                  onTap: () async {
+                    XFile? image = await _picker.pickImage(
+                        source: ImageSource.camera, imageQuality: 50);
+                    setState(() {
+                      imageImporte = image;
+                    });
+                    Navigator.of(context).pop();
+                  },
+                ),
+                ListTile(
+                  leading: const Icon(Icons.cancel),
+                  title: const Text('Restaurer la photo initiale'),
+                  onTap: () {
+                    setState(() {
+                      imageImporte = null;
+                    });
+                    Navigator.of(context).pop();
+                  },
+                ),
+              ],
+            ),
+          );
+        });
+  }
+
   @override
   Widget build(BuildContext context) {
     Friend? friend = context.watch<FriendNotifier>().friend;
@@ -207,6 +267,13 @@ class MyProfilState extends State<MyProfil> {
         ),
         centerTitle: true,
         elevation: 4,
+        actions: [
+          IconButton(
+              onPressed: () {
+                _showPicker(context);
+              },
+              icon: const Icon(Icons.add_a_photo))
+        ],
       ),
       floatingActionButton: FloatingActionButton(
           onPressed: () {
@@ -243,10 +310,13 @@ class MyProfilState extends State<MyProfil> {
                       decoration: const BoxDecoration(
                         shape: BoxShape.circle,
                       ),
-                      child: (friend?.profileImage != null)
-                          ? Image.memory(base64Decode(friend!.profileImage!))
-                          : Image.network(
-                              'https://picsum.photos/seed/220/600')),
+                      child: (imageImporte != null)
+                          ? Image.file(File(imageImporte!.path))
+                          : (friend?.profileImage != null)
+                              ? Image.memory(
+                                  base64Decode(friend!.profileImage!))
+                              : Image.network(
+                                  'https://picsum.photos/seed/220/600')),
                 ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.start,

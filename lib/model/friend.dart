@@ -1,3 +1,5 @@
+import 'dart:typed_data';
+
 import 'package:json_annotation/json_annotation.dart';
 
 part 'friend.g.dart';
@@ -9,6 +11,7 @@ class Friend {
   final String login;
   final String password;
   final String email;
+  final Uint8List? profileImage;
   final bool? mdpProvisoire;
   final String? codeMdp;
   final DateTime? dateExpiration;
@@ -18,6 +21,7 @@ class Friend {
       required this.prenom,
       required this.login,
       required this.email,
+      this.profileImage,
       required this.password,
       this.mdpProvisoire,
       this.codeMdp,

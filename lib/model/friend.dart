@@ -1,17 +1,18 @@
 import 'dart:typed_data';
 
 import 'package:json_annotation/json_annotation.dart';
+import 'package:life_friends/ui/utils/uint8_list_converter.dart';
 
 part 'friend.g.dart';
 
-@JsonSerializable()
+@JsonSerializable(explicitToJson: true)
 class Friend {
   final int? id;
   final String prenom;
   final String login;
   final String password;
   final String email;
-  final Uint8List? profileImage;
+  final String? profileImage;
   final bool? mdpProvisoire;
   final String? codeMdp;
   final DateTime? dateExpiration;

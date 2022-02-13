@@ -17,7 +17,7 @@ class HomeScreen extends StatelessWidget {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: FriendAppBar(
-        username: "Hello ${friend?.prenom}",
+        username: "Hello ${friend?.prenom ?? ""}",
       ),
       body: WillPopScope(
         onWillPop: () async => false,

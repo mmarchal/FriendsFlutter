@@ -1,3 +1,7 @@
+import 'dart:convert';
+import 'dart:typed_data';
+import 'dart:ui';
+
 import 'package:cool_alert/cool_alert.dart';
 import 'package:flutter/material.dart';
 import 'package:life_friends/model/friend.dart';
@@ -233,17 +237,16 @@ class MyProfilState extends State<MyProfil> {
                 Padding(
                   padding: const EdgeInsetsDirectional.fromSTEB(0, 10, 0, 0),
                   child: Container(
-                    width: 120,
-                    height: 120,
-                    clipBehavior: Clip.antiAlias,
-                    decoration: const BoxDecoration(
-                      shape: BoxShape.circle,
-                    ),
-                    //TODO image à stocker et modifiable
-                    child: Image.network(
-                      'https://picsum.photos/seed/220/600',
-                    ),
-                  ),
+                      width: 120,
+                      height: 120,
+                      clipBehavior: Clip.antiAlias,
+                      decoration: const BoxDecoration(
+                        shape: BoxShape.circle,
+                      ),
+                      child: (friend?.profileImage != null)
+                          ? Image.memory(base64Decode(friend!.profileImage!))
+                          : Image.network(
+                              'https://picsum.photos/seed/220/600')),
                 ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.start,

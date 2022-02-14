@@ -9,6 +9,7 @@ import 'package:life_friends/ui/screen/friend_sortie/mes_sorties.dart';
 import 'package:life_friends/ui/screen/home.dart';
 import 'package:life_friends/ui/screen/login.dart';
 import 'package:life_friends/ui/screen/messagerie/home_chat.dart';
+import 'package:life_friends/ui/screen/messagerie/nouveau_chat.dart';
 import 'package:life_friends/ui/screen/profil/my_profil.dart';
 import 'package:life_friends/ui/screen/proposition/nouvelle_proposition.dart';
 import 'package:life_friends/ui/screen/signup.dart';
@@ -64,7 +65,8 @@ class MyApp extends StatelessWidget {
           '/profil': (context) => const MyProfil(),
           '/messagerie': (context) => HomeChat(
                 user: context.watch<FriendNotifier>().friend,
-              )
+              ),
+          '/nouvelle_discussion': (context) => const NouveauChat()
         },
       ),
     );

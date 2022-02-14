@@ -33,12 +33,7 @@ class _HomeChatState extends State<HomeChat> {
         actionAppBar: IconButton(
           icon: const Icon(Icons.add),
           onPressed: () {
-            showDialog(
-              context: context,
-              builder: (context) {
-                return generateAlertDialog(apiFriends);
-              },
-            );
+            Navigator.pushNamed(context, '/nouvelle_discussion');
           },
         ),
         body: (api != null && apiFriends != null)
@@ -75,61 +70,5 @@ class _HomeChatState extends State<HomeChat> {
             style: TextStyle(fontStyle: FontStyle.italic)),
       );
     }
-  }
-
-  Widget generateAlertDialog(APIResponse<List<Friend>?>? apiFriends) {
-    TextEditingController _controller = TextEditingController();
-    String selectedFriend = "";
-    List<DropdownMenuItem<String>> friendsItem = [];
-    if (apiFriends != null) {
-      friendsItem = apiFriends.data!
-          .map((e) => DropdownMenuItem(
-                child: Text(e.prenom),
-                value: e.prenom,
-              ))
-          .toList();
-    }
-    return SimpleDialog(
-        title: const Text(
-          "Entrer le nom de la conversation et choisissez un ami avec qui discuter: ",
-          textAlign: TextAlign.center,
-        ),
-        children: [
-          Expanded(
-              child: SignTextField(
-            controller: _controller,
-            title: 'Nom de la conversation',
-          )),
-          const SizedBox(
-            height: 30,
-          ),
-          (friendsItem.isNotEmpty)
-              ? DropdownButton(
-                  value: selectedFriend,
-                  items: friendsItem,
-                  onChanged: (String? s) {
-                    setState(() {
-                      selectedFriend = s!;
-                    });
-                  })
-              : const Center(
-                  child: CircularProgressIndicator(),
-                ),
-          GradientButton(
-              label: 'Valider',
-              gradient: gMessagerie,
-              onPressed: () {
-                _generateChat(selectedFriend);
-              })
-        ]);
-  }
-
-  _generateChat(String e) {
-    Navigator.pop(context);
-    showDialog(
-        context: context,
-        builder: (BuildContext buildContext) {
-          return LoadingWidget(label: "Création de la conversation avec $e");
-        });
   }
 }

@@ -54,7 +54,6 @@ class FriendRepository extends ApiService {
   }
 
   Future<APIResponse<List<Friend>>> getFriends() async {
-    var retour = await getData(url);
     List<Friend> list = [];
     try {
       final response = await _dio.get(url);

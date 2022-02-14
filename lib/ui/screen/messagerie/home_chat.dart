@@ -8,6 +8,8 @@ import 'package:life_friends/notifier/chat/chat_list_notifier.dart';
 import 'package:life_friends/notifier/friend/friend_list_notifier.dart';
 import 'package:life_friends/ui/screen/sortie/scaffold_sortie.dart';
 import 'package:life_friends/ui/widgets/gradient_button.dart';
+import 'package:life_friends/ui/widgets/loading_widget.dart';
+import 'package:life_friends/ui/widgets/sign_textfield.dart';
 import 'package:provider/src/provider.dart';
 
 class HomeChat extends StatefulWidget {
@@ -39,7 +41,7 @@ class _HomeChatState extends State<HomeChat> {
             );
           },
         ),
-        body: (api != null)
+        body: (api != null && apiFriends != null)
             ? generateBody(api)
             : const Center(child: CircularProgressIndicator()));
   }
@@ -76,17 +78,58 @@ class _HomeChatState extends State<HomeChat> {
   }
 
   Widget generateAlertDialog(APIResponse<List<Friend>?>? apiFriends) {
+    TextEditingController _controller = TextEditingController();
+    String selectedFriend = "";
+    List<DropdownMenuItem<String>> friendsItem = [];
+    if (apiFriends != null) {
+      friendsItem = apiFriends.data!
+          .map((e) => DropdownMenuItem(
+                child: Text(e.prenom),
+                value: e.prenom,
+              ))
+          .toList();
+    }
     return SimpleDialog(
         title: const Text(
-          "Choisissez un ami avec qui discuter: ",
+          "Entrer le nom de la conversation et choisissez un ami avec qui discuter: ",
           textAlign: TextAlign.center,
         ),
-        children: apiFriends!.data!
-            .map((e) => GradientButton(
-                  label: e.prenom,
-                  onPressed: () {},
-                  gradient: gMessagerie,
-                ))
-            .toList());
+        children: [
+          Expanded(
+              child: SignTextField(
+            controller: _controller,
+            title: 'Nom de la conversation',
+          )),
+          const SizedBox(
+            height: 30,
+          ),
+          (friendsItem.isNotEmpty)
+              ? DropdownButton(
+                  value: selectedFriend,
+                  items: friendsItem,
+                  onChanged: (String? s) {
+                    setState(() {
+                      selectedFriend = s!;
+                    });
+                  })
+              : const Center(
+                  child: CircularProgressIndicator(),
+                ),
+          GradientButton(
+              label: 'Valider',
+              gradient: gMessagerie,
+              onPressed: () {
+                _generateChat(selectedFriend);
+              })
+        ]);
+  }
+
+  _generateChat(String e) {
+    Navigator.pop(context);
+    showDialog(
+        context: context,
+        builder: (BuildContext buildContext) {
+          return LoadingWidget(label: "Création de la conversation avec $e");
+        });
   }
 }

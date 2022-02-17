@@ -3,6 +3,7 @@ import 'package:life_friends/model/api/api_response.dart';
 import 'package:life_friends/model/chat.dart';
 import 'package:life_friends/model/friend.dart';
 import 'package:life_friends/model/message.dart';
+import 'package:life_friends/notifier/chat/chat_list_notifier.dart';
 import 'package:life_friends/notifier/friend/friend_notifier.dart';
 import 'package:life_friends/service/chat.repository.dart';
 import 'package:provider/src/provider.dart';
@@ -138,6 +139,9 @@ class DetailChatState extends State<DetailChat> {
                         deliveredAt: DateTime.now(),
                         friend: connected,
                       );
+                      setState(() {
+                        _list!.add(newMessage);
+                      });
                       APIResponse<bool> sendMessage =
                           await Provider.of<ChatRepository>(context,
                                   listen: false)
@@ -145,9 +149,14 @@ class DetailChatState extends State<DetailChat> {
                         channelId: widget.chat.id.toString(),
                         message: newMessage,
                       );
-                      setState(() {
-                        _list!.add(newMessage);
-                      });
+                      Provider.of<ChatListNotifier>(context, listen: false)
+                          .loadChannels(
+                              friendId: Provider.of<FriendNotifier>(context,
+                                      listen: false)
+                                  .friend!
+                                  .id!
+                                  .toString(),
+                              clearList: true);
                     },
                     child: const Icon(
                       Icons.send,

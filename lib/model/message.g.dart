@@ -7,7 +7,7 @@ part of 'message.dart';
 // **************************************************************************
 
 Message _$MessageFromJson(Map<String, dynamic> json) => Message(
-      id: json['id'] as int,
+      id: json['id'] as int?,
       content: json['content'] as String,
       deliveredAt: DateTime.parse(json['deliveredAt'] as String),
       friend: Friend.fromJson(json['friend'] as Map<String, dynamic>),

@@ -5,13 +5,13 @@ part 'message.g.dart';
 
 @JsonSerializable()
 class Message {
-  final int id;
+  final int? id;
   final String content;
   final DateTime deliveredAt;
   final Friend friend;
 
   Message(
-      {required this.id,
+      {this.id,
       required this.content,
       required this.deliveredAt,
       required this.friend});

@@ -2,12 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:life_friends/env/constants.dart';
+import 'package:life_friends/model/chat.dart';
 import 'package:life_friends/notifier/friend/friend_notifier.dart';
 import 'package:life_friends/provider_def.dart';
 import 'package:life_friends/ui/screen/forgot_pass.dart';
 import 'package:life_friends/ui/screen/friend_sortie/mes_sorties.dart';
 import 'package:life_friends/ui/screen/home.dart';
 import 'package:life_friends/ui/screen/login.dart';
+import 'package:life_friends/ui/screen/messagerie/detail/detail_chat.dart';
 import 'package:life_friends/ui/screen/messagerie/home_chat.dart';
 import 'package:life_friends/ui/screen/messagerie/nouveau_chat.dart';
 import 'package:life_friends/ui/screen/profil/my_profil.dart';
@@ -66,7 +68,10 @@ class MyApp extends StatelessWidget {
           '/messagerie': (context) => HomeChat(
                 user: context.watch<FriendNotifier>().friend,
               ),
-          '/nouvelle_discussion': (context) => const NouveauChat()
+          '/nouvelle_discussion': (context) => const NouveauChat(),
+          '/detail_chat': (context) => DetailChat(
+                chat: ModalRoute.of(context)!.settings.arguments as Chat,
+              )
         },
       ),
     );

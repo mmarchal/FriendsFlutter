@@ -61,6 +61,9 @@ class _HomeChatState extends State<HomeChat> {
                     : "Aucun message !"),
               ),
             ),
+            onTap: () {
+              Navigator.pushNamed(context, '/detail_chat', arguments: chat);
+            },
           );
         },
       );

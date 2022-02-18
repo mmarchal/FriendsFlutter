@@ -23,6 +23,7 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
+  //TODO Switch pour changer le host : prod(kimsufi) ou dev(raspberry)
   final TextEditingController _user = TextEditingController();
   final TextEditingController _pass = TextEditingController();
 

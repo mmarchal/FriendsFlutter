@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:life_friends/ui/screen/profil/widgets/profil_picture.dart';
 
 class FriendAppBar extends StatelessWidget with PreferredSizeWidget {
   final String? username;
-  const FriendAppBar({Key? key, this.username}) : super(key: key);
+  final String? picture;
+  const FriendAppBar({Key? key, this.username, this.picture}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -10,6 +12,9 @@ class FriendAppBar extends StatelessWidget with PreferredSizeWidget {
       elevation: 0,
       backgroundColor: Colors.white,
       centerTitle: false,
+      leading: ProfilPicture(
+        profileImage: picture,
+      ),
       title: Text(
         username ?? "Bonjour",
         style: const TextStyle(color: Colors.black),

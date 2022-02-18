@@ -17,6 +17,7 @@ class HomeScreen extends StatelessWidget {
       backgroundColor: Colors.white,
       appBar: FriendAppBar(
         username: "Hello ${friend?.prenom ?? ""}",
+        picture: friend?.profileImage,
       ),
       body: WillPopScope(
         onWillPop: () async => false,

@@ -10,6 +10,7 @@ import 'package:life_friends/model/friend.dart';
 import 'package:life_friends/notifier/friend/friend_notifier.dart';
 import 'package:life_friends/service/friend.repository.dart';
 import 'package:life_friends/ui/screen/profil/widgets/profil_information_row.dart';
+import 'package:life_friends/ui/screen/profil/widgets/profil_picture.dart';
 import 'package:life_friends/ui/utils/hexcolor.dart';
 import 'package:life_friends/ui/widgets/advance_custom_alert.dart';
 import 'package:life_friends/ui/widgets/copper_text.dart';
@@ -302,22 +303,9 @@ class MyProfilState extends State<MyProfil> {
                       textAlign: TextAlign.center,
                       color: Colors.white,
                     )),
-                Padding(
-                  padding: const EdgeInsetsDirectional.fromSTEB(0, 10, 0, 0),
-                  child: Container(
-                      width: 120,
-                      height: 120,
-                      clipBehavior: Clip.antiAlias,
-                      decoration: const BoxDecoration(
-                        shape: BoxShape.circle,
-                      ),
-                      child: (imageImporte != null)
-                          ? Image.file(File(imageImporte!.path))
-                          : (friend?.profileImage != null)
-                              ? Image.memory(
-                                  base64Decode(friend!.profileImage!))
-                              : Image.network(
-                                  'https://picsum.photos/seed/220/600')),
+                ProfilPicture(
+                  imageImporte: imageImporte,
+                  profileImage: friend?.profileImage,
                 ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.start,

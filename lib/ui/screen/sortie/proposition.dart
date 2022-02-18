@@ -33,6 +33,7 @@ class PropositionSortieState extends State<PropositionSortie> {
 
   @override
   Widget build(BuildContext context) {
+    //TODO Mettre à jour la liste des sorties si création OK
     final List<TypeSortie>? liste =
         context.watch<TypeSortieListNotifier>().listeTypes;
     _selectDate(BuildContext context) async {

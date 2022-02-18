@@ -49,6 +49,7 @@ class AllFieldsForm extends StatefulWidget {
 }
 
 class _AllFieldsForm extends State<AllFieldsForm> {
+  //TODO Nom + Date non modifiable + essaie sur la demande est longue
   double value = 0.0;
   @override
   Widget build(BuildContext context) {

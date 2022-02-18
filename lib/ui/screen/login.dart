@@ -78,16 +78,21 @@ class _LoginPageState extends State<LoginPage> {
             padding: const EdgeInsets.only(top: 62),
             child: Column(
               children: <Widget>[
-                LoginText(
-                    controller: _user, icon: Icons.person, hint: 'Identifiant'),
-                const SizedBox(
-                  height: 50,
+                Container(
+                  margin: const EdgeInsets.all(20),
+                  child: LoginText(
+                      controller: _user,
+                      icon: Icons.person,
+                      hint: 'Identifiant'),
                 ),
-                LoginText(
-                    controller: _pass,
-                    icon: Icons.vpn_key,
-                    isPassword: true,
-                    hint: 'Mot de passe'),
+                Container(
+                  margin: const EdgeInsets.all(20),
+                  child: LoginText(
+                      controller: _pass,
+                      icon: Icons.vpn_key,
+                      isPassword: true,
+                      hint: 'Mot de passe'),
+                ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [

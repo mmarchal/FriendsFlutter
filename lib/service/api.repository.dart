@@ -54,7 +54,7 @@ class ApiRepository extends ApiService {
     }
   }
 
-  Future<APIResponse<bool>> insertFriend(
+  Future<APIResponse<Friend>> insertFriend(
       {required String prenom,
       required String login,
       required String password,
@@ -64,7 +64,7 @@ class ApiRepository extends ApiService {
     var url = '$domaine/friend';
     try {
       final response = await _dio.post(url, data: friend.toJson());
-      return APIResponse(data: response.data);
+      return APIResponse(data: Friend.fromJson(response.data));
     } on DioError catch (error) {
       if (error.response != null) {
         switch (error.response?.statusCode) {

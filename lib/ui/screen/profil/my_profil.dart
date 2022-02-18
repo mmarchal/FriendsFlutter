@@ -269,13 +269,13 @@ class MyProfilState extends State<MyProfil> {
         ),
         centerTitle: true,
         elevation: 4,
-        actions: [
+        /*actions: [
           IconButton(
               onPressed: () {
                 _showPicker(context);
               },
               icon: const Icon(Icons.add_a_photo))
-        ],
+        ],*/
       ),
       floatingActionButton: FloatingActionButton(
           onPressed: () {

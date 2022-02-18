@@ -7,6 +7,7 @@ import 'package:life_friends/ui/screen/login_head_screen.dart';
 import 'package:life_friends/ui/utils/style.dart';
 import 'package:life_friends/ui/widgets/button_login.dart';
 import 'package:life_friends/ui/widgets/loading_widget.dart';
+import 'package:life_friends/ui/widgets/login_text.dart';
 import 'package:life_friends/ui/widgets/sign_textfield.dart';
 import 'package:provider/src/provider.dart';
 
@@ -28,6 +29,45 @@ class _SignupPageState extends State<SignupPage> {
     super.initState();
   }
 
+  _errorDialog(String desc) {
+    AwesomeDialog(
+            context: context,
+            dialogType: DialogType.ERROR,
+            animType: AnimType.RIGHSLIDE,
+            headerAnimationLoop: false,
+            title: "Erreur",
+            desc: desc,
+            btnOkOnPress: () {},
+            btnOkIcon: Icons.cancel,
+            btnOkColor: Colors.red)
+        .show();
+  }
+
+  _checkMandatoryValue() {
+    String contentError = "";
+    if (_prenom.text == '' ||
+        _login.text == '' ||
+        _password.text == '' ||
+        _mail.text == '') {
+      contentError =
+          'Des champs sont vides ! Il faut remplir l\'ensemble des champs !';
+    }
+
+    if (contentError == '') {
+      if (_mail.text.contains('@')) {
+        showDialog(
+            context: context,
+            builder: (_) =>
+                const LoadingWidget(label: 'Création de compte en cours'));
+        _creationCompte(context);
+      } else {
+        _errorDialog("Le format de l'adresse mail est incorrect !");
+      }
+    } else {
+      _errorDialog(contentError);
+    }
+  }
+
   void _creationCompte(BuildContext buildContext) {
     String prenom = _prenom.text;
     String login = _login.text;
@@ -37,7 +77,7 @@ class _SignupPageState extends State<SignupPage> {
         .insertFriend(
             prenom: prenom, login: login, password: password, email: email)
         .then((value) {
-      if (value.isSuccess && value.data!) {
+      if (value.isSuccess) {
         Navigator.pop(context);
         Navigator.pop(context);
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
@@ -51,17 +91,8 @@ class _SignupPageState extends State<SignupPage> {
               "Vous n'êtes pas connecté à Internet ! Vérifiez votre connexion !"),
         ));
       } else {
-        return AwesomeDialog(
-            context: context,
-            dialogType: DialogType.ERROR,
-            animType: AnimType.RIGHSLIDE,
-            headerAnimationLoop: false,
-            title: value.error!.title,
-            desc: value.error!.content,
-            btnOkOnPress: () {},
-            btnOkIcon: Icons.cancel,
-            btnOkColor: Colors.red)
-          ..show();
+        Navigator.pop(context);
+        _errorDialog(value.error!.content);
       }
     });
   }
@@ -70,35 +101,49 @@ class _SignupPageState extends State<SignupPage> {
   Widget build(BuildContext context) {
     return LoginHeadScreen(
         value: "Compte",
-        child: Column(
-          children: <Widget>[
-            SignTextField(
-              title: "Prénom",
-              controller: _prenom,
-            ),
-            Style().espace,
-            SignTextField(
-              title: "Login",
-              controller: _login,
-            ),
-            Style().espace,
-            SignTextField(
-              title: "Mot de passe",
-              controller: _password,
-            ),
-            Style().espace,
-            SignTextField(title: "Email", controller: _mail),
-            Style().espace,
-            ButtonLogin(
-                onTap: () {
-                  showDialog(
-                      context: context,
-                      builder: (_) => const LoadingWidget(
-                          label: 'Création de compte en cours'));
-                  _creationCompte(context);
-                },
-                title: 'Créer un compte'),
-          ],
+        child: Container(
+          margin: const EdgeInsets.all(20),
+          child: Column(
+            children: <Widget>[
+              Row(
+                children: [
+                  Expanded(
+                    child: LoginText(
+                      controller: _prenom,
+                      icon: Icons.people,
+                      hint: 'Prénom',
+                    ),
+                  ),
+                  Expanded(
+                    child: LoginText(
+                      controller: _login,
+                      icon: Icons.vpn_key,
+                      hint: 'Identifiant',
+                    ),
+                  ),
+                ],
+              ),
+              LoginText(
+                controller: _mail,
+                icon: Icons.mail,
+                hint: 'Email',
+              ),
+              LoginText(
+                controller: _password,
+                icon: Icons.password,
+                isPassword: true,
+                hint: 'Mot de passe',
+              ),
+              Align(
+                alignment: Alignment.bottomCenter,
+                child: ButtonLogin(
+                    onTap: () {
+                      _checkMandatoryValue();
+                    },
+                    title: 'Créer un compte'),
+              ),
+            ],
+          ),
         ));
   }
 }

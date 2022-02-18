@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:life_friends/env/constants.dart';
 import 'package:life_friends/notifier/friend/friend_notifier.dart';
-import 'package:life_friends/notifier/token_notifier.dart';
 import 'package:life_friends/ui/screen/friend_sortie/mes_sorties.dart';
 import 'package:life_friends/ui/widgets/friend_app_bar.dart';
 import 'package:life_friends/ui/widgets/gradient_icon_button.dart';

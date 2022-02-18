@@ -1,5 +1,4 @@
 import 'package:json_annotation/json_annotation.dart';
-import 'package:life_friends/model/friend.dart';
 import 'package:life_friends/model/type_proposition.dart';
 
 part 'proposition.g.dart';

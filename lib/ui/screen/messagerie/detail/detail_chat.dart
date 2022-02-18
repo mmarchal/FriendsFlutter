@@ -1,5 +1,6 @@
+// ignore_for_file: implementation_imports
+
 import 'package:flutter/material.dart';
-import 'package:life_friends/model/api/api_response.dart';
 import 'package:life_friends/model/chat.dart';
 import 'package:life_friends/model/friend.dart';
 import 'package:life_friends/model/message.dart';
@@ -142,10 +143,8 @@ class DetailChatState extends State<DetailChat> {
                       setState(() {
                         _list!.add(newMessage);
                       });
-                      APIResponse<bool> sendMessage =
-                          await Provider.of<ChatRepository>(context,
-                                  listen: false)
-                              .createMessageByChannelId(
+                      await Provider.of<ChatRepository>(context, listen: false)
+                          .createMessageByChannelId(
                         channelId: widget.chat.id.toString(),
                         message: newMessage,
                       );

@@ -23,15 +23,8 @@ class SortieListNotifier extends ChangeNotifier {
     if (clearList) {
       listeSorties = null;
     }
-
-    try {
-      var api = await _sortieRepository.getSorties();
-      if (api.isSuccess) {
-        listeSorties = api;
-      }
-    } catch (error) {
-      print(error);
-    }
+    var api = await _sortieRepository.getSorties();
+    listeSorties = api;
     notifyListeners();
   }
 
@@ -42,15 +35,9 @@ class SortieListNotifier extends ChangeNotifier {
       sorties = null;
     }
 
-    try {
-      var apiResponse = await _friendRepository.getMySorties(userId);
-      if (apiResponse.isSuccess) {
-        _mesSorties.addAll(apiResponse.data!);
-        sorties = APIResponse(data: _mesSorties, type: apiResponse.type);
-      } else {}
-    } catch (error) {
-      print(error);
-    }
+    var apiResponse = await _friendRepository.getMySorties(userId);
+    _mesSorties.addAll(apiResponse.data!);
+    sorties = APIResponse(data: _mesSorties, type: apiResponse.type);
     notifyListeners();
   }
 
@@ -59,16 +46,8 @@ class SortieListNotifier extends ChangeNotifier {
     if (clearSortie) {
       uniqueSortie = null;
     }
-
-    try {
-      var apiResponse = await _sortieRepository.getOneSortie(sortieId);
-      if (apiResponse.isSuccess) {
-        uniqueSortie =
-            APIResponse(data: apiResponse.data, type: apiResponse.type);
-      } else {}
-    } catch (error) {
-      print(error);
-    }
+    var apiResponse = await _sortieRepository.getOneSortie(sortieId);
+    uniqueSortie = APIResponse(data: apiResponse.data, type: apiResponse.type);
     notifyListeners();
   }
 }

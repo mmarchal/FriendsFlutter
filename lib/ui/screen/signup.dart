@@ -1,3 +1,5 @@
+// ignore_for_file: implementation_imports
+
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:life_friends/service/api.repository.dart';
@@ -5,7 +7,6 @@ import 'package:life_friends/ui/screen/login_head_screen.dart';
 import 'package:life_friends/ui/utils/style.dart';
 import 'package:life_friends/ui/widgets/button_login.dart';
 import 'package:life_friends/ui/widgets/loading_widget.dart';
-import 'package:life_friends/ui/widgets/login_right_text.dart';
 import 'package:life_friends/ui/widgets/sign_textfield.dart';
 import 'package:provider/src/provider.dart';
 

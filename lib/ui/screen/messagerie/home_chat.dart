@@ -1,3 +1,5 @@
+// ignore_for_file: implementation_imports
+
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:life_friends/env/constants.dart';
@@ -7,9 +9,6 @@ import 'package:life_friends/model/friend.dart';
 import 'package:life_friends/notifier/chat/chat_list_notifier.dart';
 import 'package:life_friends/notifier/friend/friend_list_notifier.dart';
 import 'package:life_friends/ui/screen/sortie/scaffold_sortie.dart';
-import 'package:life_friends/ui/widgets/gradient_button.dart';
-import 'package:life_friends/ui/widgets/loading_widget.dart';
-import 'package:life_friends/ui/widgets/sign_textfield.dart';
 import 'package:provider/src/provider.dart';
 
 class HomeChat extends StatefulWidget {

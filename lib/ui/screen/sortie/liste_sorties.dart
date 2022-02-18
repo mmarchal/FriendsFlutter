@@ -1,3 +1,5 @@
+// ignore_for_file: implementation_imports
+
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:life_friends/env/constants.dart';
@@ -10,9 +12,6 @@ import 'package:provider/src/provider.dart';
 
 class ListeSorties extends StatelessWidget {
   const ListeSorties({Key? key}) : super(key: key);
-
-  ///To do --> Style à modifier
-  ///https://miro.medium.com/max/910/1*xvCsoq7iYcznw1Xy5A8Jng.png
 
   _initBody(List<Sortie>? data) {
     if (data!.isNotEmpty) {

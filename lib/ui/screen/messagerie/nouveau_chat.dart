@@ -1,3 +1,5 @@
+// ignore_for_file: implementation_imports
+
 import 'package:cool_alert/cool_alert.dart';
 import 'package:flutter/material.dart';
 import 'package:life_friends/env/constants.dart';

@@ -13,7 +13,7 @@ import 'package:life_friends/service/api.service.dart';
 class ApiRepository extends ApiService {
   final Dio _dio = Dio();
 
-  ApiRepository(Dio dio, LoginService loginService) : super(dio, loginService);
+  ApiRepository(Dio dio, LoginService loginService) : super(dio);
 
   Friend _initFriend(
       {required String prenom,

@@ -1,7 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:life_friends/env/constants.dart';
 import 'package:life_friends/login_service.dart';
-import 'package:dio/src/dio.dart';
 import 'package:life_friends/model/api/api_response.dart';
 import 'package:life_friends/model/chat.dart';
 import 'package:life_friends/model/error/api_error.dart';
@@ -13,7 +12,7 @@ class ChatRepository extends ApiService {
   final String url = "$domaine/chat";
   final Dio _dio = Dio();
 
-  ChatRepository(Dio dio, LoginService loginService) : super(dio, loginService);
+  ChatRepository(Dio dio, LoginService loginService) : super(dio);
 
   Future<APIResponse<List<Chat>>> getChannels(String idFriend) async {
     List<Chat> list = [];

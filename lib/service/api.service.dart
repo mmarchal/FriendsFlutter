@@ -1,20 +1,17 @@
 import 'package:dio/dio.dart';
-import 'package:life_friends/login_service.dart';
 import 'package:life_friends/model/api/api_response.dart';
 import 'package:life_friends/model/error/api_error.dart';
 import 'package:life_friends/model/error/type_error.dart';
 
 abstract class ApiService {
   final Dio dio;
-  final LoginService _loginService;
 
-  ApiService(this.dio, this._loginService);
+  ApiService(this.dio);
 
   getData(String url, {Map<String, dynamic>? param}) async {
     var query = url;
     Options options = Options(headers: {
       'accept': 'application/json',
-      //'Authorization': 'Bearer ${_loginService.token?.token}'
     });
     try {
       final response = await dio.get(query, options: options);

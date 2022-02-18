@@ -10,14 +10,6 @@ class FriendAppBar extends StatelessWidget with PreferredSizeWidget {
       elevation: 0,
       backgroundColor: Colors.white,
       centerTitle: false,
-      leading: IconButton(
-        onPressed: () {
-          Navigator.pushNamedAndRemoveUntil(
-              context, '/', (Route<dynamic> route) => false);
-        },
-        icon: const Icon(Icons.exit_to_app),
-        color: Colors.black,
-      ),
       title: Text(
         username ?? "Bonjour",
         style: const TextStyle(color: Colors.black),

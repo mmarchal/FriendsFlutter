@@ -1,6 +1,7 @@
+// ignore_for_file: implementation_imports
+
 import 'dart:convert';
 import 'dart:io';
-import 'dart:ui';
 
 import 'package:cool_alert/cool_alert.dart';
 import 'package:flutter/material.dart';

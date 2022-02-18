@@ -10,7 +10,6 @@ import 'package:life_friends/notifier/typeproposition/typeproposition_list_notif
 import 'package:life_friends/service/proposition.repository.dart';
 import 'package:life_friends/ui/widgets/button_login.dart';
 import 'package:life_friends/ui/widgets/loading_widget.dart';
-import 'package:rating_dialog/rating_dialog.dart';
 
 class AllFieldsFormBloc extends FormBloc<String, String> {
   TextFieldBloc nomFriend = TextFieldBloc();
@@ -37,9 +36,7 @@ class AllFieldsFormBloc extends FormBloc<String, String> {
   }
 
   @override
-  void onSubmitting() {
-    // TODO: implement onSubmitting
-  }
+  void onSubmitting() {}
 }
 
 class AllFieldsForm extends StatefulWidget {

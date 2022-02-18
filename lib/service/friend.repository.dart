@@ -14,8 +14,7 @@ class FriendRepository extends ApiService {
   final String url = "$domaine/friend";
   final Dio _dio = Dio();
 
-  FriendRepository(Dio dio, LoginService loginService)
-      : super(dio, loginService);
+  FriendRepository(Dio dio, LoginService loginService) : super(dio);
 
   Future<APIResponse<Friend>> loadConnectedFriend(AuthToken? authToken) async {
     var urlFriend = "$url/${authToken!.userId}";

@@ -25,7 +25,6 @@ class DetailSortie extends StatefulWidget {
 }
 
 class _DetailSortieState extends State<DetailSortie> {
-  //TODO Problème de scroll si on scroll sur la liste des participants
   List<int> liste = [];
 
   _showDialogError(String error, BuildContext context) {

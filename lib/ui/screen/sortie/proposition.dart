@@ -5,9 +5,11 @@ import 'package:life_friends/env/constants.dart';
 import 'package:life_friends/model/api/api_response.dart';
 import 'package:life_friends/model/sortie.dart';
 import 'package:life_friends/model/typesortie.dart';
+import 'package:life_friends/notifier/sortie/sortie_list_notifier.dart';
 import 'package:life_friends/notifier/typesortie/typesortie_list_notifier.dart';
 import 'package:life_friends/service/sortie.repository.dart';
 import 'package:life_friends/ui/screen/sortie/scaffold_sortie.dart';
+import 'package:life_friends/ui/widgets/loading_widget.dart';
 import 'package:life_friends/ui/widgets/login_text.dart';
 import 'package:life_friends/ui/widgets/selected_widget.dart';
 // ignore: implementation_imports
@@ -33,7 +35,6 @@ class PropositionSortieState extends State<PropositionSortie> {
 
   @override
   Widget build(BuildContext context) {
-    //TODO Mettre à jour la liste des sorties si création OK
     final List<TypeSortie>? liste =
         context.watch<TypeSortieListNotifier>().listeTypes;
     _selectDate(BuildContext context) async {
@@ -108,6 +109,13 @@ class PropositionSortieState extends State<PropositionSortie> {
               child: ElevatedButton(
                 child: const Text("Valider"),
                 onPressed: () async {
+                  showDialog(
+                      context: context,
+                      builder: (context) {
+                        return const LoadingWidget(
+                            label:
+                                "Création de la nouvelle sortie en cours ...");
+                      });
                   Sortie sortie = Sortie(
                       datePropose: selectedDateTime,
                       intitule: _controllerTitle.text,
@@ -116,6 +124,9 @@ class PropositionSortieState extends State<PropositionSortie> {
                   APIResponse<bool> response =
                       await SortieRepository().addOuting(sortie);
                   if (response.isSuccess && response.data!) {
+                    Provider.of<SortieListNotifier>(context, listen: false)
+                        .loadAllSorties(clearList: true);
+                    Navigator.pop(context);
                     await CoolAlert.show(
                       context: context,
                       type: CoolAlertType.success,
@@ -124,6 +135,7 @@ class PropositionSortieState extends State<PropositionSortie> {
                           context, '/home', (route) => false),
                     );
                   } else {
+                    Navigator.pop(context);
                     await CoolAlert.show(
                         context: context,
                         type: CoolAlertType.error,

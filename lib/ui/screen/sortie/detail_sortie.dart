@@ -37,7 +37,9 @@ class _DetailSortieState extends State<DetailSortie> {
 
   _addFriend(Friend? friend, BuildContext context, Sortie? sortie) {
     if (friend != null && sortie != null) {
-      SortieRepository().addFriendToOuting(friend, sortie).then((value) {
+      Provider.of<SortieRepository>(context, listen: false)
+          .addFriendToOuting(friend, sortie)
+          .then((value) {
         if (value.data!) {
           CoolAlert.show(
               context: context,

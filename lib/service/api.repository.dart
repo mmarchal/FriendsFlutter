@@ -1,5 +1,4 @@
 import 'package:dio/dio.dart';
-import 'package:life_friends/env/constants.dart';
 import 'package:life_friends/login_service.dart';
 import 'package:life_friends/model/api/api_response.dart';
 import 'package:life_friends/model/api/back/api_back.dart';
@@ -12,8 +11,10 @@ import 'package:life_friends/service/api.service.dart';
 
 class ApiRepository extends ApiService {
   final Dio _dio = Dio();
+  late String domain;
 
-  ApiRepository(Dio dio, LoginService loginService) : super(dio);
+  ApiRepository(Dio dio, LoginService loginService, String domain)
+      : super(dio, domain);
 
   Friend _initFriend(
       {required String prenom,
@@ -27,7 +28,7 @@ class ApiRepository extends ApiService {
   Future<APIResponse<ApiBack>> login(
       {required String login, required String password}) async {
     Connect connect = Connect(username: login, password: password);
-    var urlLogin = '$domaine/token';
+    var urlLogin = '$domain/token';
     try {
       final responseLogin = await _dio.post(urlLogin, data: connect.toJson());
       ApiBack apiBack = ApiBack.fromJson(responseLogin.data);
@@ -61,7 +62,7 @@ class ApiRepository extends ApiService {
       required String email}) async {
     Friend friend = _initFriend(
         prenom: prenom, login: login, password: password, email: email);
-    var url = '$domaine/friend';
+    var url = '$domain/friend';
     try {
       final response = await _dio.post(url, data: friend.toJson());
       return APIResponse(data: Friend.fromJson(response.data));
@@ -88,12 +89,12 @@ class ApiRepository extends ApiService {
   }
 
   Future<APIResponse<Friend>> getFriend(String id) async {
-    var url = '$domaine/friend/$id';
+    var url = '$domain/friend/$id';
     return APIResponse(data: await getData(url));
   }
 
   Future<APIResponse<bool>> getForgotPassword(String user) async {
-    var url = '$domaine/friend/getTempPassword';
+    var url = '$domain/friend/getTempPassword';
     try {
       final response = await _dio.post(url, data: user);
       return APIResponse(data: response.data);
@@ -121,7 +122,7 @@ class ApiRepository extends ApiService {
 
   Future<APIResponse<bool>> checkingTempPassword(
       String user, String temp) async {
-    var url = '$domaine/friend/checkingTempPassword/$user';
+    var url = '$domain/friend/checkingTempPassword/$user';
     try {
       final response = await _dio.post(url, data: temp);
       return APIResponse(data: response.data);
@@ -148,7 +149,7 @@ class ApiRepository extends ApiService {
   }
 
   Future<APIResponse<bool>> resetPassword(Password password) async {
-    var url = '$domaine/friend/resetPassword';
+    var url = '$domain/friend/resetPassword';
     try {
       final response = await _dio.put(url, data: password.toJson());
       return APIResponse(data: response.data);

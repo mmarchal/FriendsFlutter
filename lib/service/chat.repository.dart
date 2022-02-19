@@ -9,15 +9,16 @@ import 'package:life_friends/model/message.dart';
 import 'package:life_friends/service/api.service.dart';
 
 class ChatRepository extends ApiService {
-  final String url = "$domaine/chat";
   final Dio _dio = Dio();
+  late String domain;
 
-  ChatRepository(Dio dio, LoginService loginService) : super(dio);
+  ChatRepository(Dio dio, LoginService loginService, String domain)
+      : super(dio, domain);
 
   Future<APIResponse<List<Chat>>> getChannels(String idFriend) async {
     List<Chat> list = [];
     try {
-      final response = await _dio.get("$url/$idFriend");
+      final response = await _dio.get("$domain/chat/$idFriend");
       for (var element in response.data) {
         list.add(Chat.fromJson(element));
       }
@@ -48,7 +49,7 @@ class ChatRepository extends ApiService {
       {required int meId,
       required int friendLinkId,
       required String nameChannel}) async {
-    String urlCreation = "$url/$meId/$friendLinkId/$nameChannel";
+    String urlCreation = "$domain/chat/$meId/$friendLinkId/$nameChannel";
     try {
       final response = await _dio.post(urlCreation);
       return APIResponse(data: response.data);
@@ -77,8 +78,8 @@ class ChatRepository extends ApiService {
   Future<APIResponse<bool>> createMessageByChannelId(
       {required String channelId, required Message message}) async {
     try {
-      final response =
-          await _dio.post("$url/message/$channelId", data: message.toJson());
+      final response = await _dio.post("$domain/chat/message/$channelId",
+          data: message.toJson());
       return APIResponse(data: response.data);
     } on DioError catch (error) {
       if (error.response != null) {

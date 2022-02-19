@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:life_friends/env/constants.dart';
 import 'package:life_friends/model/api/api_response.dart';
 import 'package:life_friends/model/api/back/api_back.dart';
 import 'package:life_friends/model/friend.dart';
@@ -8,6 +9,7 @@ import 'package:life_friends/service/api.repository.dart';
 import 'package:life_friends/service/friend.repository.dart';
 import 'package:life_friends/ui/utils/style.dart';
 import 'package:life_friends/ui/widgets/advance_custom_alert.dart';
+import 'package:life_friends/ui/widgets/copper_text.dart';
 import 'package:life_friends/ui/widgets/loading_widget.dart';
 import 'package:life_friends/ui/widgets/login_right_text.dart';
 import 'package:life_friends/ui/widgets/login_text.dart';
@@ -27,6 +29,8 @@ class _LoginPageState extends State<LoginPage> {
   final TextEditingController _user = TextEditingController();
   final TextEditingController _pass = TextEditingController();
 
+  bool isSwitched = false;
+
   @override
   void initState() {
     super.initState();
@@ -34,9 +38,7 @@ class _LoginPageState extends State<LoginPage> {
 
   @override
   Widget build(BuildContext context) {
-    ApiRepository apiRepository = ApiRepository(context.read(), context.read());
-    FriendRepository friendRepository =
-        FriendRepository(context.read(), context.read());
+    String domain = context.read<TokenNotifier>().domain ?? devDomain;
     final FriendNotifier friendNotifier =
         Provider.of<FriendNotifier>(context, listen: false);
     final TokenNotifier tokenNotifier =
@@ -79,15 +81,35 @@ class _LoginPageState extends State<LoginPage> {
             padding: const EdgeInsets.only(top: 62),
             child: Column(
               children: <Widget>[
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    CopperPlateText(label: "Dev", color: Colors.red),
+                    Switch(
+                      value: isSwitched,
+                      onChanged: (value) {
+                        setState(() {
+                          //true = prod -- false = dev
+                          isSwitched = value;
+                          Provider.of<TokenNotifier>(context, listen: false)
+                              .setEnvironment((value) ? prodDomain : devDomain);
+                        });
+                      },
+                      activeColor: Colors.green,
+                      inactiveTrackColor: Colors.red,
+                    ),
+                    CopperPlateText(label: "Prod", color: Colors.green),
+                  ],
+                ),
                 Container(
-                  margin: const EdgeInsets.all(20),
+                  margin: const EdgeInsets.only(left: 20, right: 20),
                   child: LoginText(
                       controller: _user,
                       icon: Icons.person,
                       hint: 'Identifiant'),
                 ),
                 Container(
-                  margin: const EdgeInsets.all(20),
+                  margin: const EdgeInsets.only(left: 20, right: 20),
                   child: LoginText(
                       controller: _pass,
                       icon: Icons.vpn_key,
@@ -145,14 +167,16 @@ class _LoginPageState extends State<LoginPage> {
                               return const LoadingWidget(
                                   label: "Connexion en cours");
                             });
-                        apiRepository
+                        Provider.of<ApiRepository>(context, listen: false)
                             .login(login: _user.text, password: _pass.text)
                             .then((value) async {
                           Navigator.pop(context);
                           APIResponse<ApiBack> retour = value;
                           if (retour.isSuccess && retour.data != null) {
-                            APIResponse<Friend> friend = await friendRepository
-                                .loadConnectedFriend(retour.data?.result);
+                            APIResponse<Friend> friend =
+                                await Provider.of<FriendRepository>(context,
+                                        listen: false)
+                                    .loadConnectedFriend(retour.data?.result);
                             friendNotifier.setFriend(friend.data);
                             tokenNotifier.setToken(retour.data?.result);
                             Provider.of<TokenNotifier>(context, listen: false)

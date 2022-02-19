@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 
-//const String domaine = "http://10.0.2.2:7070";
-const String domaine = "http://192.168.1.11:20000";
-//const String domaine = "http://ns329111.ip-37-187-107.eu:20000";
+const String devDomain = "http://192.168.1.11:20000";
+const String prodDomain = "http://ns329111.ip-37-187-107.eu:20000";
 
 const Gradient gNewSortie = LinearGradient(colors: [
   Color(0xFF5c8dff),

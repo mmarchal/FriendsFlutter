@@ -6,7 +6,7 @@ import 'package:life_friends/model/error/type_error.dart';
 abstract class ApiService {
   final Dio dio;
 
-  ApiService(this.dio);
+  ApiService(this.dio, String domain);
 
   getData(String url, {Map<String, dynamic>? param}) async {
     var query = url;

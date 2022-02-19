@@ -4,14 +4,18 @@ import 'package:life_friends/model/api/api_response.dart';
 import 'package:life_friends/model/error/api_error.dart';
 import 'package:life_friends/model/error/type_error.dart';
 import 'package:life_friends/model/proposition.dart';
+import 'package:life_friends/service/api.service.dart';
 
-class PropositionRepository {
+class PropositionRepository extends ApiService {
   final Dio _dio = Dio();
-  final String url = "$domaine/proposition";
+  late String domain;
+
+  PropositionRepository(Dio dio, String domain) : super(dio, domain);
 
   Future<APIResponse<bool>> addProposition(Proposition proposition) async {
     try {
-      final response = await _dio.post(url, data: proposition.toJson());
+      final response =
+          await _dio.post("$domain/proposition", data: proposition.toJson());
       return APIResponse(data: response.data);
     } on DioError catch (error) {
       if (error.response != null) {

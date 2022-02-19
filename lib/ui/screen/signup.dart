@@ -2,6 +2,7 @@
 
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:flutter/material.dart';
+import 'package:life_friends/notifier/token_notifier.dart';
 import 'package:life_friends/service/api.repository.dart';
 import 'package:life_friends/ui/screen/login_head_screen.dart';
 import 'package:life_friends/ui/widgets/button_login.dart';
@@ -71,7 +72,8 @@ class _SignupPageState extends State<SignupPage> {
     String login = _login.text;
     String password = _password.text;
     String email = _mail.text;
-    ApiRepository(context.read(), context.read())
+    ApiRepository(context.read(), context.read(),
+            context.read<TokenNotifier>().domain!)
         .insertFriend(
             prenom: prenom, login: login, password: password, email: email)
         .then((value) {

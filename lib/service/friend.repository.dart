@@ -11,13 +11,14 @@ import 'package:life_friends/model/sortie.dart';
 import 'package:life_friends/service/api.service.dart';
 
 class FriendRepository extends ApiService {
-  final String url = "$domaine/friend";
   final Dio _dio = Dio();
+  late String domain;
 
-  FriendRepository(Dio dio, LoginService loginService) : super(dio);
+  FriendRepository(Dio dio, LoginService loginService, String domain)
+      : super(dio, domain);
 
   Future<APIResponse<Friend>> loadConnectedFriend(AuthToken? authToken) async {
-    var urlFriend = "$url/${authToken!.userId}";
+    var urlFriend = "$domain/friend/${authToken!.userId}";
     return APIResponse<Friend>(data: Friend.fromJson(await getData(urlFriend)));
   }
 
@@ -26,7 +27,7 @@ class FriendRepository extends ApiService {
     XFile imageImporte,
   ) async {
     MultipartFile file = await MultipartFile.fromFile(imageImporte.path);
-    var urlFriend = "$url/$friendId/upload/profile-image";
+    var urlFriend = "$domain/friend/$friendId/upload/profile-image";
     try {
       final response = await _dio.post(urlFriend, data: file);
       return APIResponse(data: response.data);
@@ -55,7 +56,7 @@ class FriendRepository extends ApiService {
   Future<APIResponse<List<Friend>>> getFriends() async {
     List<Friend> list = [];
     try {
-      final response = await _dio.get(url);
+      final response = await _dio.get("$domain/friend");
       for (var element in response.data) {
         list.add(Friend.fromJson(element));
       }
@@ -85,7 +86,7 @@ class FriendRepository extends ApiService {
   Future<APIResponse<List<Sortie>>> getMySorties(String id) async {
     List<Sortie> list = [];
     try {
-      final response = await _dio.get("$url/$id/sorties");
+      final response = await _dio.get("$domain/friend/$id/sorties");
       for (var element in response.data) {
         list.add(Sortie.fromJson(element));
       }
@@ -114,7 +115,7 @@ class FriendRepository extends ApiService {
 
   Future<APIResponse<Friend>> updateUser(Friend friend) async {
     try {
-      final response = await _dio.put(url, data: friend.toJson());
+      final response = await _dio.put("$domain/friend", data: friend.toJson());
       return APIResponse<Friend>(data: Friend.fromJson(response.data));
     } on DioError catch (error) {
       if (error.response != null) {

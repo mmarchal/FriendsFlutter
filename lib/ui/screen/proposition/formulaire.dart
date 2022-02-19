@@ -10,6 +10,7 @@ import 'package:life_friends/notifier/typeproposition/typeproposition_list_notif
 import 'package:life_friends/service/proposition.repository.dart';
 import 'package:life_friends/ui/widgets/button_login.dart';
 import 'package:life_friends/ui/widgets/loading_widget.dart';
+import 'package:provider/provider.dart';
 
 class AllFieldsFormBloc extends FormBloc<String, String> {
   TextFieldBloc nomFriend = TextFieldBloc();
@@ -115,7 +116,10 @@ class _AllFieldsForm extends State<AllFieldsForm> {
                                 dateProposition: DateTime.now(),
                                 demande: formBloc.contenuDemande.value!);
                             APIResponse<bool> api =
-                                await PropositionRepository().addProposition(p);
+                                await Provider.of<PropositionRepository>(
+                                        context,
+                                        listen: false)
+                                    .addProposition(p);
                             if (api.isSuccess && api.data!) {
                               Navigator.pop(context);
                               await CoolAlert.show(

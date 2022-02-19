@@ -5,15 +5,18 @@ import 'package:life_friends/model/error/api_error.dart';
 import 'package:life_friends/model/error/type_error.dart';
 import 'package:life_friends/model/friend.dart';
 import 'package:life_friends/model/sortie.dart';
+import 'package:life_friends/service/api.service.dart';
 
-class SortieRepository {
+class SortieRepository extends ApiService {
   final Dio _dio = Dio();
-  final String url = "$domaine/sortie";
+  late String domain;
+
+  SortieRepository(Dio dio, String domain) : super(dio, domain);
 
   Future<APIResponse<List<Sortie>>> getSorties() async {
     List<Sortie> list = [];
     try {
-      final response = await _dio.get(url);
+      final response = await _dio.get("$domain/sortie");
       for (var element in response.data) {
         list.add(Sortie.fromJson(element));
       }
@@ -42,7 +45,8 @@ class SortieRepository {
 
   Future<APIResponse<bool>> addOuting(Sortie sortie) async {
     try {
-      final responseLogin = await _dio.post(url, data: sortie.toJson());
+      final responseLogin =
+          await _dio.post("$domain/sortie", data: sortie.toJson());
       bool response = responseLogin.data;
       return APIResponse(data: response);
     } on DioError catch (error) {
@@ -72,7 +76,8 @@ class SortieRepository {
     int? idFriend = friend.id;
     int? idSortie = sortie.id;
     try {
-      final responseLogin = await _dio.put("$url/$idSortie/$idFriend");
+      final responseLogin =
+          await _dio.put("$domain/sortie/$idSortie/$idFriend");
       bool response = responseLogin.data;
       return APIResponse(data: response);
     } on DioError catch (error) {
@@ -99,7 +104,7 @@ class SortieRepository {
 
   Future<APIResponse<Sortie>> getOneSortie(String sortieId) async {
     try {
-      final responseDio = await _dio.get("$url/$sortieId");
+      final responseDio = await _dio.get("$domain/sortie/$sortieId");
       return APIResponse(data: Sortie.fromJson(responseDio.data));
     } on DioError catch (error) {
       if (error.response != null) {

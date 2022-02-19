@@ -12,6 +12,7 @@ import 'package:life_friends/notifier/typeproposition/typeproposition_list_notif
 import 'package:life_friends/notifier/typeproposition/typeproposition_notifier.dart';
 import 'package:life_friends/notifier/typesortie/typesortie_list_notifier.dart';
 import 'package:life_friends/notifier/typesortie/typesortie_notifier.dart';
+import 'package:life_friends/service/api.repository.dart';
 import 'package:life_friends/service/chat.repository.dart';
 import 'package:life_friends/service/friend.repository.dart';
 import 'package:life_friends/service/sortie.repository.dart';
@@ -38,6 +39,11 @@ class ProviderDef extends StatelessWidget {
 
         // ------ Repositories ------
 
+        Provider<ApiRepository>(
+          create: (_) => ApiRepository(context.read(), context.read(),
+              context.read<TokenNotifier>().domain!),
+        ),
+
         // Token
         Provider<TokenNotifier>(
           create: (_) => TokenNotifier(),
@@ -48,7 +54,8 @@ class ProviderDef extends StatelessWidget {
 
         // Friend
         Provider<FriendRepository>(
-          create: (context) => FriendRepository(context.read(), context.read()),
+          create: (context) => FriendRepository(context.read(), context.read(),
+              context.read<TokenNotifier>().domain!),
         ),
         ChangeNotifierProvider<FriendNotifier>(
           create: (_) => FriendNotifier(),
@@ -62,7 +69,8 @@ class ProviderDef extends StatelessWidget {
 
         //Type de sortie
         Provider<TypeSortieRepository>(
-          create: (_) => TypeSortieRepository(),
+          create: (_) => TypeSortieRepository(
+              context.read(), context.read<TokenNotifier>().domain!),
         ),
         Provider<TypeSortieNotifier>(
           create: (_) => TypeSortieNotifier(),
@@ -80,7 +88,8 @@ class ProviderDef extends StatelessWidget {
 
         // Sortie
         Provider<SortieRepository>(
-          create: (_) => SortieRepository(),
+          create: (_) => SortieRepository(
+              context.read(), context.read<TokenNotifier>().domain!),
         ),
         ChangeNotifierProvider<SortieNotifier>(create: (_) => SortieNotifier()),
         ChangeNotifierProxyProvider<SortieNotifier, SortieListNotifier>(
@@ -97,7 +106,8 @@ class ProviderDef extends StatelessWidget {
           create: (_) => TypePropositionNotifier(),
         ),
         Provider<TypePropositionRepository>(
-          create: (_) => TypePropositionRepository(),
+          create: (_) => TypePropositionRepository(
+              context.read(), context.read<TokenNotifier>().domain!),
         ),
         Provider<TypePropositionListNotifier>(
           create: (_) => TypePropositionListNotifier(context.read()),
@@ -113,8 +123,8 @@ class ProviderDef extends StatelessWidget {
 
         // Chat
         Provider<ChatRepository>(
-            create: (context) =>
-                ChatRepository(context.read(), context.read())),
+            create: (context) => ChatRepository(context.read(), context.read(),
+                context.read<TokenNotifier>().domain!)),
         Provider<ChatNotifier>(
           create: (_) => ChatNotifier(),
         ),

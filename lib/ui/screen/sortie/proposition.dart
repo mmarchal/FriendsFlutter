@@ -122,7 +122,9 @@ class PropositionSortieState extends State<PropositionSortie> {
                       lieu: _controllerLocation.text,
                       typeSortie: TypeSortie(id: selectedValue, type: ''));
                   APIResponse<bool> response =
-                      await SortieRepository().addOuting(sortie);
+                      await Provider.of<SortieRepository>(context,
+                              listen: false)
+                          .addOuting(sortie);
                   if (response.isSuccess && response.data!) {
                     Provider.of<SortieListNotifier>(context, listen: false)
                         .loadAllSorties(clearList: true);

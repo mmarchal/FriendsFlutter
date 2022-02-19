@@ -4,6 +4,7 @@ import 'package:cool_alert/cool_alert.dart';
 import 'package:flutter/material.dart';
 import 'package:life_friends/model/api/api_response.dart';
 import 'package:life_friends/model/password.dart';
+import 'package:life_friends/notifier/token_notifier.dart';
 import 'package:life_friends/service/api.repository.dart';
 import 'package:life_friends/ui/screen/login_head_screen.dart';
 import 'package:life_friends/ui/widgets/button_login.dart';
@@ -30,7 +31,8 @@ class ForgotPassScreenState extends State<ForgotPassScreen> {
   String codeString = "Code de réinitialisation reçu";
 
   _forgotPassword(BuildContext context) async {
-    ApiRepository apiRepository = ApiRepository(context.read(), context.read());
+    ApiRepository apiRepository = ApiRepository(
+        context.read(), context.read(), context.read<TokenNotifier>().domain!);
     APIResponse<bool> response =
         await apiRepository.getForgotPassword(usernameController.text);
     if (response.isSuccess) {
@@ -60,7 +62,8 @@ class ForgotPassScreenState extends State<ForgotPassScreen> {
   }
 
   _reinitPassWithCode(BuildContext context) async {
-    ApiRepository apiRepository = ApiRepository(context.read(), context.read());
+    ApiRepository apiRepository = ApiRepository(
+        context.read(), context.read(), context.read<TokenNotifier>().domain!);
     APIResponse<bool> response = await apiRepository.checkingTempPassword(
         usernameController.text, reinitController.text);
     if (response.isSuccess) {
@@ -108,7 +111,8 @@ class ForgotPassScreenState extends State<ForgotPassScreen> {
   }
 
   _reinitPass(BuildContext context) async {
-    ApiRepository apiRepository = ApiRepository(context.read(), context.read());
+    ApiRepository apiRepository = ApiRepository(
+        context.read(), context.read(), context.read<TokenNotifier>().domain!);
     Password password = Password(
         userLogin: usernameController.text,
         token: reinitController.text,

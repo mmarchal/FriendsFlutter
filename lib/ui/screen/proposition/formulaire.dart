@@ -20,19 +20,11 @@ class AllFieldsFormBloc extends FormBloc<String, String> {
     items: [],
   );
 
-  final dateDemande =
-      InputFieldBloc<DateTime, dynamic>(initialValue: DateTime.now());
-
   final contenuDemande = TextFieldBloc();
 
   AllFieldsFormBloc() {
-    addFieldBlocs(fieldBlocs: [
-      nomFriend,
-      titreDemande,
-      typeDemande,
-      dateDemande,
-      contenuDemande
-    ]);
+    addFieldBlocs(
+        fieldBlocs: [nomFriend, titreDemande, typeDemande, contenuDemande]);
   }
 
   @override
@@ -49,7 +41,6 @@ class AllFieldsForm extends StatefulWidget {
 }
 
 class _AllFieldsForm extends State<AllFieldsForm> {
-  //TODO Nom + Date non modifiable + essaie sur la demande est longue
   double value = 0.0;
   @override
   Widget build(BuildContext context) {
@@ -98,17 +89,6 @@ class _AllFieldsForm extends State<AllFieldsForm> {
                               itemBuilder: (context, item) => item.type,
                             )
                           : const CircularProgressIndicator(),
-                      DateTimeFieldBlocBuilder(
-                        dateTimeFieldBloc: formBloc.dateDemande,
-                        format: DateFormat('dd/MM/yyyy'),
-                        initialDate: DateTime.now(),
-                        firstDate: DateTime(1900),
-                        lastDate: DateTime(2100),
-                        decoration: const InputDecoration(
-                          prefixIcon: Icon(Icons.calendar_today),
-                          labelText: 'Date',
-                        ),
-                      ),
                       TextFieldBlocBuilder(
                         textFieldBloc: formBloc.contenuDemande,
                         minLines: 2,
@@ -132,7 +112,7 @@ class _AllFieldsForm extends State<AllFieldsForm> {
                             Proposition p = Proposition(
                                 nom: formBloc.nomFriend.value!,
                                 typeProposition: formBloc.typeDemande.value!,
-                                dateProposition: formBloc.dateDemande.value!,
+                                dateProposition: DateTime.now(),
                                 demande: formBloc.contenuDemande.value!);
                             APIResponse<bool> api =
                                 await PropositionRepository().addProposition(p);

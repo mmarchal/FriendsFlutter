@@ -18,6 +18,7 @@ class ParticipantSortie extends StatelessWidget {
     if (friends != null && friends.isSuccess) {
       if (friends.data != null && friends.data!.isNotEmpty) {
         return GridView.builder(
+            physics: const NeverScrollableScrollPhysics(),
             shrinkWrap: true,
             gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
                 maxCrossAxisExtent: 200,

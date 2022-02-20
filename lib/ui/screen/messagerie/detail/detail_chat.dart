@@ -1,5 +1,7 @@
 // ignore_for_file: implementation_imports
 
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:life_friends/model/chat.dart';
 import 'package:life_friends/model/friend.dart';
@@ -22,17 +24,19 @@ class DetailChat extends StatefulWidget {
 
 class DetailChatState extends State<DetailChat> {
   final TextEditingController messageController = TextEditingController();
-
-  // ignore: prefer_final_fields
-  List<Message>? _list;
+  final StreamController<List<Message>> _streamController =
+      StreamController.broadcast();
 
   @override
   void initState() {
-    if (widget.chat.messagesList != null) {
-      _list = [];
-      _list!.addAll(widget.chat.messagesList!.toList());
-    }
     super.initState();
+    Timer.periodic(const Duration(seconds: 3), (timer) {
+      Provider.of<ChatRepository>(context, listen: false)
+          .getMessagesFromChannel(widget.chat.id.toString())
+          .then((value) {
+        _streamController.sink.add(value.data!);
+      });
+    });
   }
 
   @override
@@ -140,9 +144,6 @@ class DetailChatState extends State<DetailChat> {
                         deliveredAt: DateTime.now(),
                         friend: connected,
                       );
-                      setState(() {
-                        _list!.add(newMessage);
-                      });
                       await Provider.of<ChatRepository>(context, listen: false)
                           .createMessageByChannelId(
                         channelId: widget.chat.id.toString(),
@@ -169,44 +170,53 @@ class DetailChatState extends State<DetailChat> {
               ),
             ),
           ),
-          (_list != null)
-              ? ListView.builder(
-                  itemCount: _list!.length,
-                  shrinkWrap: true,
-                  padding: const EdgeInsets.only(top: 10, bottom: 10),
-                  physics: const NeverScrollableScrollPhysics(),
-                  itemBuilder: (context, index) {
-                    Message m = _list![index];
-                    return Container(
-                      padding: const EdgeInsets.only(
-                          left: 14, right: 14, top: 10, bottom: 10),
-                      child: Align(
-                        alignment: (m.friend.id != connected.id
-                            ? Alignment.topLeft
-                            : Alignment.topRight),
-                        child: Container(
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(20),
-                            color: (m.friend.id != connected.id
-                                ? Colors.grey.shade200
-                                : Colors.blue[200]),
+          StreamBuilder<List<Message>>(
+            stream: _streamController.stream,
+            builder: (context, snapdata) {
+              switch (snapdata.connectionState) {
+                case ConnectionState.waiting:
+                  return const Center(
+                    child: CircularProgressIndicator(),
+                  );
+                default:
+                  if (snapdata.hasError) {
+                    return const Text('Please Wait....');
+                  } else {
+                    return ListView.builder(
+                      itemCount: snapdata.data?.length,
+                      shrinkWrap: true,
+                      padding: const EdgeInsets.only(top: 10, bottom: 10),
+                      physics: const NeverScrollableScrollPhysics(),
+                      itemBuilder: (context, index) {
+                        Message m = snapdata.data![index];
+                        return Container(
+                          padding: const EdgeInsets.only(
+                              left: 14, right: 14, top: 10, bottom: 10),
+                          child: Align(
+                            alignment: (m.friend.id != connected.id
+                                ? Alignment.topLeft
+                                : Alignment.topRight),
+                            child: Container(
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(20),
+                                color: (m.friend.id != connected.id
+                                    ? Colors.grey.shade200
+                                    : Colors.blue[200]),
+                              ),
+                              padding: const EdgeInsets.all(16),
+                              child: Text(
+                                m.content,
+                                style: const TextStyle(fontSize: 15),
+                              ),
+                            ),
                           ),
-                          padding: const EdgeInsets.all(16),
-                          child: Text(
-                            m.content,
-                            style: const TextStyle(fontSize: 15),
-                          ),
-                        ),
-                      ),
+                        );
+                      },
                     );
-                  },
-                )
-              : const Center(
-                  child: Text(
-                    "Aucun message dans cette conversation",
-                    style: TextStyle(fontStyle: FontStyle.italic),
-                  ),
-                )
+                  }
+              }
+            },
+          ),
         ],
       ),
     );

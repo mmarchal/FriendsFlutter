@@ -44,6 +44,37 @@ class ChatRepository extends ApiService {
     }
   }
 
+  Future<APIResponse<List<Message>>> getMessagesFromChannel(
+      String idChannel) async {
+    List<Message> list = [];
+    try {
+      final response = await _dio.get("$url/message/$idChannel");
+      for (var element in response.data) {
+        list.add(Message.fromJson(element));
+      }
+      return APIResponse(data: list);
+    } on DioError catch (error) {
+      if (error.response != null) {
+        switch (error.response?.statusCode) {
+          case 401:
+            return APIResponse(type: FriendTypeError.noInternet);
+          case 404:
+            return APIResponse(type: FriendTypeError.notFound);
+          default:
+            return APIResponse(error: APIError.fromJson(error.response?.data));
+        }
+      } else {
+        return APIResponse(type: FriendTypeError.noInternet);
+      }
+    } catch (error) {
+      return APIResponse(
+          error: APIError(
+              systemMessage: '',
+              title: 'Erreur lors de la connexion',
+              content: error.toString()));
+    }
+  }
+
   Future<APIResponse<bool>> createOneToOneChannel(
       {required int meId,
       required int friendLinkId,

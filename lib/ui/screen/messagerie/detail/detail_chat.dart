@@ -23,7 +23,7 @@ class DetailChat extends StatefulWidget {
 }
 
 class DetailChatState extends State<DetailChat> {
-  //TODO Affichage si trop de message + Retirer possibilité images + Voir pour émoticones
+  //TODO Affichage si trop de message + Voir pour émoticones
   final TextEditingController messageController = TextEditingController();
 
   APIResponse<List<Message>?>? _list;
@@ -117,25 +117,6 @@ class DetailChatState extends State<DetailChat> {
               color: Colors.white,
               child: Row(
                 children: <Widget>[
-                  GestureDetector(
-                    onTap: () {},
-                    child: Container(
-                      height: 30,
-                      width: 30,
-                      decoration: BoxDecoration(
-                        color: Colors.lightBlue,
-                        borderRadius: BorderRadius.circular(30),
-                      ),
-                      child: const Icon(
-                        Icons.add,
-                        color: Colors.white,
-                        size: 20,
-                      ),
-                    ),
-                  ),
-                  const SizedBox(
-                    width: 15,
-                  ),
                   Expanded(
                     child: TextField(
                       controller: messageController,
@@ -192,7 +173,6 @@ class DetailChatState extends State<DetailChat> {
                       itemCount: _list!.data!.length,
                       shrinkWrap: true,
                       padding: const EdgeInsets.only(top: 10, bottom: 10),
-                      physics: const NeverScrollableScrollPhysics(),
                       itemBuilder: (context, index) {
                         Message m = _list!.data![index];
                         return Container(

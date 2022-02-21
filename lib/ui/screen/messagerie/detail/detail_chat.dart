@@ -23,6 +23,7 @@ class DetailChat extends StatefulWidget {
 }
 
 class DetailChatState extends State<DetailChat> {
+  //TODO Affichage si trop de message + Retirer possibilité images + Voir pour émoticones
   final TextEditingController messageController = TextEditingController();
 
   APIResponse<List<Message>?>? _list;
@@ -86,13 +87,14 @@ class DetailChatState extends State<DetailChat> {
                         context: context,
                         builder: (context) {
                           return const LoadingWidget(
-                              label: "Connexion en cours");
+                              label: "Rafraichissement en cours");
                         });
                     Provider.of<ChatListNotifier>(context, listen: false)
                         .getMessagesFromChannel(
-                            clearList: true,
-                            channelId: widget.chat.id.toString());
-                    Navigator.pop(context);
+                          clearList: true,
+                          channelId: widget.chat.id.toString(),
+                        )
+                        .then((value) => Navigator.pop(context));
                   },
                   icon: const Icon(
                     Icons.refresh,

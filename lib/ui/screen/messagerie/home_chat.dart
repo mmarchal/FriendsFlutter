@@ -21,6 +21,7 @@ class HomeChat extends StatefulWidget {
 }
 
 class _HomeChatState extends State<HomeChat> {
+  //TODO Refresh dans l'appBar
   @override
   Widget build(BuildContext context) {
     APIResponse<List<Chat>?>? api = context.watch<ChatListNotifier>().listeChat;

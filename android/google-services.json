@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "658675412484",
+    "firebase_url": "https://friendapp-47c65-default-rtdb.europe-west1.firebasedatabase.app",
+    "project_id": "friendapp-47c65",
+    "storage_bucket": "friendapp-47c65.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:658675412484:android:551128d2524b53762bcf51",
+        "android_client_info": {
+          "package_name": "com.example.life_friends"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "658675412484-p41gemld95ahrfbatpupeqoircsbhne7.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAN7UBpBo6BisYnCDm_tkY7gwCJx6c2Pis"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "658675412484-p41gemld95ahrfbatpupeqoircsbhne7.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

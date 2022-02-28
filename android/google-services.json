@@ -1,35 +1,41 @@
 {
   "project_info": {
-    "project_number": "658675412484",
-    "firebase_url": "https://friendapp-47c65-default-rtdb.europe-west1.firebasedatabase.app",
-    "project_id": "friendapp-47c65",
-    "storage_bucket": "friendapp-47c65.appspot.com"
+    "project_number": "868937907767",
+    "project_id": "friendchat-4626f",
+    "storage_bucket": "friendchat-4626f.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:658675412484:android:551128d2524b53762bcf51",
+        "mobilesdk_app_id": "1:868937907767:android:ba32ef905a474bca57c9b2",
         "android_client_info": {
           "package_name": "com.example.life_friends"
         }
       },
       "oauth_client": [
         {
-          "client_id": "658675412484-p41gemld95ahrfbatpupeqoircsbhne7.apps.googleusercontent.com",
+          "client_id": "868937907767-0bi6vha4ul9noervk0hrfnofl4lrpbk2.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyAN7UBpBo6BisYnCDm_tkY7gwCJx6c2Pis"
+          "current_key": "AIzaSyB7WVOt3cMMVzuP5bMRy6VVTSlSNFLVKGE"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "658675412484-p41gemld95ahrfbatpupeqoircsbhne7.apps.googleusercontent.com",
+              "client_id": "868937907767-0bi6vha4ul9noervk0hrfnofl4lrpbk2.apps.googleusercontent.com",
               "client_type": 3
+            },
+            {
+              "client_id": "868937907767-pplipncmbvtp4c71btu701tcj7crbvpr.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.lifeFriends"
+              }
             }
           ]
         }

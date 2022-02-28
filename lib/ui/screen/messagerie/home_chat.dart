@@ -8,8 +8,19 @@ class HomeChat extends StatefulWidget {
 }
 
 class _HomeChatState extends State<HomeChat> {
+  late TabController tabController;
+
   @override
   Widget build(BuildContext context) {
-    return Container();
+    return Scaffold(
+      body: TabBarView(children: []),
+      bottomNavigationBar: Material(
+        color: Colors.blue,
+        child: TabBar(
+          tabs: [],
+          controller: tabController,
+        ),
+      ),
+    );
   }
 }

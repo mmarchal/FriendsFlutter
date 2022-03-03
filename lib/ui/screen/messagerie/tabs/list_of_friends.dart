@@ -1,6 +1,7 @@
 import 'package:firebase_database/firebase_database.dart';
 import 'package:firebase_database/ui/firebase_animated_list.dart';
 import 'package:flutter/material.dart';
+import 'package:life_friends/ui/utils/firebase_helper.dart';
 import 'package:life_friends/ui/widgets/custom_image.dart';
 
 class ListOfFriends extends StatelessWidget {
@@ -19,7 +20,11 @@ class ListOfFriends extends StatelessWidget {
         } else {
           // C'est pas nous
           return ListTile(
-            leading: CustomImage(newUser.imageUrl, newUser.initiales, 20.0),
+            leading: CustomImage(
+              imageUrl: newUser.imageUrl,
+              initiales: newUser.initiales,
+              radius: 20.0,
+            ),
             title: Text("${newUser.prenom}  ${newUser.nom}"),
             trailing: IconButton(
               icon: const Icon(Icons.message),

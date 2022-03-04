@@ -2,14 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:life_friends/ui/screen/messagerie/tabs/list_of_friends.dart';
 import 'package:life_friends/ui/screen/messagerie/tabs/liste_of_messages.dart';
 
-class HomeChat extends StatefulWidget {
-  const HomeChat({Key? key}) : super(key: key);
-
-  @override
-  _HomeChatState createState() => _HomeChatState();
-}
-
-class _HomeChatState extends State<HomeChat> {
+// ignore: must_be_immutable
+class HomeChat extends StatelessWidget {
   late TabController tabController;
 
   static const List<Widget> _bottomTabs = [
@@ -25,6 +19,8 @@ class _HomeChatState extends State<HomeChat> {
     ListOfMessages(),
     ListOfFriends(),
   ];
+
+  HomeChat({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

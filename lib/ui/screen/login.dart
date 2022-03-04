@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:life_friends/model/api/api_response.dart';
 import 'package:life_friends/model/api/back/api_back.dart';
@@ -156,6 +157,10 @@ class _LoginPageState extends State<LoginPage> {
                                 .loadConnectedFriend(retour.data?.result);
                             friendNotifier.setFriend(friend.data);
                             tokenNotifier.setToken(retour.data?.result);
+                            firebaseLogin(
+                              context: context,
+                              email: email,
+                            );
                             Provider.of<TokenNotifier>(context, listen: false)
                                 .setToken(retour.data!.result);
                             Navigator.pushNamed(context, '/home');
@@ -184,5 +189,40 @@ class _LoginPageState extends State<LoginPage> {
         ],
       ),
     );
+  }
+
+  void firebaseLogin({required BuildContext context}) async {
+    var _auth = context.read<FirebaseAuth>();
+    try {
+      await _auth.signInWithEmailAndPassword(
+          email: _user.text, password: password);
+
+      await Navigator.of(context).push(
+        MaterialPageRoute(
+          builder: (contex) => HomeScreen(),
+        ),
+      );
+
+      setState(() {
+        isloading = false;
+      });
+    } on FirebaseAuthException catch (e) {
+      showDialog(
+        context: context,
+        builder: (ctx) => AlertDialog(
+          title: Text("Ops! Login Failed"),
+          content: Text('${e.message}'),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.of(ctx).pop();
+              },
+              child: Text('Okay'),
+            )
+          ],
+        ),
+      );
+      print(e);
+    }
   }
 }

@@ -1,4 +1,5 @@
 import 'package:dio/dio.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:life_friends/login_service.dart';
 import 'package:life_friends/notifier/friend/friend_list_notifier.dart';
@@ -31,6 +32,9 @@ class ProviderDef extends StatelessWidget {
         ),
         Provider<LoginService>(
           create: (_) => LoginService(),
+        ),
+        Provider<FirebaseAuth>(
+          create: (_) => FirebaseAuth.instance,
         ),
 
         // ------ Repositories ------

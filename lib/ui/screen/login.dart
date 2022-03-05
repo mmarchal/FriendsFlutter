@@ -159,11 +159,8 @@ class _LoginPageState extends State<LoginPage> {
                             tokenNotifier.setToken(retour.data?.result);
                             firebaseLogin(
                               context: context,
-                              email: email,
+                              email: _user.text,
                             );
-                            Provider.of<TokenNotifier>(context, listen: false)
-                                .setToken(retour.data!.result);
-                            Navigator.pushNamed(context, '/home');
                           } else {
                             showDialog(
                                 context: context,
@@ -191,33 +188,27 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 
-  void firebaseLogin({required BuildContext context}) async {
+  void firebaseLogin({
+    required BuildContext context,
+    required String email,
+  }) async {
     var _auth = context.read<FirebaseAuth>();
     try {
       await _auth.signInWithEmailAndPassword(
-          email: _user.text, password: password);
-
-      await Navigator.of(context).push(
-        MaterialPageRoute(
-          builder: (contex) => HomeScreen(),
-        ),
-      );
-
-      setState(() {
-        isloading = false;
-      });
+          email: email, password: _pass.text);
+      Navigator.pushNamed(context, '/home');
     } on FirebaseAuthException catch (e) {
       showDialog(
         context: context,
         builder: (ctx) => AlertDialog(
-          title: Text("Ops! Login Failed"),
+          title: const Text("Ops! Login Failed"),
           content: Text('${e.message}'),
           actions: [
             TextButton(
               onPressed: () {
                 Navigator.of(ctx).pop();
               },
-              child: Text('Okay'),
+              child: const Text('Okay'),
             )
           ],
         ),

@@ -1,6 +1,7 @@
 // ignore_for_file: implementation_imports
 
 import 'package:awesome_dialog/awesome_dialog.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:life_friends/service/api.repository.dart';
 import 'package:life_friends/ui/screen/login_head_screen.dart';
@@ -74,14 +75,21 @@ class _SignupPageState extends State<SignupPage> {
     ApiRepository(context.read(), context.read())
         .insertFriend(
             prenom: prenom, login: login, password: password, email: email)
-        .then((value) {
+        .then((value) async {
       if (value.isSuccess) {
-        Navigator.pop(context);
-        Navigator.pop(context);
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-          content: Text(
-              "Compte $prenom créé ! Vous pouvez vous connectez à l'application !"),
-        ));
+        var _auth = context.read<FirebaseAuth>();
+        try {
+          await _auth.createUserWithEmailAndPassword(
+              email: email, password: password);
+          Navigator.pop(context);
+          Navigator.pop(context);
+          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+            content: Text(
+                "Compte $prenom créé ! Vous pouvez vous connectez à l'application !"),
+          ));
+        } on FirebaseAuthException catch (e) {
+          print(e);
+        }
       } else if (!value.hasInternet) {
         Navigator.pop(context);
         ScaffoldMessenger.of(context).showSnackBar(const SnackBar(

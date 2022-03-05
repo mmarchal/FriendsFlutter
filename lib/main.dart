@@ -63,7 +63,7 @@ class MyApp extends StatelessWidget {
               ),
           '/detail_sortie': (context) => const DetailSortie(),
           '/profil': (context) => const MyProfil(),
-          '/messagerie': (context) => HomeChat(),
+          '/messagerie': (context) => const HomeChat(),
         },
       ),
     );

@@ -53,12 +53,14 @@ class _SignupPageState extends State<SignupPage> {
     }
 
     if (contentError == '') {
-      if (_mail.text.contains('@')) {
+      if (_mail.text.contains('@') && _password.text.length >= 6) {
         showDialog(
             context: context,
             builder: (_) =>
                 const LoadingWidget(label: 'Création de compte en cours'));
         _creationCompte(context);
+      } else if (_password.text.length < 6) {
+        _errorDialog("Le mot de passe doit faire au moins 6 caractères !");
       } else {
         _errorDialog("Le format de l'adresse mail est incorrect !");
       }
@@ -77,19 +79,12 @@ class _SignupPageState extends State<SignupPage> {
             prenom: prenom, login: login, password: password, email: email)
         .then((value) async {
       if (value.isSuccess) {
-        var _auth = context.read<FirebaseAuth>();
-        try {
-          await _auth.createUserWithEmailAndPassword(
-              email: email, password: password);
-          Navigator.pop(context);
-          Navigator.pop(context);
-          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-            content: Text(
-                "Compte $prenom créé ! Vous pouvez vous connectez à l'application !"),
-          ));
-        } on FirebaseAuthException catch (e) {
-          print(e);
-        }
+        Navigator.pop(context);
+        Navigator.pop(context);
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          content: Text(
+              "Compte $prenom créé ! Vous pouvez vous connectez à l'application !"),
+        ));
       } else if (!value.hasInternet) {
         Navigator.pop(context);
         ScaffoldMessenger.of(context).showSnackBar(const SnackBar(

@@ -1,3 +1,4 @@
+import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:life_friends/model/api/api_response.dart';
@@ -150,7 +151,6 @@ class _LoginPageState extends State<LoginPage> {
                         apiRepository
                             .login(login: _user.text, password: _pass.text)
                             .then((value) async {
-                          Navigator.pop(context);
                           APIResponse<ApiBack> retour = value;
                           if (retour.isSuccess && retour.data != null) {
                             APIResponse<Friend> friend = await friendRepository
@@ -159,9 +159,10 @@ class _LoginPageState extends State<LoginPage> {
                             tokenNotifier.setToken(retour.data?.result);
                             firebaseLogin(
                               context: context,
-                              email: _user.text,
+                              email: friend.data!.email,
                             );
                           } else {
+                            Navigator.pop(context);
                             showDialog(
                                 context: context,
                                 builder: (_) =>
@@ -196,23 +197,21 @@ class _LoginPageState extends State<LoginPage> {
     try {
       await _auth.signInWithEmailAndPassword(
           email: email, password: _pass.text);
+      Navigator.pop(context);
       Navigator.pushNamed(context, '/home');
     } on FirebaseAuthException catch (e) {
-      showDialog(
-        context: context,
-        builder: (ctx) => AlertDialog(
-          title: const Text("Ops! Login Failed"),
-          content: Text('${e.message}'),
-          actions: [
-            TextButton(
-              onPressed: () {
-                Navigator.of(ctx).pop();
-              },
-              child: const Text('Okay'),
-            )
-          ],
-        ),
-      );
+      Navigator.pop(context);
+      AwesomeDialog(
+              context: context,
+              dialogType: DialogType.ERROR,
+              animType: AnimType.RIGHSLIDE,
+              headerAnimationLoop: false,
+              title: "Erreur",
+              desc: e.message,
+              btnOkOnPress: () {},
+              btnOkIcon: Icons.cancel,
+              btnOkColor: Colors.red)
+          .show();
       print(e);
     }
   }

@@ -142,6 +142,11 @@ class _LoginPageState extends State<LoginPage> {
                   width: MediaQuery.of(context).size.width / 1.5,
                   child: ElevatedButton(
                       onPressed: () {
+                        /*
+                        Compte de tests :
+                        - firebaseTest (123456)
+                        - firebaseMessage (abcdef)
+                        */
                         showDialog(
                             context: context,
                             builder: (context) {

@@ -1,8 +1,6 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:life_friends/ui/screen/messagerie/tabs/list_of_friends.dart';
 import 'package:life_friends/ui/screen/messagerie/tabs/liste_of_messages.dart';
-import 'package:provider/provider.dart';
 
 class HomeChat extends StatefulWidget {
   const HomeChat({
@@ -25,16 +23,9 @@ class HomeChatState extends State<HomeChat> with TickerProviderStateMixin {
     )
   ];
 
-  late TabController tabController;
-
   @override
   void initState() {
     super.initState();
-    tabController = TabController(
-      initialIndex: 0,
-      length: 2,
-      vsync: this,
-    );
   }
 
   @override
@@ -47,11 +38,10 @@ class HomeChatState extends State<HomeChat> with TickerProviderStateMixin {
       length: _tabs.length,
       child: Scaffold(
         body: TabBarView(children: _tabs),
-        bottomNavigationBar: Material(
+        bottomNavigationBar: const Material(
           color: Colors.blue,
           child: TabBar(
             tabs: _bottomTabs,
-            controller: tabController,
           ),
         ),
       ),

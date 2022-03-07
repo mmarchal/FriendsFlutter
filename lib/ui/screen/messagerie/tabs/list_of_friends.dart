@@ -15,7 +15,9 @@ class ListOfFriends extends StatelessWidget {
       itemBuilder: (BuildContext context, DataSnapshot snapshot,
           Animation<double> animation, int index) {
         print(snapshot);
-        return Container();
+        return const Center(
+          child: Text("Hello"),
+        );
       },
     );
   }

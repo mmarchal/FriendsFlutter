@@ -1,8 +1,6 @@
 // ignore_for_file: implementation_imports
 
 import 'package:awesome_dialog/awesome_dialog.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:life_friends/service/api.repository.dart';
 import 'package:life_friends/ui/screen/login_head_screen.dart';
@@ -23,25 +21,6 @@ class _SignupPageState extends State<SignupPage> {
   final TextEditingController _login = TextEditingController();
   final TextEditingController _password = TextEditingController();
   final TextEditingController _mail = TextEditingController();
-
-  //Database
-
-  static final base = FirebaseDatabase.instance.ref();
-  final base_user = base.child("users");
-  final base_message = base.child("messages");
-  final base_conversation = base.child("conversations");
-
-  addUser(String uid, Map map) {
-    base_user.child(uid).set(map);
-  }
-
-  Future<String> getUserUid() async {
-    DatabaseEvent snapshot = await base_user
-        .child(FirebaseAuth.instance.currentUser?.uid ?? "")
-        .once();
-    print(snapshot.snapshot.value);
-    return "";
-  }
 
   _errorDialog(String desc) {
     AwesomeDialog(

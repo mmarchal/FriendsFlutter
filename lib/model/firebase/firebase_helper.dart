@@ -36,7 +36,11 @@ class FirebaseHelper {
     return FirebaseUser.fromMap(snapshot.snapshot.value);
   }
 
-  sendMessage(User user, User moi, String text, String imageUrl) {
+  sendMessage(
+      {required FirebaseUser user,
+      required FirebaseUser moi,
+      required String text,
+      String? imageUrl}) {
     String date = DateTime.now().millisecondsSinceEpoch.toString();
     Map map = {
       "from": moi.uid,
@@ -57,7 +61,7 @@ class FirebaseHelper {
   }
 
   Map getConversation(
-      String sender, User user, String text, String dateString) {
+      String sender, FirebaseUser user, String text, String dateString) {
     print(user.toString());
     Map map = {};
     map["monId"] = sender;

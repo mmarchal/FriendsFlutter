@@ -26,7 +26,7 @@ class ZoneState extends State<ZoneDeTexteWidget> {
     super.initState();
     FirebaseHelper().getUser(widget.id).then((user) {
       setState(() {
-        //moi = user;
+        moi = user;
       });
     });
   }
@@ -61,7 +61,9 @@ class ZoneState extends State<ZoneDeTexteWidget> {
   _sendButtonPressed() {
     if (_textEditingController.text != "") {
       String text = _textEditingController.text;
-      //FirebaseHelper().sendMessage(widget.partenaire, moi, text, null);
+      FirebaseHelper()
+          .sendMessage(user: widget.partenaire, moi: moi, text: text);
+//widget.partenaire, moi, text, null
       _textEditingController.clear();
       FocusScope.of(context).requestFocus(FocusNode());
     } else {

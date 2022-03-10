@@ -45,7 +45,6 @@ class ChatControllerState extends State<ChatController> {
                         Animation<double> animation, int index) {
                       FirebaseMessage message =
                           FirebaseMessage.fromMap(snapshot.value);
-                      print(message.text);
                       return ChatBubble(
                           message: message,
                           partenaire: widget.partenaire,

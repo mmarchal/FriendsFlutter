@@ -13,4 +13,11 @@ class FirebaseUser {
       prenom: map['prenom'],
     );
   }
+
+  Map<String, dynamic> toMap() {
+    return {
+      'uid': uid,
+      'prenom': prenom,
+    };
+  }
 }

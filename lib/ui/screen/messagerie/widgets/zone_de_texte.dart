@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:life_friends/model/firebase/firebase_helper.dart';
-import 'dart:io';
 
 import 'package:life_friends/model/firebase/firebase_user.dart';
 
@@ -63,11 +62,10 @@ class ZoneState extends State<ZoneDeTexteWidget> {
       String text = _textEditingController.text;
       FirebaseHelper()
           .sendMessage(user: widget.partenaire, moi: moi, text: text);
-//widget.partenaire, moi, text, null
       _textEditingController.clear();
       FocusScope.of(context).requestFocus(FocusNode());
     } else {
-      print("Texte vide ou null");
+      throw "Texte vide ou null";
     }
   }
 
@@ -77,8 +75,8 @@ class ZoneState extends State<ZoneDeTexteWidget> {
         .pickImage(source: source, maxWidth: 1000.0, maxHeight: 1000.0);
     String date = DateTime.now().millisecondsSinceEpoch.toString();
     FirebaseHelper()
-        .savePicture(file,
-            FirebaseHelper().storage_messages.child(widget.id).child(date))
+        .savePicture(
+            file, FirebaseHelper().storageMessages.child(widget.id).child(date))
         .then((string) {
       //FirebaseHelper().sendMessage(widget.partenaire, moi, null, string);
     });

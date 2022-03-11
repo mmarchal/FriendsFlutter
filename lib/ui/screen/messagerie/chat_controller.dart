@@ -38,9 +38,8 @@ class ChatControllerState extends State<ChatController> {
             // Zone de chat
             Flexible(
                 child: FirebaseAnimatedList(
-                    query: FirebaseHelper().base_message.child(FirebaseHelper()
+                    query: FirebaseHelper().baseMessage.child(FirebaseHelper()
                         .getMessageRef(widget.id, widget.partenaire.uid)),
-                    reverse: true,
                     itemBuilder: (BuildContext context, DataSnapshot snapshot,
                         Animation<double> animation, int index) {
                       FirebaseMessage message =

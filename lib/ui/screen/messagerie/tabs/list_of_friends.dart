@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:firebase_database/ui/firebase_animated_list.dart';
@@ -25,22 +23,24 @@ class ListOfFriends extends StatelessWidget {
             // C'est nous
             return Container();
           } else {
-            // C'est pas nous
-            return ListTile(
-              title: Text(user.prenom),
-              trailing: IconButton(
-                  icon: const Icon(Icons.message),
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => ChatController(
-                          id: uid,
-                          partenaire: user,
-                        ),
-                      ),
-                    );
-                  }),
+            return InkWell(
+              child: Card(
+                elevation: 10,
+                child: ListTile(
+                  title: Text(user.prenom),
+                ),
+              ),
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => ChatController(
+                      id: uid,
+                      partenaire: user,
+                    ),
+                  ),
+                );
+              },
             );
           }
         },

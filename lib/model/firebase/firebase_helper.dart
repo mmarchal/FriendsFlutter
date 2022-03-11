@@ -3,6 +3,7 @@ import 'package:firebase_database/firebase_database.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'dart:io';
 import 'package:image_picker/image_picker.dart';
+import 'package:intl/intl.dart';
 import 'package:life_friends/model/firebase/firebase_user.dart';
 
 class FirebaseHelper {
@@ -23,16 +24,16 @@ class FirebaseHelper {
   //Database
 
   static final base = FirebaseDatabase.instance.ref();
-  final base_user = base.child("users");
-  final base_message = base.child("messages");
-  final base_conversation = base.child("conversations");
+  final baseUser = base.child("users");
+  final baseMessage = base.child("messages");
+  final baseConversation = base.child("conversations");
 
   addUser(String uid, Map map) {
-    base_user.child(uid).set(map);
+    baseUser.child(uid).set(map);
   }
 
   Future<FirebaseUser> getUser(String id) async {
-    DatabaseEvent snapshot = await base_user.child(id).once();
+    DatabaseEvent snapshot = await baseUser.child(id).once();
     return FirebaseUser.fromMap(snapshot.snapshot.value);
   }
 
@@ -41,7 +42,7 @@ class FirebaseHelper {
       required FirebaseUser moi,
       required String text,
       String? imageUrl}) {
-    String date = DateTime.now().millisecondsSinceEpoch.toString();
+    String date = DateFormat("dd-MM-yyyy hh:mm:ss").format(DateTime.now());
     Map map = {
       "from": moi.uid,
       "to": user.uid,
@@ -49,12 +50,12 @@ class FirebaseHelper {
       "imageUrl": imageUrl,
       "dateString": date
     };
-    base_message.child(getMessageRef(moi.uid, user.uid)).child(date).set(map);
-    base_conversation
+    baseMessage.child(getMessageRef(moi.uid, user.uid)).child(date).set(map);
+    baseConversation
         .child(moi.uid)
         .child(user.uid)
         .set(getConversation(moi.uid, user, text, date));
-    base_conversation
+    baseConversation
         .child(user.uid)
         .child(moi.uid)
         .set(getConversation(moi.uid, moi, text, date));
@@ -62,8 +63,7 @@ class FirebaseHelper {
 
   Map getConversation(
       String sender, FirebaseUser user, String text, String dateString) {
-    print(user.toString());
-    Map map = {};
+    Map map = user.toMap();
     map["monId"] = sender;
     map["last_message"] = text;
     map["dateString"] = dateString;
@@ -81,9 +81,9 @@ class FirebaseHelper {
   }
 
   //Storage
-  static final base_storage = FirebaseStorage.instance.ref();
-  final Reference storage_users = base_storage.child("users");
-  final Reference storage_messages = base_storage.child("messages");
+  static final baseStorage = FirebaseStorage.instance.ref();
+  final Reference storageUsers = baseStorage.child("users");
+  final Reference storageMessages = baseStorage.child("messages");
 
   Future<String> savePicture(
       PickedFile? file, Reference storageReference) async {

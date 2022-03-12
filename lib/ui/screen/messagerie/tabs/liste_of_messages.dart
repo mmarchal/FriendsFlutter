@@ -14,7 +14,6 @@ class ListOfMessages extends StatelessWidget {
   Widget build(BuildContext context) {
     String uid = context.read<FirebaseAuth>().currentUser?.uid ?? "";
     return FirebaseAnimatedList(
-      padding: const EdgeInsets.only(top: 20),
       query: FirebaseHelper().baseConversation.child(uid),
       itemBuilder: (BuildContext context, DataSnapshot snapshot,
           Animation<double> animation, int index) {

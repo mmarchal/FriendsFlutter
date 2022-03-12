@@ -24,11 +24,6 @@ class HomeChatState extends State<HomeChat> with TickerProviderStateMixin {
   ];
 
   @override
-  void initState() {
-    super.initState();
-  }
-
-  @override
   Widget build(BuildContext context) {
     List<Widget> _tabs = const [
       ListOfMessages(),
@@ -37,6 +32,10 @@ class HomeChatState extends State<HomeChat> with TickerProviderStateMixin {
     return DefaultTabController(
       length: _tabs.length,
       child: Scaffold(
+        appBar: AppBar(
+          centerTitle: true,
+          title: const Text("Friend Chat"),
+        ),
         body: TabBarView(children: _tabs),
         bottomNavigationBar: const Material(
           color: Colors.blue,

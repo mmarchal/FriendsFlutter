@@ -85,7 +85,7 @@ class _LoginPageState extends State<LoginPage> {
                   child: LoginText(
                       controller: _user,
                       icon: Icons.person,
-                      hint: 'Identifiant'),
+                      hint: 'Adresse mail'),
                 ),
                 Container(
                   margin: const EdgeInsets.all(20),
@@ -144,6 +144,7 @@ class _LoginPageState extends State<LoginPage> {
                         Compte de tests :
                         - firebaseTest (123456)
                         - firebaseMessage (abcdef)
+                        - maximemarchal24@gmail.com (test456)
                         */
                         showDialog(
                             context: context,

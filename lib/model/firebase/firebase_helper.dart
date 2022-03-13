@@ -21,6 +21,20 @@ class FirebaseHelper {
     return user?.uid ?? "";
   }
 
+  Future<FirebaseUser?> handleCreate(
+      String mail, String password, String prenom) async {
+    final UserCredential result = await auth.createUserWithEmailAndPassword(
+        email: mail, password: password);
+    final User? user = result.user;
+    if (user != null) {
+      Map<String, String> map = {"uid": user.uid, "prenom": prenom};
+      addUser(user.uid, map);
+      return FirebaseUser.fromMap(map);
+    } else {
+      return null;
+    }
+  }
+
   //Database
 
   static final base = FirebaseDatabase.instance.ref();

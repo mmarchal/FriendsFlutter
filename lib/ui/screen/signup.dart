@@ -1,13 +1,10 @@
-// ignore_for_file: implementation_imports
-
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:flutter/material.dart';
-import 'package:life_friends/service/api.repository.dart';
+import 'package:life_friends/model/firebase/firebase_helper.dart';
 import 'package:life_friends/ui/screen/login_head_screen.dart';
 import 'package:life_friends/ui/widgets/button_login.dart';
 import 'package:life_friends/ui/widgets/loading_widget.dart';
 import 'package:life_friends/ui/widgets/login_text.dart';
-import 'package:provider/src/provider.dart';
 
 class SignupPage extends StatefulWidget {
   const SignupPage({Key? key}) : super(key: key);
@@ -18,7 +15,6 @@ class SignupPage extends StatefulWidget {
 
 class _SignupPageState extends State<SignupPage> {
   final TextEditingController _prenom = TextEditingController();
-  final TextEditingController _login = TextEditingController();
   final TextEditingController _password = TextEditingController();
   final TextEditingController _mail = TextEditingController();
 
@@ -38,10 +34,7 @@ class _SignupPageState extends State<SignupPage> {
 
   _checkMandatoryValue() {
     String contentError = "";
-    if (_prenom.text == '' ||
-        _login.text == '' ||
-        _password.text == '' ||
-        _mail.text == '') {
+    if (_prenom.text == '' || _password.text == '' || _mail.text == '') {
       contentError =
           'Des champs sont vides ! Il faut remplir l\'ensemble des champs !';
     }
@@ -65,29 +58,19 @@ class _SignupPageState extends State<SignupPage> {
 
   void _creationCompte(BuildContext buildContext) {
     String prenom = _prenom.text;
-    String login = _login.text;
     String password = _password.text;
     String email = _mail.text;
-    ApiRepository(context.read(), context.read())
-        .insertFriend(
-            prenom: prenom, login: login, password: password, email: email)
-        .then((value) async {
-      if (value.isSuccess) {
+    FirebaseHelper().handleCreate(email, password, prenom).then((value) {
+      if (value != null) {
         Navigator.pop(context);
         Navigator.pop(context);
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
           content: Text(
               "Compte $prenom créé ! Vous pouvez vous connectez à l'application !"),
         ));
-      } else if (!value.hasInternet) {
-        Navigator.pop(context);
-        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-          content: Text(
-              "Vous n'êtes pas connecté à Internet ! Vérifiez votre connexion !"),
-        ));
       } else {
         Navigator.pop(context);
-        _errorDialog(value.error!.content);
+        _errorDialog("Problème de création de compte ! Contactez l'admin !");
       }
     });
   }
@@ -100,23 +83,10 @@ class _SignupPageState extends State<SignupPage> {
           margin: const EdgeInsets.all(20),
           child: Column(
             children: <Widget>[
-              Row(
-                children: [
-                  Expanded(
-                    child: LoginText(
-                      controller: _prenom,
-                      icon: Icons.people,
-                      hint: 'Prénom',
-                    ),
-                  ),
-                  Expanded(
-                    child: LoginText(
-                      controller: _login,
-                      icon: Icons.vpn_key,
-                      hint: 'Identifiant',
-                    ),
-                  ),
-                ],
+              LoginText(
+                controller: _prenom,
+                icon: Icons.people,
+                hint: 'Prénom',
               ),
               LoginText(
                 controller: _mail,

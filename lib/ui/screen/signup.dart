@@ -1,7 +1,9 @@
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:life_friends/model/firebase/firebase_helper.dart';
 import 'package:life_friends/ui/screen/login_head_screen.dart';
+import 'package:life_friends/ui/utils/image_picker.dart';
 import 'package:life_friends/ui/widgets/button_login.dart';
 import 'package:life_friends/ui/widgets/loading_widget.dart';
 import 'package:life_friends/ui/widgets/login_text.dart';
@@ -60,7 +62,10 @@ class _SignupPageState extends State<SignupPage> {
     String prenom = _prenom.text;
     String password = _password.text;
     String email = _mail.text;
-    FirebaseHelper().handleCreate(email, password, prenom).then((value) {
+    FirebaseHelper()
+        .registerWithEmailAndPassword(
+            email: email, password: password, name: prenom)
+        .then((value) {
       if (value != null) {
         Navigator.pop(context);
         Navigator.pop(context);
@@ -75,40 +80,89 @@ class _SignupPageState extends State<SignupPage> {
     });
   }
 
+  final ImagePicker _picker = ImagePicker();
+  XFile? imageImporte;
+
   @override
   Widget build(BuildContext context) {
     return LoginHeadScreen(
-        value: "Compte",
-        child: Container(
-          margin: const EdgeInsets.all(20),
-          child: Column(
-            children: <Widget>[
-              LoginText(
-                controller: _prenom,
-                icon: Icons.people,
-                hint: 'Prénom',
-              ),
-              LoginText(
-                controller: _mail,
-                icon: Icons.mail,
-                hint: 'Email',
-              ),
-              LoginText(
-                controller: _password,
-                icon: Icons.password,
-                isPassword: true,
-                hint: 'Mot de passe',
-              ),
-              Align(
-                alignment: Alignment.bottomCenter,
-                child: ButtonLogin(
-                    onTap: () {
-                      _checkMandatoryValue();
+      value: "Compte",
+      child: Container(
+        margin: const EdgeInsets.all(20),
+        child: Column(
+          children: <Widget>[
+            Row(
+              children: [
+                Expanded(
+                  child: LoginText(
+                    controller: _prenom,
+                    icon: Icons.people,
+                    hint: 'Prénom',
+                  ),
+                ),
+                Expanded(
+                  child: LoginText(
+                    controller: _mail,
+                    icon: Icons.mail,
+                    hint: 'Email',
+                  ),
+                ),
+              ],
+            ),
+            LoginText(
+              controller: _password,
+              icon: Icons.password,
+              isPassword: true,
+              hint: 'Mot de passe',
+            ),
+            (imageImporte != null)
+                ? Row(
+                    children: [
+                      Text(imageImporte!.name),
+                      IconButton(
+                        onPressed: () => setState(() {
+                          imageImporte = null;
+                        }),
+                        icon: const Icon(Icons.delete),
+                      )
+                    ],
+                  )
+                : TextButton(
+                    onPressed: () {
+                      FriendImagePicker().showPicker(
+                        context: context,
+                        onTapGallery: () async {
+                          XFile? image = await _picker.pickImage(
+                              source: ImageSource.gallery, imageQuality: 50);
+
+                          setState(() {
+                            imageImporte = image;
+                          });
+                          Navigator.of(context).pop();
+                        },
+                        onTapCamera: () async {
+                          XFile? image = await _picker.pickImage(
+                              source: ImageSource.camera, imageQuality: 50);
+                          setState(() {
+                            imageImporte = image;
+                          });
+                          Navigator.of(context).pop();
+                        },
+                      );
                     },
-                    title: 'Créer un compte'),
-              ),
-            ],
-          ),
-        ));
+                    child: const Text("Ajouter une image"),
+                  ),
+            Container(
+              alignment: Alignment.bottomCenter,
+              child: ButtonLogin(
+                  onTap: () {
+                    _checkMandatoryValue();
+                  },
+                  title: 'Créer un compte'),
+            ),
+          ],
+        ),
+      ),
+    );
   }
 }

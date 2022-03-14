@@ -6,8 +6,11 @@ class LoginHeadScreen extends StatelessWidget {
   final Widget child;
   final String value;
 
-  const LoginHeadScreen({Key? key, required this.child, required this.value})
-      : super(key: key);
+  const LoginHeadScreen({
+    Key? key,
+    required this.child,
+    required this.value,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

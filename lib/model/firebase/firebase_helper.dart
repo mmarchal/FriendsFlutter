@@ -21,18 +21,29 @@ class FirebaseHelper {
     return user?.uid ?? "";
   }
 
-  Future<FirebaseUser?> handleCreate(
-      String mail, String password, String prenom) async {
-    final UserCredential result = await auth.createUserWithEmailAndPassword(
-        email: mail, password: password);
-    final User? user = result.user;
-    if (user != null) {
-      Map<String, String> map = {"uid": user.uid, "prenom": prenom};
-      addUser(user.uid, map);
-      return FirebaseUser.fromMap(map);
-    } else {
+  Future<User?> registerWithEmailAndPassword(
+      {required String name,
+      required String password,
+      required String email}) async {
+    try {
+      UserCredential result = await auth.createUserWithEmailAndPassword(
+          email: email, password: password);
+      User? user = result.user;
+      if (user != null) {
+        user.updateDisplayName(name);
+        return user;
+      } else {
+        return null;
+      }
+    } catch (e) {
       return null;
     }
+  }
+
+  Future<User?> login(String username, String password) async {
+    final UserCredential result = await auth.signInWithEmailAndPassword(
+        email: username, password: password);
+    return result.user;
   }
 
   //Database

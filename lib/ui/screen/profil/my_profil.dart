@@ -34,7 +34,6 @@ class MyProfilState extends State<MyProfil> {
   bool loginUpdated = false;
   bool nameUpdated = false;
 
-  final ImagePicker _picker = ImagePicker();
   XFile? imageImporte;
 
   _titleDialogUpdate(Updated updated) {
@@ -205,53 +204,6 @@ class MyProfilState extends State<MyProfil> {
             });
       }
     });
-  }
-
-  void _showPicker(context) {
-    showModalBottomSheet(
-        context: context,
-        builder: (BuildContext bc) {
-          return SafeArea(
-            child: Wrap(
-              children: <Widget>[
-                ListTile(
-                    leading: const Icon(Icons.photo_library),
-                    title: const Text('Galerie photos'),
-                    onTap: () async {
-                      XFile? image = await _picker.pickImage(
-                          source: ImageSource.gallery, imageQuality: 50);
-
-                      setState(() {
-                        imageImporte = image;
-                      });
-                      Navigator.of(context).pop();
-                    }),
-                ListTile(
-                  leading: const Icon(Icons.photo_camera),
-                  title: const Text('Appareil photo'),
-                  onTap: () async {
-                    XFile? image = await _picker.pickImage(
-                        source: ImageSource.camera, imageQuality: 50);
-                    setState(() {
-                      imageImporte = image;
-                    });
-                    Navigator.of(context).pop();
-                  },
-                ),
-                ListTile(
-                  leading: const Icon(Icons.cancel),
-                  title: const Text('Restaurer la photo initiale'),
-                  onTap: () {
-                    setState(() {
-                      imageImporte = null;
-                    });
-                    Navigator.of(context).pop();
-                  },
-                ),
-              ],
-            ),
-          );
-        });
   }
 
   @override

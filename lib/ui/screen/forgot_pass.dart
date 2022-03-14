@@ -1,16 +1,11 @@
 // ignore_for_file: implementation_imports
 
-import 'package:cool_alert/cool_alert.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:life_friends/model/api/api_response.dart';
-import 'package:life_friends/model/password.dart';
-import 'package:life_friends/service/api.repository.dart';
 import 'package:life_friends/ui/screen/login_head_screen.dart';
 import 'package:life_friends/ui/widgets/button_login.dart';
 import 'package:life_friends/ui/widgets/loading_widget.dart';
 import 'package:life_friends/ui/widgets/sign_textfield.dart';
-import 'package:provider/src/provider.dart';
 
 class ForgotPassScreen extends StatefulWidget {
   const ForgotPassScreen({Key? key}) : super(key: key);

@@ -2,11 +2,10 @@ import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:life_friends/model/api/api_response.dart';
-import 'package:life_friends/model/api/back/api_back.dart';
+import 'package:life_friends/model/error/type_error.dart';
+import 'package:life_friends/model/firebase/firebase_helper.dart';
 import 'package:life_friends/model/friend.dart';
 import 'package:life_friends/notifier/friend/friend_notifier.dart';
-import 'package:life_friends/notifier/token_notifier.dart';
-import 'package:life_friends/service/api.repository.dart';
 import 'package:life_friends/service/friend.repository.dart';
 import 'package:life_friends/ui/utils/style.dart';
 import 'package:life_friends/ui/widgets/advance_custom_alert.dart';
@@ -35,13 +34,9 @@ class _LoginPageState extends State<LoginPage> {
 
   @override
   Widget build(BuildContext context) {
-    ApiRepository apiRepository = ApiRepository(context.read(), context.read());
-    FriendRepository friendRepository =
-        FriendRepository(context.read(), context.read());
+    FriendRepository(context.read(), context.read());
     final FriendNotifier friendNotifier =
         Provider.of<FriendNotifier>(context, listen: false);
-    final TokenNotifier tokenNotifier =
-        Provider.of<TokenNotifier>(context, listen: false);
     return Scaffold(
       body: ListView(
         children: <Widget>[
@@ -139,12 +134,11 @@ class _LoginPageState extends State<LoginPage> {
                 SizedBox(
                   width: MediaQuery.of(context).size.width / 1.5,
                   child: ElevatedButton(
-                      onPressed: () {
+                      onPressed: () async {
                         /*
                         Compte de tests :
                         - firebaseTest (123456)
                         - firebaseMessage (abcdef)
-                        - maximemarchal24@gmail.com (test456)
                         */
                         showDialog(
                             context: context,
@@ -152,7 +146,29 @@ class _LoginPageState extends State<LoginPage> {
                               return const LoadingWidget(
                                   label: "Connexion en cours");
                             });
-                        apiRepository
+                        User? user = await FirebaseHelper()
+                            .login(_user.text, _pass.text);
+                        if (user != null) {
+                          Friend friend = Friend(
+                            prenom: user.displayName!,
+                            login: _user.text,
+                            email: _user.text,
+                            password: _pass.text,
+                          );
+                          friendNotifier.setFriend(friend);
+                          Navigator.pushNamed(context, '/home');
+                        } else {
+                          Navigator.pop(context);
+                          showDialog(
+                            context: context,
+                            builder: (_) => AdvanceCustomAlert(
+                              response: APIResponse(
+                                type: FriendTypeError.notFound,
+                              ),
+                            ),
+                          );
+                        }
+                        /*apiRepository
                             .login(login: _user.text, password: _pass.text)
                             .then((value) async {
                           APIResponse<ApiBack> retour = value;
@@ -172,7 +188,7 @@ class _LoginPageState extends State<LoginPage> {
                                 builder: (_) =>
                                     AdvanceCustomAlert(response: retour));
                           }
-                        });
+                        });*/
                       },
                       child: Center(
                         child: Text(

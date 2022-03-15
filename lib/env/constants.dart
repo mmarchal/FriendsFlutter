@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:life_friends/model/type_proposition.dart';
+import 'package:life_friends/model/typesortie.dart';
 
 //const String domaine = "http://10.0.2.2:7070";
 const String domaine = "http://192.168.1.11:20000";
@@ -26,3 +28,35 @@ const Gradient gPropositions = LinearGradient(colors: [
   Color(0xFF7e3030),
   Color(0xFF8e71f4),
 ]);
+
+//Proposition de sortie
+List<TypeSortie> listeTypesSorties = [
+  TypeSortie(
+    id: 1,
+    type: "Cinéma",
+  ),
+  TypeSortie(
+    id: 2,
+    type: "Sport",
+  ),
+  TypeSortie(
+    id: 3,
+    type: "Activité",
+  ),
+];
+
+//Proposition de modif
+List<TypeProposition> typePropositions = [
+  TypeProposition(
+    id: 1,
+    type: "Amélioration de l'app",
+  ),
+  TypeProposition(
+    id: 2,
+    type: "Bug trouvé",
+  ),
+  TypeProposition(
+    id: 3,
+    type: "Nouvelle fonctionnalité",
+  ),
+];

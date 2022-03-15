@@ -1,6 +1,7 @@
 import 'package:cool_alert/cool_alert.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_bloc/flutter_form_bloc.dart';
+import 'package:life_friends/env/constants.dart';
 import 'package:life_friends/model/api/api_response.dart';
 import 'package:life_friends/model/friend.dart';
 import 'package:life_friends/model/proposition.dart';
@@ -45,17 +46,13 @@ class _AllFieldsForm extends State<AllFieldsForm> {
   @override
   Widget build(BuildContext context) {
     Friend? friend = context.watch<FriendNotifier>().friend;
-    List<TypeProposition>? typePropositions =
-        context.watch<TypePropositionListNotifier>().listeTypes;
     return BlocProvider(
       create: (context) => AllFieldsFormBloc(),
       child: Builder(
         builder: (context) {
           final formBloc = BlocProvider.of<AllFieldsFormBloc>(context);
           formBloc.nomFriend.updateInitialValue(friend?.prenom);
-          if (typePropositions != null) {
-            formBloc.typeDemande.updateItems(typePropositions);
-          }
+          formBloc.typeDemande.updateItems(typePropositions);
           return Theme(
             data: Theme.of(context).copyWith(
               inputDecorationTheme: InputDecorationTheme(

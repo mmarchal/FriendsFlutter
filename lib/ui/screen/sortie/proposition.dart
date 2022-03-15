@@ -6,7 +6,6 @@ import 'package:life_friends/model/api/api_response.dart';
 import 'package:life_friends/model/sortie.dart';
 import 'package:life_friends/model/typesortie.dart';
 import 'package:life_friends/notifier/sortie/sortie_list_notifier.dart';
-import 'package:life_friends/notifier/typesortie/typesortie_list_notifier.dart';
 import 'package:life_friends/service/sortie.repository.dart';
 import 'package:life_friends/ui/screen/sortie/scaffold_sortie.dart';
 import 'package:life_friends/ui/widgets/loading_widget.dart';
@@ -35,15 +34,13 @@ class PropositionSortieState extends State<PropositionSortie> {
 
   @override
   Widget build(BuildContext context) {
-    final List<TypeSortie>? liste =
-        context.watch<TypeSortieListNotifier>().listeTypes;
     _selectDate(BuildContext context) async {
       final DateTime? selected = await showDatePicker(
         locale: const Locale("fr"),
         context: context,
         initialDate:
             (selectedDateTime != null) ? selectedDateTime! : DateTime.now(),
-        firstDate: DateTime(2010),
+        firstDate: DateTime(DateTime.now().year),
         lastDate: DateTime(2025),
       );
       if (selected != null && selected != selectedDateTime) {
@@ -87,23 +84,24 @@ class PropositionSortieState extends State<PropositionSortie> {
               icon: Icons.location_city,
               controller: _controllerLocation,
             ),
-            (liste != null)
-                ? Column(
-                    children: liste
-                        .map((element) => RadioListTile<int>(
-                              title: Text(element.type),
-                              activeColor: Colors.white,
-                              onChanged: (int? b) {
-                                setState(() {
-                                  selectedValue = b;
-                                });
-                              },
-                              value: element.id!,
-                              groupValue: selectedValue,
-                            ))
-                        .toList(),
-                  )
-                : const CircularProgressIndicator(),
+            Column(
+              mainAxisSize: MainAxisSize.min,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: listeTypesSorties
+                  .map((element) => RadioListTile<int>(
+                        title: Text(element.type),
+                        activeColor: Colors.white,
+                        onChanged: (int? b) {
+                          setState(() {
+                            selectedValue = b;
+                          });
+                        },
+                        secondary: _secondaryIcon(element.id!),
+                        value: element.id!,
+                        groupValue: selectedValue,
+                      ))
+                  .toList(),
+            ),
             Align(
               alignment: Alignment.bottomCenter,
               child: ElevatedButton(
@@ -149,5 +147,18 @@ class PropositionSortieState extends State<PropositionSortie> {
         ),
       ),
     );
+  }
+
+  _secondaryIcon(int i) {
+    switch (i) {
+      case 1:
+        return const Icon(Icons.movie);
+      case 2:
+        return const Icon(Icons.sports);
+      case 3:
+        return const Icon(Icons.local_activity);
+      default:
+        return const Icon(Icons.question_answer);
+    }
   }
 }

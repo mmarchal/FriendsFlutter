@@ -11,17 +11,13 @@ import 'package:life_friends/model/password.dart';
 import 'package:life_friends/service/api.service.dart';
 
 class ApiRepository extends ApiService {
-  final Dio _dio = Dio();
-
   ApiRepository(Dio dio, LoginService loginService) : super(dio);
 
   Friend _initFriend(
       {required String prenom,
-      required String login,
       required String password,
       required String email}) {
-    return Friend(
-        prenom: prenom, login: login, email: email, password: password);
+    return Friend(prenom: prenom, email: email, password: password);
   }
 
   Future<APIResponse<ApiBack>> login(
@@ -29,7 +25,7 @@ class ApiRepository extends ApiService {
     Connect connect = Connect(username: login, password: password);
     var urlLogin = '$domaine/token';
     try {
-      final responseLogin = await _dio.post(urlLogin, data: connect.toJson());
+      final responseLogin = await dio.post(urlLogin, data: connect.toJson());
       ApiBack apiBack = ApiBack.fromJson(responseLogin.data);
       return APIResponse(data: apiBack);
     } on DioError catch (error) {
@@ -54,16 +50,16 @@ class ApiRepository extends ApiService {
     }
   }
 
-  Future<APIResponse<Friend>> insertFriend(
-      {required String prenom,
-      required String login,
-      required String password,
-      required String email}) async {
-    Friend friend = _initFriend(
-        prenom: prenom, login: login, password: password, email: email);
+  Future<APIResponse<Friend>> insertFriend({
+    required String prenom,
+    required String password,
+    required String email,
+  }) async {
+    Friend friend =
+        _initFriend(prenom: prenom, password: password, email: email);
     var url = '$domaine/friend';
     try {
-      final response = await _dio.post(url, data: friend.toJson());
+      final response = await dio.post(url, data: friend.toJson());
       return APIResponse(data: Friend.fromJson(response.data));
     } on DioError catch (error) {
       if (error.response != null) {
@@ -80,10 +76,12 @@ class ApiRepository extends ApiService {
       }
     } catch (error) {
       return APIResponse(
-          error: APIError(
-              systemMessage: '',
-              title: 'Erreur lors de la création de compte',
-              content: error.toString()));
+        error: APIError(
+          systemMessage: '',
+          title: 'Erreur lors de la création de compte',
+          content: error.toString(),
+        ),
+      );
     }
   }
 
@@ -95,7 +93,7 @@ class ApiRepository extends ApiService {
   Future<APIResponse<bool>> getForgotPassword(String user) async {
     var url = '$domaine/friend/getTempPassword';
     try {
-      final response = await _dio.post(url, data: user);
+      final response = await dio.post(url, data: user);
       return APIResponse(data: response.data);
     } on DioError catch (error) {
       if (error.response != null) {
@@ -123,7 +121,7 @@ class ApiRepository extends ApiService {
       String user, String temp) async {
     var url = '$domaine/friend/checkingTempPassword/$user';
     try {
-      final response = await _dio.post(url, data: temp);
+      final response = await dio.post(url, data: temp);
       return APIResponse(data: response.data);
     } on DioError catch (error) {
       if (error.response != null) {
@@ -150,7 +148,7 @@ class ApiRepository extends ApiService {
   Future<APIResponse<bool>> resetPassword(Password password) async {
     var url = '$domaine/friend/resetPassword';
     try {
-      final response = await _dio.put(url, data: password.toJson());
+      final response = await dio.put(url, data: password.toJson());
       return APIResponse(data: response.data);
     } on DioError catch (error) {
       if (error.response != null) {

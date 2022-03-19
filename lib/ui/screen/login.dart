@@ -151,7 +151,6 @@ class _LoginPageState extends State<LoginPage> {
                         if (user != null) {
                           Friend friend = Friend(
                             prenom: user.displayName ?? "",
-                            login: _user.text,
                             email: _user.text,
                             password: _pass.text,
                           );
@@ -168,27 +167,6 @@ class _LoginPageState extends State<LoginPage> {
                             ),
                           );
                         }
-                        /*apiRepository
-                            .login(login: _user.text, password: _pass.text)
-                            .then((value) async {
-                          APIResponse<ApiBack> retour = value;
-                          if (retour.isSuccess && retour.data != null) {
-                            APIResponse<Friend> friend = await friendRepository
-                                .loadConnectedFriend(retour.data?.result);
-                            friendNotifier.setFriend(friend.data);
-                            tokenNotifier.setToken(retour.data?.result);
-                            firebaseLogin(
-                              context: context,
-                              email: friend.data!.email,
-                            );
-                          } else {
-                            Navigator.pop(context);
-                            showDialog(
-                                context: context,
-                                builder: (_) =>
-                                    AdvanceCustomAlert(response: retour));
-                          }
-                        });*/
                       },
                       child: Center(
                         child: Text(

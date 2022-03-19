@@ -1,12 +1,15 @@
 import 'package:awesome_dialog/awesome_dialog.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:image_picker/image_picker.dart';
+import 'package:life_friends/model/api/api_response.dart';
 import 'package:life_friends/model/firebase/firebase_helper.dart';
+import 'package:life_friends/model/friend.dart';
+import 'package:life_friends/service/api.repository.dart';
 import 'package:life_friends/ui/screen/login_head_screen.dart';
-import 'package:life_friends/ui/utils/image_picker.dart';
 import 'package:life_friends/ui/widgets/button_login.dart';
 import 'package:life_friends/ui/widgets/loading_widget.dart';
 import 'package:life_friends/ui/widgets/login_text.dart';
+import 'package:provider/provider.dart';
 
 class SignupPage extends StatefulWidget {
   const SignupPage({Key? key}) : super(key: key);
@@ -58,30 +61,42 @@ class _SignupPageState extends State<SignupPage> {
     }
   }
 
-  void _creationCompte(BuildContext buildContext) {
+  void _creationCompte(BuildContext buildContext) async {
     String prenom = _prenom.text;
     String password = _password.text;
     String email = _mail.text;
-    FirebaseHelper()
-        .registerWithEmailAndPassword(
-            email: email, password: password, name: prenom)
-        .then((value) {
-      if (value != null) {
-        Navigator.pop(context);
-        Navigator.pop(context);
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-          content: Text(
-              "Compte $prenom créé ! Vous pouvez vous connectez à l'application !"),
-        ));
-      } else {
-        Navigator.pop(context);
-        _errorDialog("Problème de création de compte ! Contactez l'admin !");
+    User? createdUser = await FirebaseHelper().registerWithEmailAndPassword(
+        email: email, password: password, name: prenom);
+    if (createdUser != null) {
+      APIResponse<Friend> api =
+          await ApiRepository(context.read(), context.read()).insertFriend(
+        prenom: prenom,
+        password: password,
+        email: email,
+      );
+      if (api.isSuccess) {
+        Map<String, String> map = {
+          "uid": createdUser.uid,
+          "prenom": prenom,
+          "email": email,
+        };
+        FirebaseHelper().addUser(
+          createdUser.uid,
+          map,
+        );
+        Navigator.popUntil(context, (route) => route.isFirst);
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(
+                "Compte $prenom créé ! Vous pouvez vous connectez à l'application !"),
+          ),
+        );
       }
-    });
+    } else {
+      Navigator.pop(context);
+      _errorDialog("Problème de création de compte ! Contactez l'admin !");
+    }
   }
-
-  final ImagePicker _picker = ImagePicker();
-  XFile? imageImporte;
 
   @override
   Widget build(BuildContext context) {
@@ -91,23 +106,15 @@ class _SignupPageState extends State<SignupPage> {
         margin: const EdgeInsets.all(20),
         child: Column(
           children: <Widget>[
-            Row(
-              children: [
-                Expanded(
-                  child: LoginText(
-                    controller: _prenom,
-                    icon: Icons.people,
-                    hint: 'Prénom',
-                  ),
-                ),
-                Expanded(
-                  child: LoginText(
-                    controller: _mail,
-                    icon: Icons.mail,
-                    hint: 'Email',
-                  ),
-                ),
-              ],
+            LoginText(
+              controller: _prenom,
+              icon: Icons.people,
+              hint: 'Prénom',
+            ),
+            LoginText(
+              controller: _mail,
+              icon: Icons.mail,
+              hint: 'Email',
             ),
             LoginText(
               controller: _password,
@@ -115,43 +122,6 @@ class _SignupPageState extends State<SignupPage> {
               isPassword: true,
               hint: 'Mot de passe',
             ),
-            (imageImporte != null)
-                ? Row(
-                    children: [
-                      Text(imageImporte!.name),
-                      IconButton(
-                        onPressed: () => setState(() {
-                          imageImporte = null;
-                        }),
-                        icon: const Icon(Icons.delete),
-                      )
-                    ],
-                  )
-                : TextButton(
-                    onPressed: () {
-                      FriendImagePicker().showPicker(
-                        context: context,
-                        onTapGallery: () async {
-                          XFile? image = await _picker.pickImage(
-                              source: ImageSource.gallery, imageQuality: 50);
-
-                          setState(() {
-                            imageImporte = image;
-                          });
-                          Navigator.of(context).pop();
-                        },
-                        onTapCamera: () async {
-                          XFile? image = await _picker.pickImage(
-                              source: ImageSource.camera, imageQuality: 50);
-                          setState(() {
-                            imageImporte = image;
-                          });
-                          Navigator.of(context).pop();
-                        },
-                      );
-                    },
-                    child: const Text("Ajouter une image"),
-                  ),
             Container(
               alignment: Alignment.bottomCenter,
               child: ButtonLogin(

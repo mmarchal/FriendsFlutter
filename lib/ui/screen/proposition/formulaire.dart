@@ -7,7 +7,6 @@ import 'package:life_friends/model/friend.dart';
 import 'package:life_friends/model/proposition.dart';
 import 'package:life_friends/model/type_proposition.dart';
 import 'package:life_friends/notifier/friend/friend_notifier.dart';
-import 'package:life_friends/notifier/typeproposition/typeproposition_list_notifier.dart';
 import 'package:life_friends/service/proposition.repository.dart';
 import 'package:life_friends/ui/widgets/button_login.dart';
 import 'package:life_friends/ui/widgets/loading_widget.dart';
@@ -76,16 +75,14 @@ class _AllFieldsForm extends State<AllFieldsForm> {
                           prefixIcon: Icon(Icons.text_fields),
                         ),
                       ),
-                      (typePropositions != null)
-                          ? RadioButtonGroupFieldBlocBuilder<TypeProposition>(
-                              selectFieldBloc: formBloc.typeDemande,
-                              decoration: const InputDecoration(
-                                labelText: 'Type de demande',
-                                prefixIcon: SizedBox(),
-                              ),
-                              itemBuilder: (context, item) => item.type,
-                            )
-                          : const CircularProgressIndicator(),
+                      RadioButtonGroupFieldBlocBuilder<TypeProposition>(
+                        selectFieldBloc: formBloc.typeDemande,
+                        decoration: const InputDecoration(
+                          labelText: 'Type de demande',
+                          prefixIcon: SizedBox(),
+                        ),
+                        itemBuilder: (context, item) => item.type,
+                      ),
                       TextFieldBlocBuilder(
                         textFieldBloc: formBloc.contenuDemande,
                         minLines: 2,

@@ -13,7 +13,7 @@ import 'package:life_friends/ui/widgets/copper_text.dart';
 import 'package:life_friends/ui/widgets/loading_widget.dart';
 import 'package:provider/src/provider.dart';
 
-enum Updated { prenom, mail, identifiant }
+enum Updated { prenom, mail }
 
 // ignore: must_be_immutable
 class MyProfil extends StatefulWidget {
@@ -27,11 +27,9 @@ class MyProfil extends StatefulWidget {
 
 class MyProfilState extends State<MyProfil> {
   TextEditingController mailController = TextEditingController();
-  TextEditingController loginController = TextEditingController();
   TextEditingController nameController = TextEditingController();
 
   bool mailUpdated = false;
-  bool loginUpdated = false;
   bool nameUpdated = false;
 
   XFile? imageImporte;
@@ -42,8 +40,6 @@ class MyProfilState extends State<MyProfil> {
         return "Modifier le prénom";
       case Updated.mail:
         return "Modifier l'adresse mail";
-      case Updated.identifiant:
-        return "Modifier l'identifiant";
       default:
         return "Modifier";
     }
@@ -55,15 +51,11 @@ class MyProfilState extends State<MyProfil> {
         return friend.prenom;
       case Updated.mail:
         return friend.email;
-      case Updated.identifiant:
-        return friend.login;
     }
   }
 
   _controllerUpdated(Updated updated) {
     switch (updated) {
-      case Updated.identifiant:
-        return loginController;
       case Updated.mail:
         return mailController;
       case Updated.prenom:
@@ -100,9 +92,6 @@ class MyProfilState extends State<MyProfil> {
                 onPressed: () {
                   setState(() {
                     switch (updated) {
-                      case Updated.identifiant:
-                        loginUpdated = true;
-                        break;
                       case Updated.mail:
                         mailUpdated = true;
                         break;
@@ -128,10 +117,6 @@ class MyProfilState extends State<MyProfil> {
 
   String _checkChangedValue(Friend? friend) {
     String allChangements = "";
-    if (loginUpdated) {
-      allChangements +=
-          "Identifiant modifié : ${loginController.text} (${friend?.login})\n";
-    }
     if (nameUpdated) {
       allChangements +=
           "Prénom modifié : ${nameController.text} (${friend?.prenom})\n";
@@ -176,7 +161,6 @@ class MyProfilState extends State<MyProfil> {
     Friend updateFriend = Friend(
         id: friend!.id,
         prenom: (nameUpdated) ? nameController.text : friend.prenom,
-        login: (loginUpdated) ? loginController.text : friend.login,
         email: (mailUpdated) ? mailController.text : friend.email,
         password: friend.password);
     if (imageImporte != null) {
@@ -217,13 +201,6 @@ class MyProfilState extends State<MyProfil> {
         ),
         centerTitle: true,
         elevation: 4,
-        /*actions: [
-          IconButton(
-              onPressed: () {
-                _showPicker(context);
-              },
-              icon: const Icon(Icons.add_a_photo))
-        ],*/
       ),
       floatingActionButton: FloatingActionButton(
           onPressed: () {
@@ -293,23 +270,6 @@ class MyProfilState extends State<MyProfil> {
                             setState(() {
                               mailUpdated = false;
                               mailController.clear();
-                            });
-                          },
-                        ),
-                        ProfilInformationRow(
-                          label: "Identifiant :",
-                          value: (loginUpdated)
-                              ? loginController.text
-                              : friend?.login ?? "",
-                          updated: loginUpdated,
-                          onPressed: () {
-                            _displayTextInputDialog(
-                                context, Updated.identifiant, friend!);
-                          },
-                          onReinitValue: () {
-                            setState(() {
-                              loginUpdated = false;
-                              loginController.clear();
                             });
                           },
                         ),

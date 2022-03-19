@@ -14,7 +14,7 @@ class ListeSorties extends StatelessWidget {
   const ListeSorties({Key? key}) : super(key: key);
 
   _initBody(List<Sortie>? data) {
-    if (data!.isNotEmpty) {
+    if (data != null && data.isNotEmpty) {
       return ListView.builder(
         itemCount: data.length,
         itemBuilder: (context, index) {

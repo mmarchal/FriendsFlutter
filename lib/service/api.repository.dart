@@ -14,10 +14,16 @@ class ApiRepository extends ApiService {
   ApiRepository(Dio dio, LoginService loginService) : super(dio);
 
   Friend _initFriend(
-      {required String prenom,
+      {required String uid,
+      required String prenom,
       required String password,
       required String email}) {
-    return Friend(prenom: prenom, email: email, password: password);
+    return Friend(
+      prenom: prenom,
+      email: email,
+      password: password,
+      uid: uid,
+    );
   }
 
   Future<APIResponse<ApiBack>> login(
@@ -51,12 +57,17 @@ class ApiRepository extends ApiService {
   }
 
   Future<APIResponse<Friend>> insertFriend({
+    required String uid,
     required String prenom,
     required String password,
     required String email,
   }) async {
-    Friend friend =
-        _initFriend(prenom: prenom, password: password, email: email);
+    Friend friend = _initFriend(
+      prenom: prenom,
+      password: password,
+      email: email,
+      uid: uid,
+    );
     var url = '$domaine/friend';
     try {
       final response = await dio.post(url, data: friend.toJson());

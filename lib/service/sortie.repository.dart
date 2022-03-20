@@ -69,7 +69,7 @@ class SortieRepository {
 
   Future<APIResponse<bool>> addFriendToOuting(
       Friend friend, Sortie sortie) async {
-    int? idFriend = friend.id;
+    String? idFriend = friend.uid;
     int? idSortie = sortie.id;
     try {
       final responseLogin = await _dio.put("$url/$idSortie/$idFriend");

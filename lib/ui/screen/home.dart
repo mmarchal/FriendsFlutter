@@ -42,8 +42,7 @@ class HomeScreen extends StatelessWidget {
                   onPressed: () => Navigator.push(context,
                           MaterialPageRoute(builder: (BuildContext bC) {
                         return MesSorties(
-                            gradient: gMesSorties,
-                            userId: (friend?.id.toString() ?? ""));
+                            gradient: gMesSorties, userId: (friend?.uid ?? ""));
                       })),
                   icon: Icons.my_library_add,
                   gradient: gMesSorties,

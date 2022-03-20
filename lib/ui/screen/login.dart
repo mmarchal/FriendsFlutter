@@ -150,6 +150,7 @@ class _LoginPageState extends State<LoginPage> {
                             .login(_user.text, _pass.text);
                         if (user != null) {
                           Friend friend = Friend(
+                            uid: user.uid,
                             prenom: user.displayName ?? "",
                             email: _user.text,
                             password: _pass.text,

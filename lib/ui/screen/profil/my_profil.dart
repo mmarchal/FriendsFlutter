@@ -159,13 +159,13 @@ class MyProfilState extends State<MyProfil> {
           return const LoadingWidget(label: "Modification en cours");
         });
     Friend updateFriend = Friend(
-        id: friend!.id,
+        uid: friend!.uid,
         prenom: (nameUpdated) ? nameController.text : friend.prenom,
         email: (mailUpdated) ? mailController.text : friend.email,
         password: friend.password);
     if (imageImporte != null) {
       Provider.of<FriendRepository>(context, listen: false)
-          .updateLoginPicture(friend.id!, imageImporte!);
+          .updateLoginPicture(int.parse(friend.uid), imageImporte!);
     }
     Provider.of<FriendRepository>(context, listen: false)
         .updateUser(updateFriend)

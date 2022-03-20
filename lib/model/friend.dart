@@ -4,7 +4,7 @@ part 'friend.g.dart';
 
 @JsonSerializable(explicitToJson: true)
 class Friend {
-  final int? id;
+  final String uid;
   final String prenom;
   final String password;
   final String email;
@@ -14,7 +14,7 @@ class Friend {
   final DateTime? dateExpiration;
 
   Friend({
-    this.id,
+    required this.uid,
     required this.prenom,
     required this.email,
     this.profileImage,

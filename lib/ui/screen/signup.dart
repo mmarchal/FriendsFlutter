@@ -70,6 +70,7 @@ class _SignupPageState extends State<SignupPage> {
     if (createdUser != null) {
       APIResponse<Friend> api =
           await ApiRepository(context.read(), context.read()).insertFriend(
+        uid: createdUser.uid,
         prenom: prenom,
         password: password,
         email: email,

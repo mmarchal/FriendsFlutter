@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:life_friends/env/constants.dart';
 import 'package:life_friends/model/api/api_response.dart';
+import 'package:life_friends/model/firebase/firebase_helper.dart';
 import 'package:life_friends/model/friend.dart';
 import 'package:life_friends/model/sortie.dart';
 import 'package:life_friends/notifier/friend/friend_notifier.dart';
@@ -25,7 +26,7 @@ class DetailSortie extends StatefulWidget {
 }
 
 class _DetailSortieState extends State<DetailSortie> {
-  List<int> liste = [];
+  List<String> liste = [];
 
   _showDialogError(String error, BuildContext context) {
     return CoolAlert.show(
@@ -44,10 +45,7 @@ class _DetailSortieState extends State<DetailSortie> {
               type: CoolAlertType.success,
               barrierDismissible: true,
               onConfirmBtnTap: () {
-                var idFriend =
-                    Provider.of<TokenNotifier>(context, listen: false)
-                        .token!
-                        .userId;
+                var idFriend = FirebaseHelper().auth.currentUser?.uid ?? "";
                 setState(() {
                   liste.add(idFriend);
                 });
@@ -174,9 +172,9 @@ class _DetailSortieState extends State<DetailSortie> {
     );
   }
 
-  List<int> getAllIdParticipants(List<Friend>? friends) {
+  List<String> getAllIdParticipants(List<Friend>? friends) {
     friends?.forEach((element) {
-      liste.add(element.id!);
+      liste.add(element.uid);
     });
     return liste;
   }

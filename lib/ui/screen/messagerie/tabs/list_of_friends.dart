@@ -48,38 +48,35 @@ class ListOfFriendsState extends State<ListOfFriends> {
                       ),
                     );
                   },
-                  child: Padding(
-                    padding: const EdgeInsets.all(5),
+                  child: Card(
+                    elevation: 20,
+                    margin: const EdgeInsets.all(5),
                     child: Container(
                       height: 150,
                       decoration: const BoxDecoration(
                         shape: BoxShape.rectangle,
-                        borderRadius: BorderRadius.all(Radius.circular(15.0)),
+                        borderRadius: BorderRadius.all(
+                          Radius.circular(15.0),
+                        ),
                       ),
                       child: Padding(
                         padding: const EdgeInsets.all(0),
                         child: Container(
                           decoration: const BoxDecoration(
-                            shape: BoxShape.rectangle,
-                            borderRadius:
-                                BorderRadius.all(Radius.circular(15.0)),
-                            gradient: LinearGradient(
-                                colors: [
-                                  Colors.black,
-                                  Color(0x19000000),
-                                ],
-                                begin: FractionalOffset(0.0, 1.0),
-                                end: FractionalOffset(0.0, 0.0),
-                                stops: [0.0, 1.0],
-                                tileMode: TileMode.clamp),
+                            image: DecorationImage(
+                              image: AssetImage(
+                                "asset/messagerie.png",
+                              ),
+                            ),
                           ),
                           child: Center(
                             child: Text(
                               user.prenom,
                               style: const TextStyle(
-                                  fontSize: 20,
-                                  fontWeight: FontWeight.w500,
-                                  color: Colors.white),
+                                fontSize: 20,
+                                fontWeight: FontWeight.w500,
+                                color: Colors.black,
+                              ),
                             ),
                           ),
                         ),

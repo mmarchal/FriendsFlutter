@@ -37,19 +37,24 @@ class ChatControllerState extends State<ChatController> {
           children: <Widget>[
             // Zone de chat
             Flexible(
-                child: FirebaseAnimatedList(
-                    query: FirebaseHelper().baseMessage.child(FirebaseHelper()
-                        .getMessageRef(widget.id, widget.partenaire.uid)),
-                    itemBuilder: (BuildContext context, DataSnapshot snapshot,
-                        Animation<double> animation, int index) {
-                      FirebaseMessage message =
-                          FirebaseMessage.fromMap(snapshot.value);
-                      return ChatBubble(
-                          message: message,
-                          partenaire: widget.partenaire,
-                          monId: widget.id,
-                          animation: animation);
-                    })),
+              child: FirebaseAnimatedList(
+                reverse: true,
+                sort: (a, b) => b.key!.compareTo(a.key!),
+                query: FirebaseHelper().baseMessage.child(FirebaseHelper()
+                    .getMessageRef(widget.id, widget.partenaire.uid)),
+                itemBuilder: (BuildContext context, DataSnapshot snapshot,
+                    Animation<double> animation, int index) {
+                  FirebaseMessage message =
+                      FirebaseMessage.fromMap(snapshot.value);
+                  return ChatBubble(
+                    message: message,
+                    partenaire: widget.partenaire,
+                    monId: widget.id,
+                    animation: animation,
+                  );
+                },
+              ),
+            ),
             const Divider(
               height: 1.5,
             ),

@@ -126,10 +126,11 @@ class _SignupPageState extends State<SignupPage> {
             Container(
               alignment: Alignment.bottomCenter,
               child: ButtonLogin(
-                  onTap: () {
-                    _checkMandatoryValue();
-                  },
-                  title: 'Créer un compte'),
+                onTap: () {
+                  _checkMandatoryValue();
+                },
+                title: 'Créer un compte',
+              ),
             ),
           ],
         ),

@@ -31,6 +31,7 @@ class PropositionSortieState extends State<PropositionSortie> {
   DateTime? selectedDateTime;
   String? selectedLocation;
   int? selectedValue = 0;
+  String? selectedValueLabel;
 
   @override
   Widget build(BuildContext context) {
@@ -94,6 +95,7 @@ class PropositionSortieState extends State<PropositionSortie> {
                         onChanged: (int? b) {
                           setState(() {
                             selectedValue = b;
+                            selectedValueLabel = element.type;
                           });
                         },
                         secondary: _secondaryIcon(element.id!),
@@ -115,10 +117,14 @@ class PropositionSortieState extends State<PropositionSortie> {
                                 "Création de la nouvelle sortie en cours ...");
                       });
                   Sortie sortie = Sortie(
-                      datePropose: selectedDateTime,
-                      intitule: _controllerTitle.text,
-                      lieu: _controllerLocation.text,
-                      typeSortie: TypeSortie(id: selectedValue, type: ''));
+                    datePropose: selectedDateTime,
+                    intitule: _controllerTitle.text,
+                    lieu: _controllerLocation.text,
+                    typeSortie: TypeSortie(
+                      id: selectedValue,
+                      type: selectedValueLabel ?? "",
+                    ),
+                  );
                   APIResponse<bool> response =
                       await SortieRepository().addOuting(sortie);
                   if (response.isSuccess && response.data!) {

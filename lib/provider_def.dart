@@ -11,6 +11,7 @@ import 'package:life_friends/notifier/typeproposition/typeproposition_list_notif
 import 'package:life_friends/notifier/typeproposition/typeproposition_notifier.dart';
 import 'package:life_friends/notifier/typesortie/typesortie_list_notifier.dart';
 import 'package:life_friends/notifier/typesortie/typesortie_notifier.dart';
+import 'package:life_friends/service/api.repository.dart';
 import 'package:life_friends/service/friend.repository.dart';
 import 'package:life_friends/service/sortie.repository.dart';
 import 'package:life_friends/service/typeproposition.repository.dart';
@@ -38,6 +39,14 @@ class ProviderDef extends StatelessWidget {
         ),
 
         // ------ Repositories ------
+
+        //Api
+        Provider<ApiRepository>(
+          create: (_) => ApiRepository(
+            context.read(),
+            context.read(),
+          ),
+        ),
 
         // Token
         Provider<TokenNotifier>(

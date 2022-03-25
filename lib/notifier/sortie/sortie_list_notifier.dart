@@ -36,7 +36,7 @@ class SortieListNotifier extends ChangeNotifier {
     }
 
     var apiResponse = await _friendRepository.getMySorties(userId);
-    _mesSorties.addAll(apiResponse.data!);
+    _mesSorties.addAll(apiResponse.data ?? []);
     sorties = APIResponse(data: _mesSorties, type: apiResponse.type);
     notifyListeners();
   }

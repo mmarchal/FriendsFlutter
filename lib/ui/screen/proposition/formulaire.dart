@@ -1,12 +1,12 @@
 import 'package:cool_alert/cool_alert.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_bloc/flutter_form_bloc.dart';
+import 'package:life_friends/env/constants.dart';
 import 'package:life_friends/model/api/api_response.dart';
 import 'package:life_friends/model/friend.dart';
 import 'package:life_friends/model/proposition.dart';
 import 'package:life_friends/model/type_proposition.dart';
 import 'package:life_friends/notifier/friend/friend_notifier.dart';
-import 'package:life_friends/notifier/typeproposition/typeproposition_list_notifier.dart';
 import 'package:life_friends/service/proposition.repository.dart';
 import 'package:life_friends/ui/widgets/button_login.dart';
 import 'package:life_friends/ui/widgets/loading_widget.dart';
@@ -45,17 +45,13 @@ class _AllFieldsForm extends State<AllFieldsForm> {
   @override
   Widget build(BuildContext context) {
     Friend? friend = context.watch<FriendNotifier>().friend;
-    List<TypeProposition>? typePropositions =
-        context.watch<TypePropositionListNotifier>().listeTypes;
     return BlocProvider(
       create: (context) => AllFieldsFormBloc(),
       child: Builder(
         builder: (context) {
           final formBloc = BlocProvider.of<AllFieldsFormBloc>(context);
           formBloc.nomFriend.updateInitialValue(friend?.prenom);
-          if (typePropositions != null) {
-            formBloc.typeDemande.updateItems(typePropositions);
-          }
+          formBloc.typeDemande.updateItems(typePropositions);
           return Theme(
             data: Theme.of(context).copyWith(
               inputDecorationTheme: InputDecorationTheme(
@@ -79,16 +75,14 @@ class _AllFieldsForm extends State<AllFieldsForm> {
                           prefixIcon: Icon(Icons.text_fields),
                         ),
                       ),
-                      (typePropositions != null)
-                          ? RadioButtonGroupFieldBlocBuilder<TypeProposition>(
-                              selectFieldBloc: formBloc.typeDemande,
-                              decoration: const InputDecoration(
-                                labelText: 'Type de demande',
-                                prefixIcon: SizedBox(),
-                              ),
-                              itemBuilder: (context, item) => item.type,
-                            )
-                          : const CircularProgressIndicator(),
+                      RadioButtonGroupFieldBlocBuilder<TypeProposition>(
+                        selectFieldBloc: formBloc.typeDemande,
+                        decoration: const InputDecoration(
+                          labelText: 'Type de demande',
+                          prefixIcon: SizedBox(),
+                        ),
+                        itemBuilder: (context, item) => item.type,
+                      ),
                       TextFieldBlocBuilder(
                         textFieldBloc: formBloc.contenuDemande,
                         minLines: 2,

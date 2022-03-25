@@ -13,7 +13,7 @@ import 'package:life_friends/ui/widgets/copper_text.dart';
 import 'package:life_friends/ui/widgets/loading_widget.dart';
 import 'package:provider/src/provider.dart';
 
-enum Updated { prenom, mail, identifiant }
+enum Updated { prenom, mail }
 
 // ignore: must_be_immutable
 class MyProfil extends StatefulWidget {
@@ -27,14 +27,11 @@ class MyProfil extends StatefulWidget {
 
 class MyProfilState extends State<MyProfil> {
   TextEditingController mailController = TextEditingController();
-  TextEditingController loginController = TextEditingController();
   TextEditingController nameController = TextEditingController();
 
   bool mailUpdated = false;
-  bool loginUpdated = false;
   bool nameUpdated = false;
 
-  final ImagePicker _picker = ImagePicker();
   XFile? imageImporte;
 
   _titleDialogUpdate(Updated updated) {
@@ -43,8 +40,6 @@ class MyProfilState extends State<MyProfil> {
         return "Modifier le prénom";
       case Updated.mail:
         return "Modifier l'adresse mail";
-      case Updated.identifiant:
-        return "Modifier l'identifiant";
       default:
         return "Modifier";
     }
@@ -56,15 +51,11 @@ class MyProfilState extends State<MyProfil> {
         return friend.prenom;
       case Updated.mail:
         return friend.email;
-      case Updated.identifiant:
-        return friend.login;
     }
   }
 
   _controllerUpdated(Updated updated) {
     switch (updated) {
-      case Updated.identifiant:
-        return loginController;
       case Updated.mail:
         return mailController;
       case Updated.prenom:
@@ -101,9 +92,6 @@ class MyProfilState extends State<MyProfil> {
                 onPressed: () {
                   setState(() {
                     switch (updated) {
-                      case Updated.identifiant:
-                        loginUpdated = true;
-                        break;
                       case Updated.mail:
                         mailUpdated = true;
                         break;
@@ -129,10 +117,6 @@ class MyProfilState extends State<MyProfil> {
 
   String _checkChangedValue(Friend? friend) {
     String allChangements = "";
-    if (loginUpdated) {
-      allChangements +=
-          "Identifiant modifié : ${loginController.text} (${friend?.login})\n";
-    }
     if (nameUpdated) {
       allChangements +=
           "Prénom modifié : ${nameController.text} (${friend?.prenom})\n";
@@ -175,14 +159,13 @@ class MyProfilState extends State<MyProfil> {
           return const LoadingWidget(label: "Modification en cours");
         });
     Friend updateFriend = Friend(
-        id: friend!.id,
+        uid: friend!.uid,
         prenom: (nameUpdated) ? nameController.text : friend.prenom,
-        login: (loginUpdated) ? loginController.text : friend.login,
         email: (mailUpdated) ? mailController.text : friend.email,
         password: friend.password);
     if (imageImporte != null) {
       Provider.of<FriendRepository>(context, listen: false)
-          .updateLoginPicture(friend.id!, imageImporte!);
+          .updateLoginPicture(int.parse(friend.uid), imageImporte!);
     }
     Provider.of<FriendRepository>(context, listen: false)
         .updateUser(updateFriend)
@@ -207,53 +190,6 @@ class MyProfilState extends State<MyProfil> {
     });
   }
 
-  void _showPicker(context) {
-    showModalBottomSheet(
-        context: context,
-        builder: (BuildContext bc) {
-          return SafeArea(
-            child: Wrap(
-              children: <Widget>[
-                ListTile(
-                    leading: const Icon(Icons.photo_library),
-                    title: const Text('Galerie photos'),
-                    onTap: () async {
-                      XFile? image = await _picker.pickImage(
-                          source: ImageSource.gallery, imageQuality: 50);
-
-                      setState(() {
-                        imageImporte = image;
-                      });
-                      Navigator.of(context).pop();
-                    }),
-                ListTile(
-                  leading: const Icon(Icons.photo_camera),
-                  title: const Text('Appareil photo'),
-                  onTap: () async {
-                    XFile? image = await _picker.pickImage(
-                        source: ImageSource.camera, imageQuality: 50);
-                    setState(() {
-                      imageImporte = image;
-                    });
-                    Navigator.of(context).pop();
-                  },
-                ),
-                ListTile(
-                  leading: const Icon(Icons.cancel),
-                  title: const Text('Restaurer la photo initiale'),
-                  onTap: () {
-                    setState(() {
-                      imageImporte = null;
-                    });
-                    Navigator.of(context).pop();
-                  },
-                ),
-              ],
-            ),
-          );
-        });
-  }
-
   @override
   Widget build(BuildContext context) {
     Friend? friend = context.watch<FriendNotifier>().friend;
@@ -265,13 +201,6 @@ class MyProfilState extends State<MyProfil> {
         ),
         centerTitle: true,
         elevation: 4,
-        /*actions: [
-          IconButton(
-              onPressed: () {
-                _showPicker(context);
-              },
-              icon: const Icon(Icons.add_a_photo))
-        ],*/
       ),
       floatingActionButton: FloatingActionButton(
           onPressed: () {
@@ -341,23 +270,6 @@ class MyProfilState extends State<MyProfil> {
                             setState(() {
                               mailUpdated = false;
                               mailController.clear();
-                            });
-                          },
-                        ),
-                        ProfilInformationRow(
-                          label: "Identifiant :",
-                          value: (loginUpdated)
-                              ? loginController.text
-                              : friend?.login ?? "",
-                          updated: loginUpdated,
-                          onPressed: () {
-                            _displayTextInputDialog(
-                                context, Updated.identifiant, friend!);
-                          },
-                          onReinitValue: () {
-                            setState(() {
-                              loginUpdated = false;
-                              loginController.clear();
                             });
                           },
                         ),

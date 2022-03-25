@@ -21,6 +21,31 @@ class FirebaseHelper {
     return user?.uid ?? "";
   }
 
+  Future<User?> registerWithEmailAndPassword(
+      {required String name,
+      required String password,
+      required String email}) async {
+    try {
+      UserCredential result = await auth.createUserWithEmailAndPassword(
+          email: email, password: password);
+      User? user = result.user;
+      if (user != null) {
+        user.updateDisplayName(name);
+        return user;
+      } else {
+        return null;
+      }
+    } catch (e) {
+      return null;
+    }
+  }
+
+  Future<User?> login(String username, String password) async {
+    final UserCredential result = await auth.signInWithEmailAndPassword(
+        email: username, password: password);
+    return result.user;
+  }
+
   //Database
 
   static final base = FirebaseDatabase.instance.ref();

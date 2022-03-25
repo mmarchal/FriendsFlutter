@@ -6,7 +6,7 @@ import 'package:life_friends/notifier/friend/friend_list_notifier.dart';
 import 'package:provider/src/provider.dart';
 
 class ParticipantSortie extends StatelessWidget {
-  final List<int> listeIdParticipants;
+  final List<String> listeIdParticipants;
 
   const ParticipantSortie({Key? key, required this.listeIdParticipants})
       : super(key: key);
@@ -32,7 +32,7 @@ class ParticipantSortie extends StatelessWidget {
                 alignment: Alignment.center,
                 child: Text(friend.prenom),
                 decoration: BoxDecoration(
-                    color: (listeIdParticipants.contains(friend.id))
+                    color: (listeIdParticipants.contains(friend.uid))
                         ? Colors.green
                         : Colors.red,
                     borderRadius: BorderRadius.circular(15)),

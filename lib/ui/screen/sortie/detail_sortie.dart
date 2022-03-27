@@ -10,7 +10,6 @@ import 'package:life_friends/model/friend.dart';
 import 'package:life_friends/model/sortie.dart';
 import 'package:life_friends/notifier/friend/friend_notifier.dart';
 import 'package:life_friends/notifier/sortie/sortie_list_notifier.dart';
-import 'package:life_friends/notifier/token_notifier.dart';
 import 'package:life_friends/service/sortie.repository.dart';
 import 'package:life_friends/ui/screen/sortie/scaffold_sortie.dart';
 import 'package:life_friends/ui/widgets/detail_type_sortie.dart';

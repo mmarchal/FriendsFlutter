@@ -67,7 +67,7 @@ class FirebaseHelper {
       required FirebaseUser moi,
       required String text,
       String? imageUrl}) {
-    String date = DateFormat("dd-MM-yyyy hh:mm:ss").format(DateTime.now());
+    String date = DateFormat("dd-MM-yyyy HH:mm:ss").format(DateTime.now());
     Map map = {
       "from": moi.uid,
       "to": user.uid,
@@ -106,7 +106,8 @@ class FirebaseHelper {
   }
 
   //Storage
-  static final baseStorage = FirebaseStorage.instance.ref();
+  static final baseStorage =
+      FirebaseStorage.instance.refFromURL('gs://friendchat-4626f.appspot.com');
   final Reference storageUsers = baseStorage.child("users");
   final Reference storageMessages = baseStorage.child("messages");
 

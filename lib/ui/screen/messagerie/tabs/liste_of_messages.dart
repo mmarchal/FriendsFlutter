@@ -20,7 +20,7 @@ class ListOfMessages extends StatelessWidget {
         FirebaseConversation conversation =
             FirebaseConversation.fromMap(snapshot.value);
         String subtitle = (conversation.id == uid) ? "Moi: " : "";
-        subtitle += conversation.lastMessage ?? "";
+        subtitle += _subMessageListTile(conversation.lastMessage);
         return ListTile(
           title: Text(conversation.user?.prenom ?? ""),
           subtitle: Text(subtitle),
@@ -39,5 +39,17 @@ class ListOfMessages extends StatelessWidget {
         );
       },
     );
+  }
+
+  String _subMessageListTile(String? lastMessage) {
+    if (lastMessage != null) {
+      if (lastMessage.contains('firebasestorage')) {
+        return "1 image envoyé";
+      } else {
+        return lastMessage;
+      }
+    } else {
+      return "";
+    }
   }
 }

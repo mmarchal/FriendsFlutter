@@ -78,7 +78,8 @@ class ZoneState extends State<ZoneDeTexteWidget> {
         .savePicture(
             file, FirebaseHelper().storageMessages.child(widget.id).child(date))
         .then((string) {
-      //FirebaseHelper().sendMessage(widget.partenaire, moi, null, string);
+      FirebaseHelper()
+          .sendMessage(user: widget.partenaire, moi: moi, text: string);
     });
   }
 }

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:life_friends/model/firebase/firebase_message.dart';
 import 'package:life_friends/model/firebase/firebase_user.dart';
+import 'package:life_friends/ui/widgets/custom_image.dart';
 
 class ChatBubble extends StatelessWidget {
   final FirebaseMessage message;
@@ -50,13 +51,15 @@ class ChatBubble extends StatelessWidget {
             color: bubbleColor,
             child: Container(
               padding: const EdgeInsets.all(10.0),
-              child: Text(
-                message.text,
-                style: TextStyle(
-                    color: textColor,
-                    fontSize: 15.0,
-                    fontStyle: FontStyle.italic),
-              ),
+              child: (!message.text.contains('firebasestorage'))
+                  ? Text(
+                      message.text,
+                      style: TextStyle(
+                          color: textColor,
+                          fontSize: 15.0,
+                          fontStyle: FontStyle.italic),
+                    )
+                  : CustomImage(imageUrl: message.text),
             ),
           )
         ],

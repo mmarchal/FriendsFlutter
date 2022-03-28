@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:firebase_database/ui/firebase_animated_list.dart';
 import 'package:firebase_database/firebase_database.dart';
@@ -40,8 +38,7 @@ class ChatControllerState extends State<ChatController> {
             // Zone de chat
             Flexible(
               child: FirebaseAnimatedList(
-                reverse: true,
-                sort: (a, b) => b.key!.compareTo(a.key!),
+                reverse: false,
                 query: FirebaseHelper().baseMessage.child(FirebaseHelper()
                     .getMessageRef(widget.id, widget.partenaire.uid)),
                 itemBuilder: (BuildContext context, DataSnapshot snapshot,

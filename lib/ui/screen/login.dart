@@ -2,6 +2,7 @@ import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:life_friends/model/api/api_response.dart';
+import 'package:life_friends/model/error/api_error.dart';
 import 'package:life_friends/model/error/type_error.dart';
 import 'package:life_friends/model/firebase/firebase_helper.dart';
 import 'package:life_friends/model/friend.dart';
@@ -146,25 +147,40 @@ class _LoginPageState extends State<LoginPage> {
                               return const LoadingWidget(
                                   label: "Connexion en cours");
                             });
-                        User? user = await FirebaseHelper()
-                            .login(_user.text, _pass.text);
-                        if (user != null) {
-                          Friend friend = Friend(
-                            uid: user.uid,
-                            prenom: user.displayName ?? "",
-                            email: _user.text,
-                            password: _pass.text,
-                          );
-                          friendNotifier.setFriend(friend);
-                          Navigator.pushNamed(context, '/home');
-                        } else {
+                        try {
+                          User? user = await FirebaseHelper()
+                              .login(_user.text, _pass.text);
+                          if (user != null) {
+                            Friend friend = Friend(
+                              uid: user.uid,
+                              prenom: user.displayName ?? "",
+                              email: _user.text,
+                              password: _pass.text,
+                            );
+                            friendNotifier.setFriend(friend);
+                            Navigator.pushNamed(context, '/home');
+                          } else {
+                            Navigator.pop(context);
+                            showDialog(
+                              context: context,
+                              builder: (_) => AdvanceCustomAlert(
+                                response: APIResponse(
+                                  type: FriendTypeError.notFound,
+                                ),
+                              ),
+                            );
+                          }
+                        } on FirebaseAuthException catch (e) {
                           Navigator.pop(context);
                           showDialog(
                             context: context,
                             builder: (_) => AdvanceCustomAlert(
                               response: APIResponse(
-                                type: FriendTypeError.notFound,
-                              ),
+                                  error: APIError(
+                                systemMessage: "Firebase",
+                                title: e.code,
+                                content: e.message!,
+                              )),
                             ),
                           );
                         }

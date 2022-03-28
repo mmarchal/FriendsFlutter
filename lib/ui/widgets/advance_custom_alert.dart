@@ -37,7 +37,7 @@ class _AdvanceCustomAlert extends State<AdvanceCustomAlert> {
                     height: 5,
                   ),
                   Text(
-                    "Erreur : ${_errorMesssage(widget.response.type)}",
+                    _errorMesssage(widget.response.type),
                     textAlign: TextAlign.center,
                     style: const TextStyle(
                       fontSize: 20,
@@ -80,7 +80,7 @@ class _AdvanceCustomAlert extends State<AdvanceCustomAlert> {
       case FriendTypeError.notFound:
         return "Non trouvé ! Contactez l'administrateur !";
       default:
-        return "Erreur inconnu ! Contactez l'administrateur !";
+        return "${widget.response.error?.content} ! Contactez l'administrateur !";
     }
   }
 }

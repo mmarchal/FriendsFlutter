@@ -9,13 +9,13 @@ class ChatBubble extends StatelessWidget {
   final String monId;
   final Animation<double> animation;
 
-  const ChatBubble(
-      {Key? key,
-      required this.message,
-      required this.partenaire,
-      required this.monId,
-      required this.animation})
-      : super(key: key);
+  const ChatBubble({
+    Key? key,
+    required this.message,
+    required this.partenaire,
+    required this.monId,
+    required this.animation,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

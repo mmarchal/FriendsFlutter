@@ -36,6 +36,8 @@ dependencies:
   flutterfire_cli: 0.1.1+2
   firebase_database:
   cached_network_image:
+  firebase_crashlytics: ^2.6.1
+  firebase_messaging: ^11.2.12
 
 dev_dependencies:
   build_runner: ^2.1.7

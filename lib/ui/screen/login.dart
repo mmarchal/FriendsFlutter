@@ -2,11 +2,13 @@ import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:life_friends/model/api/api_response.dart';
+import 'package:life_friends/model/api/back/api_back.dart';
 import 'package:life_friends/model/error/api_error.dart';
 import 'package:life_friends/model/error/type_error.dart';
 import 'package:life_friends/model/firebase/firebase_helper.dart';
 import 'package:life_friends/model/friend.dart';
 import 'package:life_friends/notifier/friend/friend_notifier.dart';
+import 'package:life_friends/service/api.repository.dart';
 import 'package:life_friends/service/friend.repository.dart';
 import 'package:life_friends/ui/utils/style.dart';
 import 'package:life_friends/ui/widgets/advance_custom_alert.dart';
@@ -15,27 +17,14 @@ import 'package:life_friends/ui/widgets/login_right_text.dart';
 import 'package:life_friends/ui/widgets/login_text.dart';
 import 'package:provider/provider.dart';
 
-class LoginPage extends StatefulWidget {
-  const LoginPage({Key? key}) : super(key: key);
-
-  @override
-  State<StatefulWidget> createState() {
-    return _LoginPageState();
-  }
-}
-
-class _LoginPageState extends State<LoginPage> {
+class LoginPage extends StatelessWidget {
   final TextEditingController _user = TextEditingController();
   final TextEditingController _pass = TextEditingController();
 
-  @override
-  void initState() {
-    super.initState();
-  }
+  LoginPage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    FriendRepository(context.read(), context.read());
     final FriendNotifier friendNotifier =
         Provider.of<FriendNotifier>(context, listen: false);
     return Scaffold(
@@ -136,18 +125,76 @@ class _LoginPageState extends State<LoginPage> {
                   width: MediaQuery.of(context).size.width / 1.5,
                   child: ElevatedButton(
                       onPressed: () async {
-                        /*
-                        Compte de tests :
-                        - firebaseTest (123456)
-                        - firebaseMessage (abcdef)
-                        */
+                        final apiRepo = ApiRepository(
+                          context.read(),
+                          context.read(),
+                        );
                         showDialog(
                             context: context,
                             builder: (context) {
                               return const LoadingWidget(
-                                  label: "Connexion en cours");
+                                label: "Connexion en cours",
+                              );
                             });
                         try {
+                          APIResponse<ApiBack> response = await apiRepo.login(
+                            login: _user.text,
+                            password: _pass.text,
+                          );
+                          if (response.isSuccess) {
+                            APIResponse<Friend> resp = await apiRepo.getFriend(
+                              id: response.data!.result.userId,
+                              token: response.data!.result.token,
+                            );
+                            if (resp.isSuccess) {
+                              Friend friend = Friend(
+                                uid: resp.data!.uid,
+                                prenom: resp.data!.prenom,
+                                email: _user.text,
+                                password: _pass.text,
+                                login: _user.text,
+                              );
+                              friendNotifier.setFriend(friend);
+                              Navigator.pushNamed(context, '/home');
+                            } else {
+                              Navigator.pop(context);
+                              showDialog(
+                                context: context,
+                                builder: (_) => AdvanceCustomAlert(
+                                  response: APIResponse(
+                                    type: FriendTypeError.notFound,
+                                  ),
+                                ),
+                              );
+                            }
+                          } else {
+                            Navigator.pop(context);
+                            showDialog(
+                              context: context,
+                              builder: (_) => AdvanceCustomAlert(
+                                response: APIResponse(
+                                  type: FriendTypeError.notFound,
+                                ),
+                              ),
+                            );
+                          }
+                        } on Exception catch (e) {
+                          print(e);
+                          Navigator.pop(context);
+                          showDialog(
+                            context: context,
+                            builder: (_) => AdvanceCustomAlert(
+                              response: APIResponse(
+                                error: APIError(
+                                  systemMessage: "Login",
+                                  title: "Erreur",
+                                  content: e.toString(),
+                                ),
+                              ),
+                            ),
+                          );
+                        }
+                        /*try {
                           User? user = await FirebaseHelper()
                               .login(_user.text, _pass.text);
                           if (user != null) {
@@ -156,6 +203,7 @@ class _LoginPageState extends State<LoginPage> {
                               prenom: user.displayName ?? "",
                               email: _user.text,
                               password: _pass.text,
+                              login: _user.text,
                             );
                             friendNotifier.setFriend(friend);
                             Navigator.pushNamed(context, '/home');
@@ -183,7 +231,7 @@ class _LoginPageState extends State<LoginPage> {
                               )),
                             ),
                           );
-                        }
+                        }*/
                       },
                       child: Center(
                         child: Text(
@@ -202,31 +250,5 @@ class _LoginPageState extends State<LoginPage> {
         ],
       ),
     );
-  }
-
-  void firebaseLogin({
-    required BuildContext context,
-    required String email,
-  }) async {
-    var _auth = context.read<FirebaseAuth>();
-    try {
-      await _auth.signInWithEmailAndPassword(
-          email: email, password: _pass.text);
-      Navigator.pop(context);
-      Navigator.pushNamed(context, '/home');
-    } on FirebaseAuthException catch (e) {
-      Navigator.pop(context);
-      AwesomeDialog(
-              context: context,
-              dialogType: DialogType.ERROR,
-              animType: AnimType.RIGHSLIDE,
-              headerAnimationLoop: false,
-              title: "Erreur",
-              desc: e.message,
-              btnOkOnPress: () {},
-              btnOkIcon: Icons.cancel,
-              btnOkColor: Colors.red)
-          .show();
-    }
   }
 }

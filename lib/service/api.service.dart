@@ -10,9 +10,12 @@ abstract class ApiService {
 
   getData(String url, {Map<String, dynamic>? param}) async {
     var query = url;
-    Options options = Options(headers: {
-      'accept': 'application/json',
-    });
+    Options options = Options(
+      headers: {
+        'accept': 'application/json',
+        'authorization': 'Bearer ',
+      },
+    );
     try {
       final response = await dio.get(query, options: options);
       return response.data;
@@ -31,12 +34,12 @@ abstract class ApiService {
       }
     } catch (error) {
       return APIResponse(
-          error: APIError(
-              systemMessage: '',
-              title: 'Erreur rencontré !',
-              content: error.toString()));
+        error: APIError(
+          systemMessage: '',
+          title: 'Erreur rencontré !',
+          content: error.toString(),
+        ),
+      );
     }
   }
-
-  insertData(String url, {Map<String, dynamic>? data}) async {}
 }

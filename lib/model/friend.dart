@@ -5,6 +5,7 @@ part 'friend.g.dart';
 @JsonSerializable(explicitToJson: true)
 class Friend {
   final String uid;
+  final String login;
   final String prenom;
   final String password;
   final String email;
@@ -15,6 +16,7 @@ class Friend {
 
   Friend({
     required this.uid,
+    required this.login,
     required this.prenom,
     required this.email,
     this.profileImage,

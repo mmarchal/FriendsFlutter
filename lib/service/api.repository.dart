@@ -23,6 +23,7 @@ class ApiRepository extends ApiService {
       email: email,
       password: password,
       uid: uid,
+      login: email,
     );
   }
 
@@ -49,10 +50,12 @@ class ApiRepository extends ApiService {
       }
     } catch (error) {
       return APIResponse(
-          error: APIError(
-              systemMessage: '',
-              title: 'Erreur lors de la connexion',
-              content: error.toString()));
+        error: APIError(
+          systemMessage: '',
+          title: 'Erreur lors de la connexion',
+          content: error.toString(),
+        ),
+      );
     }
   }
 
@@ -96,9 +99,43 @@ class ApiRepository extends ApiService {
     }
   }
 
-  Future<APIResponse<Friend>> getFriend(String id) async {
+  Future<APIResponse<Friend>> getFriend({
+    required String id,
+    required String token,
+  }) async {
     var url = '$domaine/friend/$id';
-    return APIResponse(data: await getData(url));
+    try {
+      final response = await dio.get(
+        url,
+        options: Options(
+          headers: {
+            'accept': 'application/json',
+            'authorization': 'Bearer $token',
+          },
+        ),
+      );
+      return APIResponse(data: response.data);
+    } on DioError catch (error) {
+      if (error.response != null) {
+        switch (error.response?.statusCode) {
+          case 401:
+            return APIResponse(type: FriendTypeError.unauthorized);
+          case 404:
+            return APIResponse(type: FriendTypeError.notFound);
+          default:
+            return APIResponse(error: APIError.fromJson(error.response?.data));
+        }
+      } else {
+        return APIResponse(type: FriendTypeError.noInternet);
+      }
+    } catch (error) {
+      return APIResponse(
+          error: APIError(
+              systemMessage: '',
+              title: 'Erreur lors de l\'oublie de mot de passe',
+              content: error.toString()));
+    }
+    //return APIResponse(data: await getData(url));
   }
 
   Future<APIResponse<bool>> getForgotPassword(String user) async {

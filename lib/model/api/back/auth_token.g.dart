@@ -9,7 +9,7 @@ part of 'auth_token.dart';
 AuthToken _$AuthTokenFromJson(Map<String, dynamic> json) => AuthToken(
       json['token'] as String,
       json['username'] as String,
-      json['userId'] as int,
+      json['userId'] as String,
     );
 
 Map<String, dynamic> _$AuthTokenToJson(AuthToken instance) => <String, dynamic>{

@@ -6,7 +6,7 @@ part 'auth_token.g.dart';
 class AuthToken {
   final String token;
   final String username;
-  final int userId;
+  final String userId;
 
   AuthToken(this.token, this.username, this.userId);
 

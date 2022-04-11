@@ -12,6 +12,7 @@ import 'package:life_friends/notifier/typeproposition/typeproposition_notifier.d
 import 'package:life_friends/notifier/typesortie/typesortie_list_notifier.dart';
 import 'package:life_friends/notifier/typesortie/typesortie_notifier.dart';
 import 'package:life_friends/service/api.repository.dart';
+import 'package:life_friends/service/api.service.dart';
 import 'package:life_friends/service/friend.repository.dart';
 import 'package:life_friends/service/sortie.repository.dart';
 import 'package:life_friends/service/typeproposition.repository.dart';

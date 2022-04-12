@@ -114,7 +114,7 @@ class ApiRepository extends ApiService {
           },
         ),
       );
-      return APIResponse(data: response.data);
+      return APIResponse(data: Friend.fromJson(response.data));
     } on DioError catch (error) {
       if (error.response != null) {
         switch (error.response?.statusCode) {

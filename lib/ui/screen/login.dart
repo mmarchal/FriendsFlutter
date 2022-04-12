@@ -1,15 +1,11 @@
-import 'package:awesome_dialog/awesome_dialog.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:life_friends/model/api/api_response.dart';
 import 'package:life_friends/model/api/back/api_back.dart';
 import 'package:life_friends/model/error/api_error.dart';
 import 'package:life_friends/model/error/type_error.dart';
-import 'package:life_friends/model/firebase/firebase_helper.dart';
 import 'package:life_friends/model/friend.dart';
 import 'package:life_friends/notifier/friend/friend_notifier.dart';
 import 'package:life_friends/service/api.repository.dart';
-import 'package:life_friends/service/friend.repository.dart';
 import 'package:life_friends/ui/utils/style.dart';
 import 'package:life_friends/ui/widgets/advance_custom_alert.dart';
 import 'package:life_friends/ui/widgets/loading_widget.dart';
@@ -179,7 +175,6 @@ class LoginPage extends StatelessWidget {
                             );
                           }
                         } on Exception catch (e) {
-                          print(e);
                           Navigator.pop(context);
                           showDialog(
                             context: context,
@@ -194,44 +189,6 @@ class LoginPage extends StatelessWidget {
                             ),
                           );
                         }
-                        /*try {
-                          User? user = await FirebaseHelper()
-                              .login(_user.text, _pass.text);
-                          if (user != null) {
-                            Friend friend = Friend(
-                              uid: user.uid,
-                              prenom: user.displayName ?? "",
-                              email: _user.text,
-                              password: _pass.text,
-                              login: _user.text,
-                            );
-                            friendNotifier.setFriend(friend);
-                            Navigator.pushNamed(context, '/home');
-                          } else {
-                            Navigator.pop(context);
-                            showDialog(
-                              context: context,
-                              builder: (_) => AdvanceCustomAlert(
-                                response: APIResponse(
-                                  type: FriendTypeError.notFound,
-                                ),
-                              ),
-                            );
-                          }
-                        } on FirebaseAuthException catch (e) {
-                          Navigator.pop(context);
-                          showDialog(
-                            context: context,
-                            builder: (_) => AdvanceCustomAlert(
-                              response: APIResponse(
-                                  error: APIError(
-                                systemMessage: "Firebase",
-                                title: e.code,
-                                content: e.message!,
-                              )),
-                            ),
-                          );
-                        }*/
                       },
                       child: Center(
                         child: Text(

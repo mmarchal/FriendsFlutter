@@ -3,6 +3,7 @@ import 'package:life_friends/model/api/api_response.dart';
 import 'package:life_friends/model/api/back/api_back.dart';
 import 'package:life_friends/model/error/api_error.dart';
 import 'package:life_friends/model/error/type_error.dart';
+import 'package:life_friends/model/firebase/firebase_helper.dart';
 import 'package:life_friends/model/friend.dart';
 import 'package:life_friends/notifier/friend/friend_notifier.dart';
 import 'package:life_friends/service/api.repository.dart';
@@ -138,6 +139,7 @@ class LoginPage extends StatelessWidget {
                             password: _pass.text,
                           );
                           if (response.isSuccess) {
+                            FirebaseHelper().login(_user.text, _pass.text);
                             APIResponse<Friend> resp = await apiRepo.getFriend(
                               id: response.data!.result.userId,
                               token: response.data!.result.token,

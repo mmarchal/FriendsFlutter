@@ -90,7 +90,9 @@ class ProviderDef extends StatelessWidget {
 
         // Sortie
         Provider<SortieRepository>(
-          create: (_) => SortieRepository(),
+          create: (context) => SortieRepository(
+            token: context.read<TokenNotifier>().token!.token,
+          ),
         ),
         ChangeNotifierProvider<SortieNotifier>(create: (_) => SortieNotifier()),
         ChangeNotifierProxyProvider<SortieNotifier, SortieListNotifier>(

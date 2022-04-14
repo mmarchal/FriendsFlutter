@@ -6,6 +6,7 @@ import 'package:life_friends/model/error/type_error.dart';
 import 'package:life_friends/model/firebase/firebase_helper.dart';
 import 'package:life_friends/model/friend.dart';
 import 'package:life_friends/notifier/friend/friend_notifier.dart';
+import 'package:life_friends/notifier/token_notifier.dart';
 import 'package:life_friends/service/api.repository.dart';
 import 'package:life_friends/ui/utils/style.dart';
 import 'package:life_friends/ui/widgets/advance_custom_alert.dart';
@@ -139,6 +140,7 @@ class LoginPage extends StatelessWidget {
                             password: _pass.text,
                           );
                           if (response.isSuccess) {
+                            context.read<TokenNotifier>().setToken(response.data!.result);
                             FirebaseHelper().login(_user.text, _pass.text);
                             APIResponse<Friend> resp = await apiRepo.getFriend(
                               id: response.data!.result.userId,

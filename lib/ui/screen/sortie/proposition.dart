@@ -126,7 +126,7 @@ class PropositionSortieState extends State<PropositionSortie> {
                     ),
                   );
                   APIResponse<bool> response =
-                      await SortieRepository().addOuting(sortie);
+                      await context.read<SortieRepository>().addOuting(sortie);
                   if (response.isSuccess && response.data!) {
                     Provider.of<SortieListNotifier>(context, listen: false)
                         .loadAllSorties(clearList: true);

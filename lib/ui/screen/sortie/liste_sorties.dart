@@ -6,12 +6,24 @@ import 'package:life_friends/env/constants.dart';
 import 'package:life_friends/model/api/api_response.dart';
 import 'package:life_friends/model/sortie.dart';
 import 'package:life_friends/notifier/sortie/sortie_list_notifier.dart';
+import 'package:life_friends/service/sortie.repository.dart';
 import 'package:life_friends/ui/screen/sortie/scaffold_sortie.dart';
 import 'package:life_friends/ui/widgets/icon_type.dart';
 import 'package:provider/src/provider.dart';
 
-class ListeSorties extends StatelessWidget {
-  const ListeSorties({Key? key}) : super(key: key);
+class ListSorties extends StatefulWidget {
+  const ListSorties({Key? key}) : super(key: key);
+
+  @override
+  State<StatefulWidget> createState() {
+    return ListeSortiesState();
+  }
+
+}
+
+class ListeSortiesState extends State<ListSorties> {
+
+  APIResponse<List<Sortie>>? response;
 
   _initBody(List<Sortie>? data) {
     if (data != null && data.isNotEmpty) {
@@ -73,17 +85,28 @@ class ListeSorties extends StatelessWidget {
   }
 
   @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    getAllSorties(context);
+  }
+  @override
   Widget build(BuildContext context) {
-    APIResponse<List<Sortie>>? response =
-        context.watch<SortieListNotifier>().listeSorties;
     return ScaffoldSortie(
       title: "Liste des sorties",
       body: (response == null)
           ? const Center(
               child: CircularProgressIndicator(),
             )
-          : _initBody(response.data),
+          : _initBody(response!.data),
       gradient: gNextSorties,
     );
+  }
+
+  Future<void> getAllSorties(BuildContext context) async {
+    APIResponse<List<Sortie>> api = await context.read<SortieRepository>().getSorties();
+    setState(() {
+      response = api;
+    });
   }
 }

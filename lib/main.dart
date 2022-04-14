@@ -63,7 +63,7 @@ class MyApp extends StatelessWidget {
           '/signup': (context) => const SignupPage(),
           '/home': (context) => const HomeScreen(),
           '/nouvel_sortie': (context) => const PropositionSortie(),
-          '/prochaines_sorties': (context) => const ListeSorties(),
+          '/prochaines_sorties': (context) => const ListSorties(),
           '/mes_sorties': (context) => const MesSorties(
                 gradient: gPropositions,
                 userId: '',

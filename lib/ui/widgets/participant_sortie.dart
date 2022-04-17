@@ -55,10 +55,11 @@ class ParticipantSortieState extends State<ParticipantSortie> {
               alignment: Alignment.center,
               child: Text(friend.prenom),
               decoration: BoxDecoration(
-                  color: (widget.listeIdParticipants.contains(friend.uid))
-                      ? Colors.green
-                      : Colors.red,
-                  borderRadius: BorderRadius.circular(15)),
+                color: (widget.listeIdParticipants.contains(friend.uid))
+                    ? Colors.green
+                    : Colors.red,
+                borderRadius: BorderRadius.circular(15),
+              ),
             );
           },
         );

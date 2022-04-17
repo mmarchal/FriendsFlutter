@@ -58,7 +58,9 @@ class ProviderDef extends StatelessWidget {
 
         // Friend
         Provider<FriendRepository>(
-          create: (context) => FriendRepository(context.read(), context.read()),
+          create: (context) => FriendRepository(
+            token: context.read<TokenNotifier>().token!.token,
+          ),
         ),
         ChangeNotifierProvider<FriendNotifier>(
           create: (_) => FriendNotifier(),

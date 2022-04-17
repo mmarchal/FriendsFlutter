@@ -100,7 +100,10 @@ class MesSortiesState extends State<MesSorties> {
             builder: (BuildContext bC) {
               return AlertDialog(
                 shape: const RoundedRectangleBorder(
-                    borderRadius: BorderRadius.all(Radius.circular(32.0))),
+                  borderRadius: BorderRadius.all(
+                    Radius.circular(32.0),
+                  ),
+                ),
                 contentPadding: const EdgeInsets.only(top: 10.0),
                 elevation: 10,
                 title: Image.asset(
@@ -145,7 +148,9 @@ class MesSortiesState extends State<MesSorties> {
                 ],
               ),
             )
-          : const Center(child: CircularProgressIndicator()),
+          : const Center(
+              child: CircularProgressIndicator(),
+            ),
     );
   }
 

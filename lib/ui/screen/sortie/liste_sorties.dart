@@ -66,11 +66,7 @@ class ListeSortiesState extends State<ListSorties> {
                 ],
               ),
             ),
-            onTap: () {
-              Provider.of<SortieListNotifier>(context, listen: false)
-                  .loadOneSortie(sortieId: s.id.toString());
-              Navigator.pushNamed(context, '/detail_sortie');
-            },
+            onTap: () => Navigator.pushNamed(context, '/detail_sortie', arguments: s.id),
           );
         },
       );

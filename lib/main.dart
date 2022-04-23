@@ -71,7 +71,7 @@ class MyApp extends StatelessWidget {
           '/nouvelle_proposition': (context) => const NouvelleProposition(
                 gradient: gPropositions,
               ),
-          '/detail_sortie': (context) => const DetailSortie(),
+          '/detail_sortie': (context) => DetailSortie(sortieId: '',),
           '/profil': (context) => const MyProfil(),
           '/messagerie': (context) => const HomeChat(),
         },

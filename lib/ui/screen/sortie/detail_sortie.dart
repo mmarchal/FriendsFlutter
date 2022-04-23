@@ -18,7 +18,9 @@ import 'package:life_friends/ui/widgets/participant_sortie.dart';
 import 'package:provider/src/provider.dart';
 
 class DetailSortie extends StatefulWidget {
-  const DetailSortie({Key? key}) : super(key: key);
+  final String sortieId;
+
+  const DetailSortie({Key? key, required this.sortieId,}) : super(key: key);
 
   @override
   _DetailSortieState createState() => _DetailSortieState();
@@ -26,6 +28,8 @@ class DetailSortie extends StatefulWidget {
 
 class _DetailSortieState extends State<DetailSortie> {
   List<String> liste = [];
+  Sortie? sortie;
+  Friend? friend;
 
   _showDialogError(String error, BuildContext context) {
     return CoolAlert.show(
@@ -37,7 +41,8 @@ class _DetailSortieState extends State<DetailSortie> {
 
   _addFriend(Friend? friend, BuildContext context, Sortie? sortie) {
     if (friend != null && sortie != null) {
-      context.read<SortieRepository>().addFriendToOuting(friend, sortie).then((value) {
+      context.read<SortieRepository>().addFriendToOuting(friend, sortie).then((
+          value) {
         if (value.data!) {
           CoolAlert.show(
               context: context,
@@ -64,12 +69,21 @@ class _DetailSortieState extends State<DetailSortie> {
   }
 
   @override
-  Widget build(BuildContext context) {
-    APIResponse<Sortie>? apiSortie =
-        context.watch<SortieListNotifier>().uniqueSortie;
-    Friend? friend = context.watch<FriendNotifier>().friend;
+  void initState() {
+    super.initState();
+    getSortie(context);
+  }
 
-    Sortie? sortie = apiSortie?.data;
+  getSortie(BuildContext context) async {
+    APIResponse<Sortie> api = await context.read<SortieRepository>().getOneSortie(widget.sortieId);
+    setState(() {
+      sortie = api.data;
+      friend = context.read<FriendNotifier>().friend;
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
     return ScaffoldSortie(
       title: sortie?.intitule ?? "",
       actionAppBar: IconButton(
@@ -109,64 +123,67 @@ class _DetailSortieState extends State<DetailSortie> {
       sortie: sortie,
       body: (sortie != null)
           ? SingleChildScrollView(
+        child: Column(
+          children: [
+            SizedBox(
+              width: MediaQuery
+                  .of(context)
+                  .size
+                  .width / 1.25,
+              child: DetailTypeSortie(
+                typeSortie: sortie!.typeSortie,
+              ),
+            ),
+            Container(
+              margin: const EdgeInsets.all(16),
               child: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                mainAxisSize: MainAxisSize.min,
                 children: [
-                  SizedBox(
-                    width: MediaQuery.of(context).size.width / 1.25,
-                    child: DetailTypeSortie(
-                      typeSortie: sortie.typeSortie,
+                  const Text(
+                    "Les informations :",
+                    textScaleFactor: 2,
+                    style: TextStyle(
+                      color: Colors.white,
+                      decoration: TextDecoration.underline,
                     ),
                   ),
+                  FriendCardSortie(
+                      title: "Date",
+                      subTitle: (sortie!.datePropose != null)
+                          ? DateFormat('dd/MM/yyyy')
+                          .format(sortie!.datePropose!)
+                          : "Aucune date renseigné !",
+                      icon: const Icon(Icons.calendar_today,
+                          color: Colors.white)),
+                  FriendCardSortie(
+                      title: "Lieu",
+                      subTitle: sortie!.lieu,
+                      icon: const Icon(Icons.map, color: Colors.white)),
                   Container(
-                    margin: const EdgeInsets.all(16),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        const Text(
-                          "Les informations :",
-                          textScaleFactor: 2,
-                          style: TextStyle(
-                            color: Colors.white,
-                            decoration: TextDecoration.underline,
-                          ),
-                        ),
-                        FriendCardSortie(
-                            title: "Date",
-                            subTitle: (sortie.datePropose != null)
-                                ? DateFormat('dd/MM/yyyy')
-                                    .format(sortie.datePropose!)
-                                : "Aucune date renseigné !",
-                            icon: const Icon(Icons.calendar_today,
-                                color: Colors.white)),
-                        FriendCardSortie(
-                            title: "Lieu",
-                            subTitle: sortie.lieu,
-                            icon: const Icon(Icons.map, color: Colors.white)),
-                        Container(
-                          margin: const EdgeInsets.only(top: 20, bottom: 20),
-                          child: const Text(
-                            "Les participants :",
-                            textScaleFactor: 2,
-                            style: TextStyle(
-                              color: Colors.white,
-                              decoration: TextDecoration.underline,
-                            ),
-                          ),
-                        ),
-                        ParticipantSortie(
-                          listeIdParticipants:
-                              getAllIdParticipants(sortie.friends),
-                        )
-                      ],
+                    margin: const EdgeInsets.only(top: 20, bottom: 20),
+                    child: const Text(
+                      "Les participants :",
+                      textScaleFactor: 2,
+                      style: TextStyle(
+                        color: Colors.white,
+                        decoration: TextDecoration.underline,
+                      ),
                     ),
                   ),
+                  ParticipantSortie(
+                    listeIdParticipants:
+                    getAllIdParticipants(sortie!.friends),
+                  )
                 ],
               ),
-            )
-          : const Center(
-              child: CircularProgressIndicator(),
             ),
+          ],
+        ),
+      )
+          : const Center(
+        child: CircularProgressIndicator(),
+      ),
       gradient: gNextSorties,
     );
   }

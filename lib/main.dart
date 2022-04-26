@@ -21,7 +21,9 @@ import 'package:provider/provider.dart';
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   Provider.debugCheckInvalidValueType = null;
-  Firebase.initializeApp();
+  await Firebase.initializeApp(
+    options: firebaseOptions,
+  );
   /*
   Firebase Cloud Messaging
   https://medium.com/firebase-tips-tricks/how-to-use-firebase-cloud-messaging-in-flutter-a15ca69ff292

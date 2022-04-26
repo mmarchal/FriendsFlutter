@@ -92,6 +92,10 @@ class _SignupPageState extends State<SignupPage> {
                 "Compte $prenom créé ! Vous pouvez vous connectez à l'application !"),
           ),
         );
+      } else {
+        print(api.error);
+        Navigator.pop(context);
+        _errorDialog("Problème de création de compte ! Contactez l'admin !");
       }
     } else {
       Navigator.pop(context);

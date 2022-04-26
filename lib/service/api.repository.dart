@@ -71,7 +71,7 @@ class ApiRepository extends ApiService {
       email: email,
       uid: uid,
     );
-    var url = '$domaine/friend';
+    var url = '$domaine/friend/create';
     try {
       final response = await dio.post(url, data: friend.toJson());
       return APIResponse(data: Friend.fromJson(response.data));

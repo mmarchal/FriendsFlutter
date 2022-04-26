@@ -1,10 +1,11 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:life_friends/model/type_proposition.dart';
 import 'package:life_friends/model/typesortie.dart';
 
-const String domaine = "http://10.0.2.2:7070";
+//const String domaine = "http://10.0.2.2:7070";
 //const String domaine = "http://192.168.1.11:20000";
-//const String domaine = "http://ns329111.ip-37-187-107.eu:20000";
+const String domaine = "http://ns329111.ip-37-187-107.eu:20000";
 
 const Gradient gNewSortie = LinearGradient(colors: [
   Color(0xFF5c8dff),
@@ -60,3 +61,12 @@ List<TypeProposition> typePropositions = [
     type: "Nouvelle fonctionnalité",
   ),
 ];
+
+var firebaseOptions = const FirebaseOptions(
+databaseURL: "https://friendchat-4626f.firebaseio.com",
+apiKey: "AIzaSyB7WVOt3cMMVzuP5bMRy6VVTSlSNFLVKGE",
+appId: "friendchat-4626f",
+messagingSenderId: "868937907767",
+projectId: "868937907767",
+storageBucket: "gs://friendchat-4626f.appspot.com",
+);

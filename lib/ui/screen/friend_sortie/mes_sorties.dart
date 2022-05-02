@@ -6,10 +6,10 @@ import 'package:flutter_calendar_carousel/flutter_calendar_carousel.dart';
 import 'package:intl/intl.dart';
 import 'package:life_friends/model/api/api_response.dart';
 import 'package:life_friends/model/sortie.dart';
-import 'package:life_friends/notifier/sortie/sortie_list_notifier.dart';
+import 'package:life_friends/service/sortie.repository.dart';
 import 'package:life_friends/ui/screen/sortie/scaffold_sortie.dart';
 import 'package:life_friends/ui/widgets/button_login.dart';
-import 'package:provider/src/provider.dart';
+import 'package:provider/provider.dart';
 
 // ignore: must_be_immutable
 class MesSorties extends StatefulWidget {
@@ -45,21 +45,27 @@ class MesSortiesState extends State<MesSorties> {
 
   late double cHeight;
 
+  APIResponse<List<Sortie>>? apiSorties;
+
   @override
   void initState() {
-    Provider.of<SortieListNotifier>(context, listen: false)
-        .loadMesSorties(userId: widget.userId);
     super.initState();
+    loadMesSorties(context);
+  }
+
+  loadMesSorties(BuildContext context) async {
+    final response = await context.read<SortieRepository>().getSorties();
+    setState(() {
+      apiSorties = response;
+    });
   }
 
   @override
   Widget build(BuildContext context) {
-    APIResponse<List<Sortie>>? apiSorties =
-        context.watch<SortieListNotifier>().sorties;
     cHeight = MediaQuery.of(context).size.height;
-    if (apiSorties != null && apiSorties.data != null) {
-      for (int i = 0; i < apiSorties.data!.length; i++) {
-        Sortie s = apiSorties.data![i];
+    if (apiSorties != null && apiSorties?.data != null) {
+      for (int i = 0; i < apiSorties!.data!.length; i++) {
+        Sortie s = apiSorties!.data![i];
         if (s.datePropose != null) {
           _markedDateMap.add(
             s.datePropose!,
@@ -94,7 +100,10 @@ class MesSortiesState extends State<MesSorties> {
             builder: (BuildContext bC) {
               return AlertDialog(
                 shape: const RoundedRectangleBorder(
-                    borderRadius: BorderRadius.all(Radius.circular(32.0))),
+                  borderRadius: BorderRadius.all(
+                    Radius.circular(32.0),
+                  ),
+                ),
                 contentPadding: const EdgeInsets.only(top: 10.0),
                 elevation: 10,
                 title: Image.asset(
@@ -133,11 +142,15 @@ class MesSortiesState extends State<MesSorties> {
                 children: <Widget>[
                   _calendarCarouselNoHeader,
                   markerRepresent(Colors.green, "Present"),
-                  widgetSortieSansDate(apiSorties.data)
+                  widgetSortieSansDate(
+                    apiSorties?.data ?? [],
+                  )
                 ],
               ),
             )
-          : const Center(child: CircularProgressIndicator()),
+          : const Center(
+              child: CircularProgressIndicator(),
+            ),
     );
   }
 

@@ -108,8 +108,9 @@ class _AllFieldsForm extends State<AllFieldsForm> {
                                 typeProposition: formBloc.typeDemande.value!,
                                 dateProposition: DateTime.now(),
                                 demande: formBloc.contenuDemande.value!);
-                            APIResponse<bool> api =
-                                await PropositionRepository().addProposition(p);
+                            APIResponse<bool> api = await context
+                                .read<PropositionRepository>()
+                                .addProposition(p);
                             if (api.isSuccess && api.data!) {
                               Navigator.pop(context);
                               await CoolAlert.show(

@@ -21,7 +21,9 @@ import 'package:provider/provider.dart';
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   Provider.debugCheckInvalidValueType = null;
-  Firebase.initializeApp();
+  await Firebase.initializeApp(
+    options: firebaseOptions,
+  );
   /*
   Firebase Cloud Messaging
   https://medium.com/firebase-tips-tricks/how-to-use-firebase-cloud-messaging-in-flutter-a15ca69ff292
@@ -71,7 +73,9 @@ class MyApp extends StatelessWidget {
           '/nouvelle_proposition': (context) => const NouvelleProposition(
                 gradient: gPropositions,
               ),
-          '/detail_sortie': (context) => DetailSortie(sortieId: '',),
+          '/detail_sortie': (context) => DetailSortie(
+                sortieId: ModalRoute.of(context)!.settings.arguments as int,
+              ),
           '/profil': (context) => const MyProfil(),
           '/messagerie': (context) => const HomeChat(),
         },

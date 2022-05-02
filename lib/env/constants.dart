@@ -1,3 +1,4 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:life_friends/model/type_proposition.dart';
 import 'package:life_friends/model/typesortie.dart';
@@ -60,3 +61,12 @@ List<TypeProposition> typePropositions = [
     type: "Nouvelle fonctionnalité",
   ),
 ];
+
+var firebaseOptions = const FirebaseOptions(
+databaseURL: "https://friendchat-4626f.firebaseio.com",
+apiKey: "AIzaSyB7WVOt3cMMVzuP5bMRy6VVTSlSNFLVKGE",
+appId: "friendchat-4626f",
+messagingSenderId: "868937907767",
+projectId: "868937907767",
+storageBucket: "gs://friendchat-4626f.appspot.com",
+);

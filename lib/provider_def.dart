@@ -7,14 +7,12 @@ import 'package:life_friends/notifier/friend/friend_notifier.dart';
 import 'package:life_friends/notifier/sortie/sortie_list_notifier.dart';
 import 'package:life_friends/notifier/sortie/sortie_notifier.dart';
 import 'package:life_friends/notifier/token_notifier.dart';
-import 'package:life_friends/notifier/typeproposition/typeproposition_list_notifier.dart';
-import 'package:life_friends/notifier/typeproposition/typeproposition_notifier.dart';
 import 'package:life_friends/notifier/typesortie/typesortie_list_notifier.dart';
 import 'package:life_friends/notifier/typesortie/typesortie_notifier.dart';
 import 'package:life_friends/service/api.repository.dart';
 import 'package:life_friends/service/friend.repository.dart';
+import 'package:life_friends/service/proposition.repository.dart';
 import 'package:life_friends/service/sortie.repository.dart';
-import 'package:life_friends/service/typeproposition.repository.dart';
 import 'package:life_friends/service/typesortie.repository.dart';
 import 'package:provider/provider.dart';
 
@@ -58,7 +56,9 @@ class ProviderDef extends StatelessWidget {
 
         // Friend
         Provider<FriendRepository>(
-          create: (context) => FriendRepository(context.read(), context.read()),
+          create: (context) => FriendRepository(
+            token: context.read<TokenNotifier>().token!.token,
+          ),
         ),
         ChangeNotifierProvider<FriendNotifier>(
           create: (_) => FriendNotifier(),
@@ -104,24 +104,12 @@ class ProviderDef extends StatelessWidget {
           },
         ),
 
-        // Type de propositions
-        Provider<TypePropositionNotifier>(
-          create: (_) => TypePropositionNotifier(),
-        ),
-        Provider<TypePropositionRepository>(
-          create: (_) => TypePropositionRepository(),
-        ),
-        Provider<TypePropositionListNotifier>(
-          create: (_) => TypePropositionListNotifier(context.read()),
-        ),
-        ChangeNotifierProxyProvider<TypePropositionNotifier,
-            TypePropositionListNotifier>(
-          create: (context) => TypePropositionListNotifier(context.read())
-            ..loadTypesPropositions(clearList: true),
-          update: (context, filter, typePropositionsList) {
-            return typePropositionsList!;
-          },
-        ),
+        //Proposition
+        Provider<PropositionRepository>(
+          create: (context) => PropositionRepository(
+            token: context.read<TokenNotifier>().token!.token,
+          ),
+        )
       ],
       child: child,
     );

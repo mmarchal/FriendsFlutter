@@ -18,11 +18,9 @@ class ListSorties extends StatefulWidget {
   State<StatefulWidget> createState() {
     return ListeSortiesState();
   }
-
 }
 
 class ListeSortiesState extends State<ListSorties> {
-
   APIResponse<List<Sortie>>? response;
 
   _initBody(List<Sortie>? data) {
@@ -66,7 +64,15 @@ class ListeSortiesState extends State<ListSorties> {
                 ],
               ),
             ),
-            onTap: () => Navigator.pushNamed(context, '/detail_sortie', arguments: s.id),
+            onTap: () {
+              Provider.of<SortieListNotifier>(context, listen: false)
+                  .loadOneSortie(sortieId: s.id.toString());
+              Navigator.pushNamed(
+                context,
+                '/detail_sortie',
+                arguments: s.id,
+              );
+            },
           );
         },
       );
@@ -82,10 +88,10 @@ class ListeSortiesState extends State<ListSorties> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     getAllSorties(context);
   }
+
   @override
   Widget build(BuildContext context) {
     return ScaffoldSortie(
@@ -100,7 +106,8 @@ class ListeSortiesState extends State<ListSorties> {
   }
 
   Future<void> getAllSorties(BuildContext context) async {
-    APIResponse<List<Sortie>> api = await context.read<SortieRepository>().getSorties();
+    APIResponse<List<Sortie>> api =
+        await context.read<SortieRepository>().getSorties();
     setState(() {
       response = api;
     });

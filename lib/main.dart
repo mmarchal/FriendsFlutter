@@ -22,6 +22,7 @@ Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   Provider.debugCheckInvalidValueType = null;
   await Firebase.initializeApp(
+    name: 'FriendChat',
     options: firebaseOptions,
   );
   /*

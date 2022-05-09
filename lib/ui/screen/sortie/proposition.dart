@@ -40,7 +40,7 @@ class PropositionSortieState extends State<PropositionSortie> {
         locale: const Locale("fr"),
         context: context,
         initialDate:
-            (selectedDateTime != null) ? selectedDateTime! : DateTime.now(),
+        (selectedDateTime != null) ? selectedDateTime! : DateTime.now(),
         firstDate: DateTime(DateTime.now().year),
         lastDate: DateTime(2025),
       );
@@ -90,18 +90,18 @@ class PropositionSortieState extends State<PropositionSortie> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: listeTypesSorties
                   .map((element) => RadioListTile<int>(
-                        title: Text(element.type),
-                        activeColor: Colors.white,
-                        onChanged: (int? b) {
-                          setState(() {
-                            selectedValue = b;
-                            selectedValueLabel = element.type;
-                          });
-                        },
-                        secondary: _secondaryIcon(element.id!),
-                        value: element.id!,
-                        groupValue: selectedValue,
-                      ))
+                title: Text(element.type),
+                activeColor: Colors.white,
+                onChanged: (int? b) {
+                  setState(() {
+                    selectedValue = b;
+                    selectedValueLabel = element.type;
+                  });
+                },
+                secondary: _secondaryIcon(element.id!),
+                value: element.id!,
+                groupValue: selectedValue,
+              ))
                   .toList(),
             ),
             Align(
@@ -109,42 +109,14 @@ class PropositionSortieState extends State<PropositionSortie> {
               child: ElevatedButton(
                 child: const Text("Valider"),
                 onPressed: () async {
-                  showDialog(
-                      context: context,
-                      builder: (context) {
-                        return const LoadingWidget(
-                            label:
-                                "Création de la nouvelle sortie en cours ...");
-                      });
-                  Sortie sortie = Sortie(
-                    datePropose: selectedDateTime,
-                    intitule: _controllerTitle.text,
-                    lieu: _controllerLocation.text,
-                    typeSortie: TypeSortie(
-                      id: selectedValue,
-                      type: selectedValueLabel ?? "",
-                    ),
-                  );
-                  APIResponse<bool> response =
-                      await context.read<SortieRepository>().addOuting(sortie);
-                  if (response.isSuccess && response.data!) {
-                    Provider.of<SortieListNotifier>(context, listen: false)
-                        .loadAllSorties(clearList: true);
-                    Navigator.pop(context);
+                  if(selectedValue==0) {
                     await CoolAlert.show(
                       context: context,
-                      type: CoolAlertType.success,
-                      text: 'Sortie enregistré !',
-                      onConfirmBtnTap: () => Navigator.pushNamedAndRemoveUntil(
-                          context, '/home', (route) => false),
-                    );
+                      type: CoolAlertType.error,
+                      title: 'Type de sortie !',
+                      text: 'Veuillez en sélectionnez une !',);
                   } else {
-                    Navigator.pop(context);
-                    await CoolAlert.show(
-                        context: context,
-                        type: CoolAlertType.error,
-                        title: response.error!.title,
-                        text: response.error!.content);
+                    _sendProposition();
                   }
                 },
               ),
@@ -155,6 +127,45 @@ class PropositionSortieState extends State<PropositionSortie> {
     );
   }
 
+  _sendProposition() async {
+    showDialog(
+        context: context,
+        builder: (context) {
+          return const LoadingWidget(
+              label:
+              "Création de la nouvelle sortie en cours ...");
+        });
+    Sortie sortie = Sortie(
+      datePropose: selectedDateTime,
+      intitule: _controllerTitle.text,
+      lieu: _controllerLocation.text,
+      typeSortie: TypeSortie(
+        id: selectedValue,
+        type: selectedValueLabel ?? "",
+      ),
+    );
+    APIResponse<bool> response =
+    await context.read<SortieRepository>().addOuting(sortie);
+    if (response.isSuccess && response.data!) {
+      Provider.of<SortieListNotifier>(context, listen: false)
+          .loadAllSorties(clearList: true);
+      Navigator.pop(context);
+      await CoolAlert.show(
+        context: context,
+        type: CoolAlertType.success,
+        text: 'Sortie enregistré !',
+        onConfirmBtnTap: () => Navigator.pushNamedAndRemoveUntil(
+            context, '/home', (route) => false),
+      );
+    } else {
+      Navigator.pop(context);
+      await CoolAlert.show(
+          context: context,
+          type: CoolAlertType.error,
+          title: response.error!.title,
+          text: response.error!.content);
+    }
+  }
   _secondaryIcon(int i) {
     switch (i) {
       case 1:

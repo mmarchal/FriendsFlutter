@@ -10,7 +10,7 @@
       "client_info": {
         "mobilesdk_app_id": "1:868937907767:android:ba32ef905a474bca57c9b2",
         "android_client_info": {
-          "package_name": "com.example.life_friends"
+          "package_name": "max.dev.life_friends"
         }
       },
       "oauth_client": [
@@ -35,7 +35,7 @@
               "client_id": "868937907767-pplipncmbvtp4c71btu701tcj7crbvpr.apps.googleusercontent.com",
               "client_type": 2,
               "ios_info": {
-                "bundle_id": "com.example.lifeFriends"
+                "bundle_id": "max.dev.life_friends"
               }
             }
           ]

@@ -1,5 +1,5 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.life_friends">
+    package="max.dev.life_friends">
    <application
         android:label="life_friends"
         android:name="${applicationName}"
